@@ -16,6 +16,9 @@
 		</header>
 		<div class="w3-container">
 			<h2><div id="result"></div></h2>
+			<h2><div id="result1"></div></h2>
+			<h2><div id="result2"></div></h2>
+			<h2><div id="result3"></div></h2>
 		</div>
 	  </div>
 	</div>
@@ -25,23 +28,23 @@
 			<div class="col-md-8">
 				<h3>Adicionar um Envelope e Saldo</h3>
 	
-					<form name="contact-form" method="post" id="contact-form">
+					<form name="contact-form" method="post" id="form1">
 						<div class="form-group">
 							<label for="inputName">Envelope</label>
-							<input type="text" class="form-control" id="cardName" name="cardName" placeholder="Envelope" required>
+							<input type="text" class="form-control" id="cardName" name="cardName" placeholder="Envelope" >
 						</div>
 		
 						<div class="form-group">
 							<label for="inputValue">Valor</label>
-							<input type="number" class="form-control" id="Value" name="Value" placeholder="Valor" required>
+							<input type="number" class="form-control" id="Value" name="Value" placeholder="Valor" >
 						</div>
 					
 						<div class="form-group">
 							<label for="inputDescription">Descrição</label>
-							<input type="text" class="form-control" id="Description" name="Description" placeholder="Descrição" required>
+							<input type="text" class="form-control" id="Description" name="Description" placeholder="Descrição" >
 						</div>
 					
-						<button onclick="store()" class="btn btn-primary" name="submit" value="Submit" id="submit_form">Adicionar</button>
+						<button onclick="store()" class="btn btn-primary" id="submit_form">Adicionar</button>
 					
 					</form>	
 			</div>
@@ -50,33 +53,24 @@
 	
 <script>
 
-	function store(){	
-		var inputName = document.getElementById("cardName");
-		localStorage.setItem("cardName", inputName.value);
+	function store(){
+		if (typeof(Storage) !== "undefined") {	
+			var inputName = document.getElementById("cardName");
+			sessionStorage.setItem("cardName", inputName.value);
 
-		var inputValue = document.getElementById("Value");
-		localStorage.setItem("Value", inputValue.value);
+			var inputValue = document.getElementById("Value");
+			sessionStorage.setItem("Value", inputValue.value);
 
-		var inputDescription = document.getElementById("Description");
-		localStorage.setItem("Description", inputDescription.value);
-		
-		if (typeof(Storage) !== "undefined") {
-			if (localStorage.storecardName) {
-				localStorage.storecardName = text(inputName.value);
+			var inputDescription = document.getElementById("Description");
+			sessionStorage.setItem("Description", inputDescription.value);
+						
+			document.getElementById("result1").innerHTML = sessionStorage.getItem("cardName");
+			document.getElementById("result2").innerHTML = sessionStorage.getItem("Value");
+			document.getElementById("result3").innerHTML = sessionStorage.getItem("Description");
+		    
 			} else {
-			if (localStorage.storecardValue) {
-				localStorage.storecardValue = number(inputValue.value);
-			} else }
-			if (localStorage.storecardDescription) {
-				localStorage.storecardDescription = text(inputDescription.value);
-			}
-				document.getElementById("result").innerHTML = localStorage.storecardName;
-				document.getElementById("result").innerHTML = localStorage.storecardValue;
-				document.getElementById("result").innerHTML = localStorage.storecardDescription;
-		    }
-		else {
 			document.getElementById("result").innerHTML = "Ops! Alguma coisa deu errado...";
-		}		
+		}
 	}
 
 </script>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto-Suficiencia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+<body>
+
+	<div class="w3-container">
+	  <div class="w3-card-4" style="width:100%">
+		<header class="w3-container w3-light-grey">
+		    <h2><Div id="nameBox"></Div></h2>
+		</header>
+		<div class="w3-container">
+			<h2><div id="result"></div></h2>
+		</div>
+	  </div>
+	</div>
+	
+	<div class="w3-container">
+		<div class="row">
+			<div class="col-md-8">
+				<h3>Adicionar um Envelope e Saldo</h3>
+	
+					<form name="contact-form" method="post" id="contact-form">
+						<div class="form-group">
+							<label for="inputName">Envelope</label>
+							<input type="text" class="form-control" id="cardName" name="cardName" placeholder="Envelope" required>
+						</div>
+		
+						<div class="form-group">
+							<label for="inputValue">Valor</label>
+							<input type="number" class="form-control" id="Value" name="Value" placeholder="Valor" required>
+						</div>
+					
+						<div class="form-group">
+							<label for="inputDescription">Descrição</label>
+							<input type="text" class="form-control" id="Description" name="Description" placeholder="Descrição" required>
+						</div>
+					
+						<button onclick="store()" class="btn btn-primary" name="submit" value="Submit" id="submit_form">Adicionar</button>
+					
+					</form>	
+			</div>
+		</div>
+	</div>
+	
+<script>
+
+	function store(){	
+		var inputName = document.getElementById("cardName");
+		localStorage.setItem("cardName", inputName.value);
+
+		var inputValue = document.getElementById("Value");
+		localStorage.setItem("Value", inputValue.value);
+
+		var inputDescription = document.getElementById("Description");
+		localStorage.setItem("Description", inputDescription.value);
+		
+		if (typeof(Storage) !== "undefined") {
+			if (localStorage.storecardName) {
+				localStorage.storecardName = text(inputName.value);
+			} else {
+			if (localStorage.storecardValue) {
+				localStorage.storecardValue = number(inputValue.value);
+			} else }
+			if (localStorage.storecardDescription) {
+				localStorage.storecardDescription = text(inputDescription.value);
+			}
+				document.getElementById("result").innerHTML = localStorage.storecardName;
+				document.getElementById("result").innerHTML = localStorage.storecardValue;
+				document.getElementById("result").innerHTML = localStorage.storecardDescription;
+		    }
+		else {
+			document.getElementById("result").innerHTML = "Ops! Alguma coisa deu errado...";
+		}		
+	}
+
+</script>
+</body>
+</html> 
+	
+

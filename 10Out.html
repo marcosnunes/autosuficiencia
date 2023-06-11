@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  
+  /* Adicione estilos para telas menores */
+  @media screen and (max-width: 600px) {
+    table {
+      width: 100%;
+    }
+    th, td {
+      font-size: 14px;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Outubro</h2>
+
+<p>Saldo Inicial: <input type="number" id="initialBalance" oninput="calculateTotal()"></p>
+
+<table id="myTable">
+  <tr>
+    <th>Descrição</th>
+    <th>Débito</th> 
+    <th>Crédito</th>
+    <th>Apagar</th>
+	<th>Remover</th>
+  </tr>
+  <tr>
+    <td><input type="text" class="description form-control"></td>
+    <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td> 
+    <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+    <td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>
+	<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+  </tr>
+</table>
+
+<p>Subtotal: <span id="total"></span></p>
+
+<script>
+$(document).ready(function() {
+  loaddata();
+});
+
+$(document).on("blur", ".description", function() {
+  if ($(this).val() != "") {
+    var table = $("#myTable");
+    var row = $("<tr></tr>");
+    row.append('<td><input type="text" class="description"></td>');
+    row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
+    row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
+    row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+	row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+    table.append(row);
+  }
+});
+
+function calculateTotal() {
+  var initialBalance = Number($("#initialBalance").val());
+  var debitTotal = 0;
+  var creditTotal = 0;
+  $(".debit").each(function() {
+    debitTotal += Number($(this).val());
+  });
+  $(".credit").each(function() {
+    creditTotal += Number($(this).val());
+  });
+  var total = initialBalance + creditTotal - debitTotal;
+  $("#total").html(total);
+}
+
+function savedata() {
+  var totalOutubro = {};
+  totalOutubro.initialBalance = $("#initialBalance").val();
+  totalOutubro.rows = [];
+  $("#myTable tr").each(function() {
+    var row = {};
+    row.description = $(this).find(".description").val();
+    row.debit = $(this).find(".debit").val();
+    row.credit = $(this).find(".credit").val();
+    totalOutubro.rows.push(row);
+  });
+  localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
+}
+
+function loaddata() {
+  var totalSetembro = JSON.parse(localStorage.getItem("totalSetembro"));
+  
+  if (totalSetembro) {
+      var initialBalance = Number(totalSetembro.initialBalance);
+      var debitTotal = 0;
+      var creditTotal = 0;
+      
+      for (var i = 1; i < totalSetembro.rows.length; i++) {
+          debitTotal += Number(totalSetembro.rows[i].debit);
+          creditTotal += Number(totalSetembro.rows[i].credit);
+      }
+      
+      var totalSetembroFinal = initialBalance + creditTotal - debitTotal;
+      
+      $("#initialBalance").val(totalSetembroFinal);
+  }
+  
+  var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
+  if (totalOutubro) {
+    for (var i = 1; i < totalOutubro.rows.length; i++) {
+      var table = $("#myTable");
+      var row = $("<tr></tr>");
+      row.append('<td><input type="text" class="description" value="' + totalOutubro.rows[i].description + '"></td>');
+      row.append('<td><input type="number" class="debit" oninput="calculateTotal()" value="' + totalOutubro.rows[i].debit + '"></td>');
+      row.append('<td><input type="number" class="credit" oninput="calculateTotal()" value="' + totalOutubro.rows[i].credit + '"></td>');
+      row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+	  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+      table.append(row);
+    }
+    calculateTotal();
+  }
+}
+
+$(window).on("beforeunload", function() {
+  savedata();
+});
+
+function clearRow(button) {
+  var table = $("#myTable");
+  $(button).closest("tr").remove();
+  var row = $("<tr></tr>");
+  row.append('<td><input type="text" class="description"></td>');
+  row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
+  row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
+  row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+  table.append(row);
+  calculateTotal();
+}
+
+function deleteRow(button) {
+  var table = $("#myTable");
+  $(button).closest("tr").remove();
+  calculateTotal();
+}
+</script>
+
+</body>
+</html>

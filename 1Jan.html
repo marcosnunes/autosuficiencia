@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Janeiro</h2>
+
+<p>Saldo Inicial: <input type="number" id="initialBalance" oninput="calculateTotal()"></p>
+
+<table id="myTable">
+  <tr>
+    <th>Descrição</th>
+    <th>Débito</th> 
+    <th>Crédito</th>
+    <th>Apagar</th>
+	<th>Remover</th>
+  </tr>
+  <tr>
+    <td><input type="text" class="description form-control"></td>
+    <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td> 
+    <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+    <td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>
+	<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+  </tr>
+</table>
+
+<p>Subtotal: <span id="total"></span></p>
+
+<script>
+$(document).ready(function() {
+  loaddata();
+});
+
+$(document).on("blur", ".description", function() {
+  if ($(this).val() != "") {
+    var table = $("#myTable");
+    var row = $("<tr></tr>");
+    row.append('<td><input type="text" class="description"></td>');
+    row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
+    row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
+    row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+	row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+    table.append(row);
+  }
+});
+
+function calculateTotal() {
+  var initialBalance = Number($("#initialBalance").val());
+  var debitTotal = 0;
+  var creditTotal = 0;
+  $(".debit").each(function() {
+    debitTotal += Number($(this).val());
+  });
+  $(".credit").each(function() {
+    creditTotal += Number($(this).val());
+  });
+  var total = initialBalance + creditTotal - debitTotal;
+  $("#total").html(total);
+}
+
+function savedata() {
+  var totalJaneiro = {};
+  totalJaneiro.initialBalance = $("#initialBalance").val();
+  totalJaneiro.rows = [];
+  $("#myTable tr").each(function() {
+    var row = {};
+    row.description = $(this).find(".description").val();
+    row.debit = $(this).find(".debit").val();
+    row.credit = $(this).find(".credit").val();
+    totalJaneiro.rows.push(row);
+  });
+  localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
+}
+
+function loaddata() {
+  var totalJaneiro = JSON.parse(localStorage.getItem("totalJaneiro"));
+  if (totalJaneiro) {
+    $("#initialBalance").val(totalJaneiro.initialBalance);
+    for (var i = 1; i < totalJaneiro.rows.length; i++) {
+      var table = $("#myTable");
+      var row = $("<tr></tr>");
+      row.append('<td><input type="text" class="description" value="' + totalJaneiro.rows[i].description + '"></td>');
+      row.append('<td><input type="number" class="debit" oninput="calculateTotal()" value="' + totalJaneiro.rows[i].debit + '"></td>');
+      row.append('<td><input type="number" class="credit" oninput="calculateTotal()" value="' + totalJaneiro.rows[i].credit + '"></td>');
+      row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+	  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+      table.append(row);
+    }
+    calculateTotal();
+  }
+}
+
+$(window).on("beforeunload", function() {
+  savedata();
+});
+
+function clearRow(button) {
+  var table = $("#myTable");
+  $(button).closest("tr").remove();
+  var row = $("<tr></tr>");
+  row.append('<td><input type="text" class="description"></td>');
+  row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
+  row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
+  row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
+  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+  table.append(row);
+  calculateTotal();
+}
+
+function deleteRow(button) {
+  var table = $("#myTable");
+  $(button).closest("tr").remove();
+  calculateTotal();
+}
+</script>
+
+</body>
+</html>

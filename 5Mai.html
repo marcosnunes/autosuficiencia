@@ -62,11 +62,11 @@ $(document).on("blur", ".description", function() {
   if ($(this).val() != "") {
     var table = $("#myTable");
     var row = $("<tr></tr>");
-    row.append('<td><input type="text" class="description"></td>');
-    row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
-    row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
-    row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
-	row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+    row.append('<td><input type="text" class="description form-control"></td>');
+    row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>');
+    row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>');
+    row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
+	row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
     table.append(row);
   }
 });
@@ -122,11 +122,11 @@ function loaddata() {
     for (var i = 1; i < totalMaio.rows.length; i++) {
       var table = $("#myTable");
       var row = $("<tr></tr>");
-      row.append('<td><input type="text" class="description" value="' + totalMaio.rows[i].description + '"></td>');
-      row.append('<td><input type="number" class="debit" oninput="calculateTotal()" value="' + totalMaio.rows[i].debit + '"></td>');
-      row.append('<td><input type="number" class="credit" oninput="calculateTotal()" value="' + totalMaio.rows[i].credit + '"></td>');
-      row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
-	  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+      row.append('<td><input type="text" class="description form-control" value="' + totalMaio.rows[i].description + '"></td>');
+      row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()" value="' + totalMaio.rows[i].debit + '"></td>');
+      row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()" value="' + totalMaio.rows[i].credit + '"></td>');
+      row.append('<td><button onclick="clearRow(this)" class="btn btn-default>Apagar</button></td>');
+	  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default>Remover</button></td>');
       table.append(row);
     }
     calculateTotal();
@@ -141,11 +141,11 @@ function clearRow(button) {
   var table = $("#myTable");
   $(button).closest("tr").remove();
   var row = $("<tr></tr>");
-  row.append('<td><input type="text" class="description"></td>');
-  row.append('<td><input type="number" class="debit" oninput="calculateTotal()"></td>');
-  row.append('<td><input type="number" class="credit" oninput="calculateTotal()"></td>');
-  row.append('<td><button onclick="clearRow(this)">Apagar</button></td>');
-  row.append('<td><button onclick="deleteRow(this)">Remover</button></td>');
+  row.append('<td><input type="text" class="description form-control"></td>');
+    row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>');
+    row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>');
+    row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
+	row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
   table.append(row);
   calculateTotal();
 }

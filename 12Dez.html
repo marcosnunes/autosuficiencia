@@ -125,8 +125,8 @@ function loaddata() {
       row.append('<td><input type="text" class="description form-control" value="' + totalDezembro.rows[i].description + '"></td>');
       row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()" value="' + totalDezembro.rows[i].debit + '"></td>');
       row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()" value="' + totalDezembro.rows[i].credit + '"></td>');
-      row.append('<td><button onclick="clearRow(this)" class="btn btn-default>Apagar</button></td>');
-	  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default>Remover</button></td>');
+      row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
+	  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
       table.append(row);
     }
     calculateTotal();

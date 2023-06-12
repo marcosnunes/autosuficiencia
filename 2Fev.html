@@ -125,8 +125,8 @@ function loaddata() {
       row.append('<td><input type="text" class="description form-control" value="' + totalFevereiro.rows[i].description + '"></td>');
       row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()" value="' + totalFevereiro.rows[i].debit + '"></td>');
       row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()" value="' + totalFevereiro.rows[i].credit + '"></td>');
-      row.append('<td><button onclick="clearRow(this)" class="btn btn-default>Apagar</button></td>');
-	  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default>Remover</button></td>');
+      row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
+	  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
       table.append(row);
     }
     calculateTotal();
@@ -142,10 +142,10 @@ function clearRow(button) {
   $(button).closest("tr").remove();
   var row = $("<tr></tr>");
   row.append('<td><input type="text" class="description form-control"></td>');
-    row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>');
-    row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>');
-    row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
-	row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
+  row.append('<td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>');
+  row.append('<td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>');
+  row.append('<td><button onclick="clearRow(this)" class="btn btn-default">Apagar</button></td>');
+  row.append('<td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>');
   table.append(row);
   calculateTotal();
 }

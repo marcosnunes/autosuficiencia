@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <title>Setembro</title>
+</head>
+<body>
+
+<nav>
+  <div class="nav-wrapper">
+    <a href="#" class="brand-logo center">Setembro</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <p>Saldo Inicial: <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()"></p>
+
+  <table id="myTable">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Débito</th> 
+        <th>Crédito</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" class="description form-control"></td>
+        <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td> 
+        <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+        <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
+        <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Subtotal: <span id="total"></span></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    M.AutoInit();
+    loaddata();
+  });
+
+  document.addEventListener('blur', function(event) {
+    if (event.target.matches('.description') && event.target.value !== "") {
+      var table = document.getElementById("myTable");
+      var row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" class="description form-control"></td>
+        <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
+        <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+        <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
+        <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+      `;
+      table.querySelector("tbody").appendChild(row);
+    }
+  });
+
+  function calculateTotal() {
+    var initialBalance = Number(document.getElementById("initialBalance").value);
+    var debitTotal = 0;
+    var creditTotal = 0;
+    var debitInputs = document.querySelectorAll(".debit");
+    var creditInputs = document.querySelectorAll(".credit");
+    for (var i = 0; i < debitInputs.length; i++) {
+      debitTotal += Number(debitInputs[i].value);
+    }
+    for (var i = 0; i < creditInputs.length; i++) {
+      creditTotal += Number(creditInputs[i].value);
+    }
+    var total = initialBalance + creditTotal - debitTotal;
+    document.getElementById("total").textContent = total;
+  }
+
+  function savedata() {
+    var totalSetembro = {};
+    totalSetembro.initialBalance = document.getElementById("initialBalance").value;
+    totalSetembro.rows = [];
+    var tableRows = document.querySelectorAll("#myTable tbody tr");
+    for (var i = 0; i < tableRows.length; i++) {
+      var row = {};
+      row.description = tableRows[i].querySelector(".description").value;
+      row.debit = tableRows[i].querySelector(".debit").value;
+      row.credit = tableRows[i].querySelector(".credit").value;
+      totalSetembro.rows.push(row);
+    }
+    localStorage.setItem("totalSetembro", JSON.stringify(totalSetembro));
+  }
+
+  function loaddata() {
+    var totalAgosto = JSON.parse(localStorage.getItem("totalAgosto"));
+
+    if (totalAgosto) {
+      var initialBalance = Number(totalAgosto.initialBalance);
+      var debitTotal = 0;
+      var creditTotal = 0;
+
+      for (var i = 0; i < totalAgosto.rows.length; i++) {
+        debitTotal += Number(totalAgosto.rows[i].debit);
+        creditTotal += Number(totalAgosto.rows[i].credit);
+      }
+
+      var totalAgostoFinal = initialBalance + creditTotal - debitTotal;
+
+      document.getElementById("initialBalance").value = totalAgostoFinal;
+    }
+
+    var totalSetembro = JSON.parse(localStorage.getItem("totalSetembro"));
+    if (totalSetembro) {
+      var table = document.getElementById("myTable");
+      for (var i = 0; i < totalSetembro.rows.length; i++) {
+        var row = document.createElement("tr");
+        row.innerHTML = `
+          <td><input type="text" class="description form-control" value="${totalSetembro.rows[i].description}"></td>
+          <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalSetembro.rows[i].debit}"></td>
+          <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalSetembro.rows[i].credit}"></td>
+          <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
+          <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+        `;
+        table.querySelector("tbody").appendChild(row);
+      }
+      calculateTotal();
+    }
+  }
+
+  window.addEventListener("beforeunload", function() {
+    savedata();
+  });
+
+  function clearRow(button) {
+    var table = document.getElementById("myTable");
+    var row = document.createElement("tr");
+    row.innerHTML = `
+      <td><input type="text" class="description form-control"></td>
+      <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
+      <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+      <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
+      <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+    `;
+    table.querySelector("tbody").appendChild(row);
+    calculateTotal();
+  }
+
+  function deleteRow(button) {
+    var table = document.getElementById("myTable");
+    button.closest("tr").remove();
+    calculateTotal();
+  }
+</script>
+
+</body>
+</html>

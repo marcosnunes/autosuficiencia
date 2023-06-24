@@ -16,7 +16,16 @@
 
 <div class="container">
 
-  <p>Saldo Inicial: <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()"></p>
+  <div class="input-field">
+    <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()" placeholder="Saldo Inicial">
+    <label for="initialBalance">Saldo Inicial</label>
+  </div>
+  
+  <div class="row">
+    <div class="col s12">
+      <button onclick="clearRow(this)" class="btn btn-default">Inserir Linha</button>
+    </div>
+  </div>
 
   <table id="myTable">
     <thead>
@@ -29,12 +38,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="auto-insert-row">
         <td><input type="text" class="description form-control"></td>
         <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td> 
         <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-        <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
-        <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+        <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+        <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
       </tr>
     </tbody>
   </table>
@@ -44,25 +53,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    M.AutoInit();
-    loaddata();
-  });
-
-  document.addEventListener('blur', function(event) {
-    if (event.target.matches('.description') && event.target.value !== "") {
-      var table = document.getElementById("myTable");
-      var row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" class="description form-control"></td>
-        <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
-        <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-        <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
-        <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
-      `;
-      table.querySelector("tbody").appendChild(row);
+  function removeAutoInsertRow() {
+    var autoInsertRows = document.querySelectorAll('.auto-insert-row');
+    for (var i = 0; i < autoInsertRows.length; i++) {
+      autoInsertRows[i].remove();
     }
-  });
+  }
 
   function calculateTotal() {
     var initialBalance = Number(document.getElementById("initialBalance").value);
@@ -122,8 +118,8 @@
           <td><input type="text" class="description form-control" value="${totalAbril.rows[i].description}"></td>
           <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalAbril.rows[i].debit}"></td>
           <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalAbril.rows[i].credit}"></td>
-          <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
-          <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+          <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+          <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
         `;
         table.querySelector("tbody").appendChild(row);
       }
@@ -142,8 +138,8 @@
       <td><input type="text" class="description form-control"></td>
       <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
       <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-      <td><button onclick="clearRow(this)" class="btn btn-default">Inserir</button></td>
-      <td><button onclick="deleteRow(this)" class="btn btn-default">Remover</button></td>
+      <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+      <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
     `;
     table.querySelector("tbody").appendChild(row);
     calculateTotal();
@@ -154,6 +150,12 @@
     button.closest("tr").remove();
     calculateTotal();
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    M.AutoInit();
+    loaddata();
+    removeAutoInsertRow();
+  });
 </script>
 
 </body>

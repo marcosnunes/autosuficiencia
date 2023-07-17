@@ -14,7 +14,10 @@
   </div>
 </nav>
 
+
 <div class="container">
+
+<iframe src="chart.html" frameborder="0" style="center" width="auto" height="auto"></iframe>
 
   <div class="input-field">
     <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()" placeholder="Saldo Inicial">
@@ -48,7 +51,7 @@
     </tbody>
   </table>
 
-  <p>Subtotal: <span id="total"></span></p>
+  <p>Fechamento do mês: <span id="total"></span></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -80,22 +83,25 @@
     }
     var total = initialBalance + creditTotal - debitTotal;
     document.getElementById("total").textContent = total;
+	savedata(); // Salvar os dados do fechamento do mês
   }
-
+  
   function savedata() {
-    var totalJaneiro = {};
-    totalJaneiro.initialBalance = document.getElementById("initialBalance").value;
-    totalJaneiro.rows = [];
-    var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
-    for (var i = 0; i < tableRows.length; i++) {
-      var row = {};
-      row.description = tableRows[i].querySelector(".description").value;
-      row.debit = tableRows[i].querySelector(".debit").value;
-      row.credit = tableRows[i].querySelector(".credit").value;
-      totalJaneiro.rows.push(row);
-    }
-    localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
+  var totalJaneiro = {};
+  totalJaneiro.initialBalance = document.getElementById("initialBalance").value;
+  totalJaneiro.total = document.getElementById("total").textContent;
+  totalJaneiro.rows = [];
+  var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
+  for (var i = 0; i < tableRows.length; i++) {
+    var row = {};
+    row.description = tableRows[i].querySelector(".description").value;
+    row.debit = tableRows[i].querySelector(".debit").value;
+    row.credit = tableRows[i].querySelector(".credit").value;
+    totalJaneiro.rows.push(row);
   }
+  localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
+}
+
 
   function loaddata() {
     var totalJaneiro = JSON.parse(localStorage.getItem("totalJaneiro"));

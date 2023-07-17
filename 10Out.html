@@ -14,7 +14,10 @@
   </div>
 </nav>
 
+
 <div class="container">
+
+<iframe src="chart.html" frameborder="0" style="center" width="auto" height="auto"></iframe>
 
   <div class="input-field">
     <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()" placeholder="Saldo Inicial">
@@ -48,114 +51,101 @@
     </tbody>
   </table>
 
-  <p>Subtotal: <span id="total"></span></p>
+  <p>Fechamento do mês: <span id="total"></span></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
-  function removeAutoInsertRow() {
-    var autoInsertRows = document.querySelectorAll('.auto-insert-row');
-    for (var i = 0; i < autoInsertRows.length; i++) {
-      autoInsertRows[i].remove();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+  M.AutoInit();
+  loaddata();
+  removeAutoInsertRow();
+});
+
+function removeAutoInsertRow() {
+  var autoInsertRows = document.querySelectorAll('.auto-insert-row');
+  for (var i = 0; i < autoInsertRows.length; i++) {
+    autoInsertRows[i].remove();
   }
+}
 
-  function calculateTotal() {
-    var initialBalance = Number(document.getElementById("initialBalance").value);
-    var debitTotal = 0;
-    var creditTotal = 0;
-    var debitInputs = document.querySelectorAll(".debit");
-    var creditInputs = document.querySelectorAll(".credit");
-    for (var i = 0; i < debitInputs.length; i++) {
-      debitTotal += Number(debitInputs[i].value);
-    }
-    for (var i = 0; i < creditInputs.length; i++) {
-      creditTotal += Number(creditInputs[i].value);
-    }
-    var total = initialBalance + creditTotal - debitTotal;
-    document.getElementById("total").textContent = total;
+function calculateTotal() {
+  var initialBalance = Number(document.getElementById("initialBalance").value);
+  var debitTotal = 0;
+  var creditTotal = 0;
+  var debitInputs = document.querySelectorAll(".debit");
+  var creditInputs = document.querySelectorAll(".credit");
+  for (var i = 0; i < debitInputs.length; i++) {
+    debitTotal += Number(debitInputs[i].value);
   }
-
-  function savedata() {
-    var totalOutubro = {};
-    totalOutubro.initialBalance = document.getElementById("initialBalance").value;
-    totalOutubro.rows = [];
-    var tableRows = document.querySelectorAll("#myTable tbody tr");
-    for (var i = 0; i < tableRows.length; i++) {
-      var row = {};
-      row.description = tableRows[i].querySelector(".description").value;
-      row.debit = tableRows[i].querySelector(".debit").value;
-      row.credit = tableRows[i].querySelector(".credit").value;
-      totalOutubro.rows.push(row);
-    }
-    localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
+  for (var i = 0; i < creditInputs.length; i++) {
+    creditTotal += Number(creditInputs[i].value);
   }
+  var total = initialBalance + creditTotal - debitTotal;
+  document.getElementById("total").textContent = total;
+  savedata();
+}
 
-  function loaddata() {
-    var totalSetembro = JSON.parse(localStorage.getItem("totalSetembro"));
-
-    if (totalSetembro) {
-      var initialBalance = Number(totalSetembro.initialBalance);
-      var debitTotal = 0;
-      var creditTotal = 0;
-
-      for (var i = 0; i < totalSetembro.rows.length; i++) {
-        debitTotal += Number(totalSetembro.rows[i].debit);
-        creditTotal += Number(totalSetembro.rows[i].credit);
-      }
-
-      var totalSetembroFinal = initialBalance + creditTotal - debitTotal;
-
-      document.getElementById("initialBalance").value = totalSetembroFinal;
-    }
-
-    var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
-    if (totalOutubro) {
-      var table = document.getElementById("myTable");
-      for (var i = 0; i < totalOutubro.rows.length; i++) {
-        var row = document.createElement("tr");
-        row.innerHTML = `
-          <td><input type="text" class="description form-control" value="${totalOutubro.rows[i].description}"></td>
-          <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].debit}"></td>
-          <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].credit}"></td>
-          <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
-          <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
-        `;
-        table.querySelector("tbody").appendChild(row);
-      }
-      calculateTotal();
-    }
+function savedata() {
+  var totalOutubro = {};
+  totalOutubro.initialBalance = document.getElementById("initialBalance").value;
+  totalOutubro.total = document.getElementById("total").textContent;
+  totalOutubro.rows = [];
+  var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
+  for (var i = 0; i < tableRows.length; i++) {
+    var row = {};
+    row.description = tableRows[i].querySelector(".description").value;
+    row.debit = tableRows[i].querySelector(".debit").value;
+    row.credit = tableRows[i].querySelector(".credit").value;
+    totalOutubro.rows.push(row);
   }
+  localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
+}
 
-  window.addEventListener("beforeunload", function() {
-    savedata();
-  });
-
-  function clearRow(button) {
+function loaddata() {
+  var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
+  if (totalOutubro) {
+    document.getElementById("initialBalance").value = totalOutubro.initialBalance;
     var table = document.getElementById("myTable");
-    var row = document.createElement("tr");
-    row.innerHTML = `
-      <td><input type="text" class="description form-control"></td>
-      <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
-      <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-      <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
-      <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
-    `;
-    table.querySelector("tbody").appendChild(row);
+    for (var i = 0; i < totalOutubro.rows.length; i++) {
+      var row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" class="description form-control" value="${totalOutubro.rows[i].description}"></td>
+        <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].debit}"></td>
+        <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].credit}"></td>
+        <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+        <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
+      `;
+      table.querySelector("tbody").appendChild(row);
+    }
     calculateTotal();
   }
+}
 
-  function deleteRow(button) {
-    var table = document.getElementById("myTable");
-    button.closest("tr").remove();
-    calculateTotal();
-  }
+window.addEventListener("beforeunload", function() {
+  savedata();
+});
 
-  document.addEventListener('DOMContentLoaded', function() {
-    M.AutoInit();
-    loaddata();
-    removeAutoInsertRow();
-  });
+function clearRow(button) {
+  var table = document.getElementById("myTable");
+  var row = document.createElement("tr");
+  row.innerHTML = `
+    <td><input type="text" class="description form-control"></td>
+    <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
+    <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
+    <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+    <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
+  `;
+  table.querySelector("tbody").appendChild(row);
+  calculateTotal();
+}
+
+function deleteRow(button) {
+  var table = document.getElementById("myTable");
+  button.closest("tr").remove();
+  calculateTotal();
+}
+
 </script>
 
 </body>

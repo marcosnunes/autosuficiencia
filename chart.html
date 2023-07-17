@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <title>Grafico Anual</title>
+  
+  <style>
+    .chart-iframe {
+      width: 100%;
+      height: 0;
+      padding-bottom: 75%; /* Proporção de aspecto para manter a proporção do gráfico (por exemplo, 4:3 seria 75%) */
+    }
+
+    .chart-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      padding-top: 56.25%; /* Proporção de aspecto para manter a proporção do gráfico (por exemplo, 16:9 seria 56.25%) */
+    }
+
+    .chart-iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="chart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('chart').getContext('2d');
+
+    var monthlyData = [
+      { month: "Janeiro", key: "totalJaneiro", value: 0 },
+      { month: "Fevereiro", key: "totalFevereiro", value: 0 },
+	  { month: "Marco", key: "totalMarco", value: 0 },
+	  { month: "Abril", key: "totalAbril", value: 0 },
+	  { month: "Maio", key: "totalMaio", value: 0 },
+	  { month: "Junho", key: "totalJunho", value: 0 },
+	  { month: "Julho", key: "totalJulho", value: 0 },
+	  { month: "Agosto", key: "totalAgosto", value: 0 },
+	  { month: "Setembro", key: "totalSetembro", value: 0 },
+	  { month: "Outubro", key: "totalOuturo", value: 0 },
+	  { month: "Novembro", key: "totalNovembro", value: 0 },
+	  { month: "Dezembro", key: "totalDezembro", value: 0 },
+    ];
+
+    // Recuperar os valores de fechamento de cada mês do localStorage
+    monthlyData.forEach(function(month) {
+      var monthData = JSON.parse(localStorage.getItem(month.key));
+      month.value = monthData && monthData.total ? parseFloat(monthData.total) : 0;
+    });
+
+    var labels = monthlyData.map(function(month) {
+      return month.month;
+    });
+
+    var data = monthlyData.map(function(month) {
+      return month.value;
+    });
+
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Fechamento Mensal',
+          data: data,
+          backgroundColor: 'rgba(0, 123, 255, 0.5)',
+          borderColor: 'rgba(0, 123, 255, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

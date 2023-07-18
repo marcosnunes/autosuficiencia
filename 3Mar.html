@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <title>Marco</title>
+  <title>Março</title>
 </head>
 <body>
 
@@ -56,6 +56,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
   M.AutoInit();
   loaddata();
@@ -100,6 +101,7 @@ function savedata() {
     totalMarco.rows.push(row);
   }
   localStorage.setItem("totalMarco", JSON.stringify(totalMarco));
+  localStorage.setItem("previousMonthTotal", totalMarco.total); // Salvar o valor do fechamento do mês anterior
 }
 
 function loaddata() {
@@ -119,6 +121,11 @@ function loaddata() {
       table.querySelector("tbody").appendChild(row);
     }
     calculateTotal();
+  } else {
+    var previousMonthTotal = localStorage.getItem("previousMonthTotal");
+    if (previousMonthTotal) {
+      document.getElementById("initialBalance").value = previousMonthTotal;
+    }
   }
 }
 
@@ -145,6 +152,7 @@ function deleteRow(button) {
   button.closest("tr").remove();
   calculateTotal();
 }
+
 </script>
 
 </body>

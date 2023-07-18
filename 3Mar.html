@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
   M.AutoInit();
   loaddata();
   removeAutoInsertRow();
+  setPreviousMonthBalance();
 });
 
 function removeAutoInsertRow() {
@@ -88,44 +89,38 @@ function calculateTotal() {
 }
 
 function savedata() {
-  var totalMarco = {};
-  totalMarco.initialBalance = document.getElementById("initialBalance").value;
-  totalMarco.total = document.getElementById("total").textContent;
-  totalMarco.rows = [];
+  var totalMarço = {};
+  totalMarço.initialBalance = document.getElementById("initialBalance").value;
+  totalMarço.total = document.getElementById("total").textContent;
+  totalMarço.rows = [];
   var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
   for (var i = 0; i < tableRows.length; i++) {
     var row = {};
     row.description = tableRows[i].querySelector(".description").value;
     row.debit = tableRows[i].querySelector(".debit").value;
     row.credit = tableRows[i].querySelector(".credit").value;
-    totalMarco.rows.push(row);
+    totalMarço.rows.push(row);
   }
-  localStorage.setItem("totalMarco", JSON.stringify(totalMarco));
-  localStorage.setItem("previousMonthTotal", totalMarco.total); // Salvar o valor do fechamento do mês anterior
+  localStorage.setItem("totalMarço", JSON.stringify(totalMarço));
 }
 
 function loaddata() {
-  var totalMarco = JSON.parse(localStorage.getItem("totalMarco"));
-  if (totalMarco) {
-    document.getElementById("initialBalance").value = totalMarco.initialBalance;
+  var totalMarço = JSON.parse(localStorage.getItem("totalMarço"));
+  if (totalMarço) {
+    document.getElementById("initialBalance").value = totalMarço.initialBalance;
     var table = document.getElementById("myTable");
-    for (var i = 0; i < totalMarco.rows.length; i++) {
+    for (var i = 0; i < totalMarço.rows.length; i++) {
       var row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" class="description form-control" value="${totalMarco.rows[i].description}"></td>
-        <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalMarco.rows[i].debit}"></td>
-        <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalMarco.rows[i].credit}"></td>
+        <td><input type="text" class="description form-control" value="${totalMarço.rows[i].description}"></td>
+        <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalMarço.rows[i].debit}"></td>
+        <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalMarço.rows[i].credit}"></td>
         <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
         <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
       `;
       table.querySelector("tbody").appendChild(row);
     }
     calculateTotal();
-  } else {
-    var previousMonthTotal = localStorage.getItem("previousMonthTotal");
-    if (previousMonthTotal) {
-      document.getElementById("initialBalance").value = previousMonthTotal;
-    }
   }
 }
 
@@ -151,6 +146,15 @@ function deleteRow(button) {
   var table = document.getElementById("myTable");
   button.closest("tr").remove();
   calculateTotal();
+}
+
+function setPreviousMonthBalance() {
+  var previousMonthData = JSON.parse(localStorage.getItem("totalFevereiro")); // Altere "Fevereiro" para o mês anterior
+  if (previousMonthData) {
+    var previousMonthTotal = Number(previousMonthData.total);
+    document.getElementById("initialBalance").value = previousMonthTotal;
+    calculateTotal();
+  }
 }
 
 </script>

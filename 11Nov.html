@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
   M.AutoInit();
   loaddata();
   removeAutoInsertRow();
+  setPreviousMonthBalance();
 });
 
 function removeAutoInsertRow() {
@@ -145,6 +146,15 @@ function deleteRow(button) {
   var table = document.getElementById("myTable");
   button.closest("tr").remove();
   calculateTotal();
+}
+
+function setPreviousMonthBalance() {
+  var previousMonthData = JSON.parse(localStorage.getItem("totalOutubro")); // Altere "Outubro" para o mês anterior
+  if (previousMonthData) {
+    var previousMonthTotal = Number(previousMonthData.total);
+    document.getElementById("initialBalance").value = previousMonthTotal;
+    calculateTotal();
+  }
 }
 
 </script>

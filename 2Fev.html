@@ -101,6 +101,7 @@ function savedata() {
     totalFevereiro.rows.push(row);
   }
   localStorage.setItem("totalFevereiro", JSON.stringify(totalFevereiro));
+  localStorage.setItem("previousMonthTotal", totalFevereiro.total); // Salvar o valor do fechamento do mês anterior
 }
 
 function loaddata() {
@@ -120,6 +121,11 @@ function loaddata() {
       table.querySelector("tbody").appendChild(row);
     }
     calculateTotal();
+  } else {
+    var previousMonthTotal = localStorage.getItem("previousMonthTotal");
+    if (previousMonthTotal) {
+      document.getElementById("initialBalance").value = previousMonthTotal;
+    }
   }
 }
 

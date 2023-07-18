@@ -83,25 +83,25 @@
     }
     var total = initialBalance + creditTotal - debitTotal;
     document.getElementById("total").textContent = total;
-	savedata(); // Salvar os dados do fechamento do mês
+    savedata(); // Salvar os dados do fechamento do mês
   }
-  
-  function savedata() {
-  var totalJaneiro = {};
-  totalJaneiro.initialBalance = document.getElementById("initialBalance").value;
-  totalJaneiro.total = document.getElementById("total").textContent;
-  totalJaneiro.rows = [];
-  var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
-  for (var i = 0; i < tableRows.length; i++) {
-    var row = {};
-    row.description = tableRows[i].querySelector(".description").value;
-    row.debit = tableRows[i].querySelector(".debit").value;
-    row.credit = tableRows[i].querySelector(".credit").value;
-    totalJaneiro.rows.push(row);
-  }
-  localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
-}
 
+  function savedata() {
+    var totalJaneiro = {};
+    totalJaneiro.initialBalance = document.getElementById("initialBalance").value;
+    totalJaneiro.total = document.getElementById("total").textContent;
+    totalJaneiro.rows = [];
+    var tableRows = document.querySelectorAll("#myTable tbody tr:not(.auto-insert-row)");
+    for (var i = 0; i < tableRows.length; i++) {
+      var row = {};
+      row.description = tableRows[i].querySelector(".description").value;
+      row.debit = tableRows[i].querySelector(".debit").value;
+      row.credit = tableRows[i].querySelector(".credit").value;
+      totalJaneiro.rows.push(row);
+    }
+    localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
+    localStorage.setItem("previousMonthTotal", totalJaneiro.total); // Salvar o valor do fechamento do mês anterior
+  }
 
   function loaddata() {
     var totalJaneiro = JSON.parse(localStorage.getItem("totalJaneiro"));
@@ -120,6 +120,11 @@
         table.querySelector("tbody").appendChild(row);
       }
       calculateTotal();
+    } else {
+      var previousMonthTotal = localStorage.getItem("previousMonthTotal");
+      if (previousMonthTotal) {
+        document.getElementById("initialBalance").value = previousMonthTotal;
+      }
     }
   }
 

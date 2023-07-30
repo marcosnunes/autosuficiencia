@@ -103,16 +103,23 @@ function calculateTotal() {
   var creditTotal = 0;
   var debitInputs = document.querySelectorAll(".debit");
   var creditInputs = document.querySelectorAll(".credit");
+  
   for (var i = 0; i < debitInputs.length; i++) {
     debitTotal += Number(debitInputs[i].value);
   }
+  
   for (var i = 0; i < creditInputs.length; i++) {
     creditTotal += Number(creditInputs[i].value);
   }
+  
   var total = initialBalance + creditTotal - debitTotal;
-  document.getElementById("total").textContent = total;
+  // Usando toFixed(2) para mostrar apenas 2 casas decimais após a vírgula
+  var formattedTotal = total.toFixed(2);
+  
+  document.getElementById("total").textContent = formattedTotal;
   savedata();
 }
+
 
 function savedata() {
   var totalAbril = {};

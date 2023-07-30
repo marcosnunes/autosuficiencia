@@ -5,15 +5,41 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <title>Dezembro</title>
+  
+ <style>
+ .nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.brand-logo {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-btn-left,
+.nav-btn-right {
+  padding: 5px 10px;
+  background-color: #ccc;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+ </style>
+  
 </head>
 <body>
 
 <nav>
   <div class="nav-wrapper">
-    <a href="#" class="brand-logo center">Dezembro</a>
+    <button onclick="window.location.href='11Nov.html'" class="btn btn-default">&lt;</button>
+    <span class="brand-logo center">Dezembro</span>
+    <button onclick="window.location.href='index.html'" class="btn btn-default">&gt;</button>
   </div>
 </nav>
-
 
 <div class="container">
 

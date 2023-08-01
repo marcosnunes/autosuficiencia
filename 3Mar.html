@@ -7,6 +7,21 @@
   <title>Março</title>
 
  <style>
+     
+	.iframe-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      padding-top: 56.25%; /* Proporção de aspecto para manter a proporção do gráfico (por exemplo, 16:9 seria 56.25%) */
+    }
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+ 
  .nav-wrapper {
   display: flex;
   align-items: center;
@@ -43,7 +58,27 @@
 
 <div class="container">
 
-<iframe src="chart.html" frameborder="0" style="center" width="auto" height="auto"></iframe>
+
+<div class="iframe-container">
+  <iframe src="chart.html" frameborder="0"></iframe>
+</div>
+
+<script>
+  function resizeIframe() {
+    var iframe = document.querySelector('.iframe-container iframe');
+    var container = document.querySelector('.iframe-container');
+    var containerWidth = container.offsetWidth;
+    var aspectRatio = 9 / 16;
+
+    var newHeight = containerWidth * aspectRatio;
+    iframe.style.height = newHeight + 'px';
+  }
+
+  window.addEventListener('load', resizeIframe);
+  window.addEventListener('resize', resizeIframe);
+</script>
+
+
 
   <div class="input-field">
     <input type="number" class="form-control" id="initialBalance" oninput="calculateTotal()" placeholder="Saldo Inicial">
@@ -78,6 +113,8 @@
   </table>
 
   <p>Fechamento do mês: <span id="total"></span></p>
+  <p>Total Crédito: <span id="totalCredit"></span></p>
+  <p>Total Débito: <span id="totalDebit"></span></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -117,6 +154,9 @@ function calculateTotal() {
   var formattedTotal = total.toFixed(2);
   
   document.getElementById("total").textContent = formattedTotal;
+  document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
+  document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
+  
   savedata();
 }
 

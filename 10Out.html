@@ -240,12 +240,12 @@ function loaddata() {
     for (var i = 0; i < totalJaneiro.rows.length; i++) {
       var row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" class="description form-control" value="${totalJaneiro.rows[i].description}"></td>
-        <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalJaneiro.rows[i].debit}"></td>
-        <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalJaneiro.rows[i].credit}"></td>
+        <td><input type="text" class="description form-control" value="${totalOutubro.rows[i].description}"></td>
+        <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].debit}"></td>
+        <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].credit}"></td>
         <td>
           <label>
-            <input type="checkbox" class="filled-in" id="checkbox-${i}" onchange="updateCurrentBalance(this)" ${totalJaneiro.rows[i].checked ? "checked" : ""}>
+            <input type="checkbox" class="filled-in" id="checkbox-${i}" onchange="updateCurrentBalance(this)" ${totalOutubro.rows[i].checked ? "checked" : ""}>
             <span></span>
           </label>
         </td>

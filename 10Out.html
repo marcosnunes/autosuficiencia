@@ -5,9 +5,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <title>Outubro</title>
-  
+
  <style>
-      
+     
 	.iframe-container {
       position: relative;
       overflow: hidden;
@@ -43,14 +43,14 @@
   cursor: pointer;
 }
 
- </style>
+ </style>  
 
 </head>
 <body>
 
 <nav>
   <div class="nav-wrapper">
-    <button onclick="window.location.href='9set.html'" class="btn btn-default">&lt;</button>
+    <button onclick="window.location.href='9Set.html'" class="btn btn-default">&lt;</button>
     <span class="brand-logo center">Outubro</span>
     <button onclick="window.location.href='11Nov.html'" class="btn btn-default">&gt;</button>
   </div>
@@ -97,7 +97,7 @@
         <th>Descrição</th>
         <th>Débito</th> 
         <th>Crédito</th>
-        <th></th>
+        <th>Feito</th>
         <th></th>
       </tr>
     </thead>
@@ -106,12 +106,18 @@
         <td><input type="text" class="description form-control"></td>
         <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td> 
         <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-        <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+        <td>
+          <label>
+            <input type="checkbox" class="filled-in" id="checkbox-0" onchange="updateCurrentBalance(this)">
+            <span></span>
+          </label>
+        </td>
         <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
       </tr>
     </tbody>
   </table>
 
+  <p>Saldo Atual: <span id="currentBalance"></span></p>
   <p>Fechamento do mês: <span id="total"></span></p>
   <p>Total Crédito: <span id="totalCredit"></span></p>
   <p>Total Débito: <span id="totalDebit"></span></p>
@@ -125,7 +131,46 @@ document.addEventListener('DOMContentLoaded', function() {
   loaddata();
   removeAutoInsertRow();
   setPreviousMonthBalance();
+  
+  // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
+  var savedCurrentBalance = localStorage.getItem('currentBalance');
+  if (savedCurrentBalance) {
+    document.getElementById('currentBalance').textContent = savedCurrentBalance;
+  }
 });
+
+function updateCurrentBalance(checkbox) {
+  var initialBalance = Number(document.getElementById("initialBalance").value);
+  var debitInputs = document.querySelectorAll(".debit");
+  var creditInputs = document.querySelectorAll(".credit");
+  var checkboxInputs = document.querySelectorAll(".filled-in");
+  var selectedCreditTotal = 0;
+  var selectedDebitTotal = 0;
+
+  for (var i = 0; i < checkboxInputs.length; i++) {
+    if (checkboxInputs[i].checked) {
+      selectedCreditTotal += Number(creditInputs[i].value);
+      selectedDebitTotal += Number(debitInputs[i].value);
+    }
+    // Salva o estado da checkbox no localStorage
+    var rowIndex = Array.prototype.indexOf.call(
+      checkbox.parentElement.parentElement.parentElement.children,
+      checkbox.parentElement.parentElement
+    ) - 1;
+    var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
+    totalOutubro.rows[rowIndex].checked = checkbox.checked;
+    localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
+  }
+
+  var currentBalance = initialBalance + selectedCreditTotal - selectedDebitTotal;
+
+  var formattedCurrentBalance = currentBalance.toFixed(2);
+
+  document.getElementById("currentBalance").textContent = formattedCurrentBalance;
+  
+  // Salvar o saldo atual em localStorage
+  localStorage.setItem('currentBalance', formattedCurrentBalance);
+}
 
 function removeAutoInsertRow() {
   var autoInsertRows = document.querySelectorAll('.auto-insert-row');
@@ -156,7 +201,7 @@ function calculateTotal() {
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
   document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
- 
+  
   savedata();
 }
 
@@ -172,6 +217,7 @@ function savedata() {
     row.description = tableRows[i].querySelector(".description").value;
     row.debit = tableRows[i].querySelector(".debit").value;
     row.credit = tableRows[i].querySelector(".credit").value;
+    row.checked = tableRows[i].querySelector(".filled-in").checked; // Obtém o estado da checkbox
     totalOutubro.rows.push(row);
   }
   localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
@@ -182,16 +228,29 @@ function loaddata() {
   if (totalOutubro) {
     document.getElementById("initialBalance").value = totalOutubro.initialBalance;
     var table = document.getElementById("myTable");
+    var tbody = table.querySelector("tbody");
+    if (!tbody) {
+      tbody = document.createElement("tbody");
+      table.appendChild(tbody);
+    } else {
+      // Limpar as linhas existentes para recarregar os dados atualizados
+      tbody.innerHTML = "";
+    }
     for (var i = 0; i < totalOutubro.rows.length; i++) {
       var row = document.createElement("tr");
       row.innerHTML = `
         <td><input type="text" class="description form-control" value="${totalOutubro.rows[i].description}"></td>
         <td><input type="number" class="debit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].debit}"></td>
         <td><input type="number" class="credit form-control" oninput="calculateTotal()" value="${totalOutubro.rows[i].credit}"></td>
-        <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+        <td>
+          <label>
+            <input type="checkbox" class="filled-in" id="checkbox-${i}" onchange="updateCurrentBalance(this)" ${totalOutubro.rows[i].checked ? "checked" : ""}>
+            <span></span>
+          </label>
+        </td>
         <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
       `;
-      table.querySelector("tbody").appendChild(row);
+      tbody.appendChild(row);
     }
     calculateTotal();
   }
@@ -208,7 +267,12 @@ function clearRow(button) {
     <td><input type="text" class="description form-control"></td>
     <td><input type="number" class="debit form-control" oninput="calculateTotal()"></td>
     <td><input type="number" class="credit form-control" oninput="calculateTotal()"></td>
-    <td><button onclick="clearRow(this)" class="btn btn-default">+</button></td>
+    <td>
+      <label>
+        <input type="checkbox" class="filled-in" onchange="updateCurrentBalance(this)">
+        <span></span>
+      </label>
+    </td>
     <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
   `;
   table.querySelector("tbody").appendChild(row);
@@ -219,10 +283,11 @@ function deleteRow(button) {
   var table = document.getElementById("myTable");
   button.closest("tr").remove();
   calculateTotal();
+  updateCurrentBalance();
 }
 
 function setPreviousMonthBalance() {
-  var previousMonthData = JSON.parse(localStorage.getItem("totalSetembro")); // Altere "Setembro" para o mês anterior
+  var previousMonthData = JSON.parse(localStorage.getItem("totalSetembro")); // Altere "Outubro" para o mês anterior
   if (previousMonthData) {
     var previousMonthTotal = Number(previousMonthData.total);
     document.getElementById("initialBalance").value = previousMonthTotal;

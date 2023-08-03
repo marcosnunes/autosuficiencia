@@ -152,14 +152,6 @@ function updateCurrentBalance(checkbox) {
       selectedCreditTotal += Number(creditInputs[i].value);
       selectedDebitTotal += Number(debitInputs[i].value);
     }
-    // Salva o estado da checkbox no localStorage
-    var rowIndex = Array.prototype.indexOf.call(
-      checkbox.parentElement.parentElement.parentElement.children,
-      checkbox.parentElement.parentElement
-    ) - 1;
-    var totalAgosto = JSON.parse(localStorage.getItem("totalAgosto"));
-    totalAgosto.rows[rowIndex].checked = checkbox.checked;
-    localStorage.setItem("totalAgosto", JSON.stringify(totalAgosto));
   }
 
   var currentBalance = initialBalance + selectedCreditTotal - selectedDebitTotal;
@@ -167,7 +159,7 @@ function updateCurrentBalance(checkbox) {
   var formattedCurrentBalance = currentBalance.toFixed(2);
 
   document.getElementById("currentBalance").textContent = formattedCurrentBalance;
-  
+
   // Salvar o saldo atual em localStorage
   localStorage.setItem('currentBalance', formattedCurrentBalance);
 }
@@ -252,16 +244,11 @@ function loaddata() {
         <td><button onclick="deleteRow(this)" class="btn btn-default">-</button></td>
       `;
       tbody.appendChild(row);
-
-      // Adicione um ouvinte de eventos à checkbox para cada linha
-      var checkbox = row.querySelector(".filled-in");
-      checkbox.addEventListener("change", function() {
-        calculateTotal(); // Chame a função calculateTotal() sempre que a checkbox mudar
-      });
     }
 
     calculateTotal(); // Chama calculateTotal() após carregar os dados para calcular o saldo total corretamente.
   }
+}
 
 window.addEventListener("beforeunload", function() {
   savedata();

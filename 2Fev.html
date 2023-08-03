@@ -149,9 +149,11 @@ function updateCurrentBalance(checkbox) {
 
   for (var i = 0; i < checkboxInputs.length; i++) {
     if (checkboxInputs[i].checked) {
+      // Para cada linha com a caixa de seleção marcada, adicionamos os valores de débito e crédito aos totais.
       selectedCreditTotal += Number(creditInputs[i].value);
       selectedDebitTotal += Number(debitInputs[i].value);
     }
+
     // Salva o estado da checkbox no localStorage
     var rowIndex = Array.prototype.indexOf.call(
       checkbox.parentElement.parentElement.parentElement.children,
@@ -162,15 +164,17 @@ function updateCurrentBalance(checkbox) {
     localStorage.setItem("totalFevereiro", JSON.stringify(totalFevereiro));
   }
 
+  // Calcula o saldo atual com base no saldo inicial, débitos e créditos selecionados.
   var currentBalance = initialBalance + selectedCreditTotal - selectedDebitTotal;
-
   var formattedCurrentBalance = currentBalance.toFixed(2);
 
+  // Atualiza o valor do saldo atual exibido na página.
   document.getElementById("currentBalance").textContent = formattedCurrentBalance;
-  
+
   // Salvar o saldo atual em localStorage
   localStorage.setItem('currentBalance', formattedCurrentBalance);
 }
+
 
 function removeAutoInsertRow() {
   var autoInsertRows = document.querySelectorAll('.auto-insert-row');

@@ -179,6 +179,7 @@ function calculateTotal() {
   var creditTotal = 0;
   var debitInputs = document.querySelectorAll(".debit");
   var creditInputs = document.querySelectorAll(".credit");
+  var totalPorcentagem = 0;
   
   for (var i = 0; i < debitInputs.length; i++) {
     debitTotal += Number(debitInputs[i].value);

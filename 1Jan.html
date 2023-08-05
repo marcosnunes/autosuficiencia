@@ -121,6 +121,7 @@
   <p>Fechamento do mês: <span id="total"></span></p>
   <p>Total Crédito: <span id="totalCredit"></span></p>
   <p>Total Débito: <span id="totalDebit"></span></p>
+  <p>Débito ÷ Crédito: <span id="totalPorcentagem"></span></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -279,6 +280,32 @@ function deleteRow(button) {
   calculateTotal();
   updateCurrentBalance();
 }
+
+function porcentagemTotal() {
+  var debitTotal = 0;
+  var creditTotal = 0;
+  var debitInputs = document.querySelectorAll(".debit");
+  var creditInputs = document.querySelectorAll(".credit");
+  
+  for (var i = 0; i < debitInputs.length; i++) {
+    debitTotal += Number(debitInputs[i].value);
+  }
+  
+  for (var i = 0; i < creditInputs.length; i++) {
+    creditTotal += Number(creditInputs[i].value);
+  }
+  
+  var porcentagemtotal = (creditTotal / debitTotal) * 100;
+  // Usando toFixed(2) para mostrar a porcentagem com 2 casas decimais após a vírgula
+  var formattedporcentagemTotal = porcentagemtotal.toFixed(2);
+  
+  document.getElementById("porcentagemtotal").textContent = formattedporcentagemTotal + "%";
+  document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
+  document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
+  
+  savedata();
+}
+
 
 </script>
 

@@ -193,6 +193,11 @@ function calculateTotal() {
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
   document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
+
+  var percentage = (debitTotal / creditTotal) * 100;
+  var formattedPercentage = percentage.toFixed(2);
+  
+  document.getElementById("totalPorcentagem").textContent = formattedPercentage + "%";
   
   savedata();
 }
@@ -280,32 +285,6 @@ function deleteRow(button) {
   calculateTotal();
   updateCurrentBalance();
 }
-
-function porcentagemTotal() {
-  var debitTotal = 0;
-  var creditTotal = 0;
-  var debitInputs = document.querySelectorAll(".debit");
-  var creditInputs = document.querySelectorAll(".credit");
-  
-  for (var i = 0; i < debitInputs.length; i++) {
-    debitTotal += Number(debitInputs[i].value);
-  }
-  
-  for (var i = 0; i < creditInputs.length; i++) {
-    creditTotal += Number(creditInputs[i].value);
-  }
-  
-  var porcentagemtotal = (creditTotal / debitTotal) * 100;
-  // Usando toFixed(2) para mostrar a porcentagem com 2 casas decimais após a vírgula
-  var formattedporcentagemTotal = porcentagemtotal.toFixed(2);
-  
-  document.getElementById("porcentagemtotal").textContent = formattedporcentagemTotal + "%";
-  document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
-  document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
-  
-  savedata();
-}
-
 
 </script>
 

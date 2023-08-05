@@ -194,6 +194,11 @@ function calculateTotal() {
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
   document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
+
+  var percentage = (debitTotal / creditTotal) * 100;
+  var formattedPercentage = percentage.toFixed(2);
+  
+  document.getElementById("totalPorcentagem").textContent = formattedPercentage + "%";
   
   savedata();
 }

@@ -121,6 +121,7 @@
   <p>Fechamento do mês: <span id="total"></span></p>
   <p>Total Crédito: <span id="totalCredit"></span></p>
   <p>Total Débito: <span id="totalDebit"></span></p>
+  <p>Débito ÷ Crédito: <span id="totalPorcentagem"></span></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -193,6 +194,11 @@ function calculateTotal() {
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
   document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);
+
+  var percentage = (debitTotal / creditTotal) * 100;
+  var formattedPercentage = percentage.toFixed(2);
+  
+  document.getElementById("totalPorcentagem").textContent = formattedPercentage + "%";
   
   savedata();
 }

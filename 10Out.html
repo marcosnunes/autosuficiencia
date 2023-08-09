@@ -121,6 +121,7 @@
   <p>Fechamento do mês: <span id="total"></span></p>
   <p>Total Crédito: <span id="totalCredit"></span></p>
   <p>Total Débito: <span id="totalDebit"></span></p>
+  <p>Balanço: <span id="balance"></span></p>
   <p>Débito ÷ Crédito: <span id="totalPorcentagem"></span></p>
 </div>
 
@@ -191,6 +192,9 @@ function calculateTotal() {
   var total = initialBalance + creditTotal - debitTotal;
   // Usando toFixed(2) para mostrar apenas 2 casas decimais após a vírgula
   var formattedTotal = total.toFixed(2);
+
+  var balance = creditTotal - debitTotal;
+  var formattedBalance = balance.toFixed(2);
   
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);

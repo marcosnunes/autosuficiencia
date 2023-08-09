@@ -196,6 +196,7 @@ function calculateTotal() {
   var balance = creditTotal - debitTotal;
   var formattedBalance = balance.toFixed(2);
   
+  document.getElementById("balance").textContent = formattedBalance;
   document.getElementById("total").textContent = formattedTotal;
   document.getElementById("totalCredit").textContent = creditTotal.toFixed(2);
   document.getElementById("totalDebit").textContent = debitTotal.toFixed(2);

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <title>Autossuficiência - Autenticação</title>
+  <style>
+    .auth-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .auth-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo center">Autossuficiência</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="auth-container">
+          <button class="btn waves-effect waves-light" onclick="loginWithGoogle()">Entrar com Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtFMlFeti5qSJlIhTQ8kzm4QNRULVow2M",
+      authDomain: "autossuficiencia-web.firebaseapp.com",
+      projectId: "autossuficiencia-web",
+      storageBucket: "autossuficiencia-web.appspot.com",
+      messagingSenderId: "784156731768",
+      appId: "1:784156731768:web:977afab5c50c11992b008d",
+      measurementId: "G-64RG615HVR"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          console.log("Usuário logado:", user);
+          window.location.href = "https://marcosnunes.github.io/autossuficiencia";
+        })
+        .catch((error) => {
+          console.error("Erro no login com Google:", error);
+        });
+    }
+  </script>
+</body>
+</html>

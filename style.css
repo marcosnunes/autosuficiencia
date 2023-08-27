@@ -40,6 +40,7 @@
       width: 50%;
     }
 
-    nav {
+    .navigation {
       position: fixed;
+      width: 100%;
     }

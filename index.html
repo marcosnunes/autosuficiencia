@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Sua calculadora financeira prática">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    .card-columns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .card {
+      width: calc(25% - 20px);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 992px) {
+      .card {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
   <title>Autossuficiência</title>
 </head>
 
@@ -16,39 +38,83 @@
       <a href="#" class="brand-logo center">Autossuficiência</a>
     </div>
   </nav>
-
   <div class="container">
-    <p class="flow-text">"Organizai-vos; preparai todas as coisas necessárias e estabelecei uma casa, sim, uma casa de oração, uma casa de jejum, uma casa de fé, uma casa de aprendizado, uma casa de glória, uma casa de ordem, uma casa de Deus."      D&C 88:119</p>
-
+    <p class="flow-text">"Organizai-vos; preparai todas as coisas necessárias e estabelecei uma casa, sim, uma casa de
+      oração, uma casa de jejum, uma casa de fé, uma casa de aprendizado, uma casa de glória, uma casa de ordem, uma
+      casa de Deus." D&C 88:119</p>
     <div class="row">
-      <div class="col s6">
-        <ul class="collection collection-columns">
-          <li class="collection-item"><a href="1Jan.html">Janeiro</a></li>
-          <li class="collection-item"><a href="2Fev.html">Fevereiro</a></li>
-          <li class="collection-item"><a href="3Mar.html">Março</a></li>
-          <li class="collection-item"><a href="4Abr.html">Abril</a></li>
-          <li class="collection-item"><a href="5Mai.html">Maio</a></li>
-          <li class="collection-item"><a href="6Jun.html">Junho</a></li>
-        </ul>
-      </div>
-      <div class="col s6">
-        <ul class="collection collection-columns">
-          <li class="collection-item"><a href="7Jul.html">Julho</a></li>
-          <li class="collection-item"><a href="8Ago.html">Agosto</a></li>
-          <li class="collection-item"><a href="9Set.html">Setembro</a></li>
-          <li class="collection-item"><a href="10Out.html">Outubro</a></li>
-          <li class="collection-item"><a href="11Nov.html">Novembro</a></li>
-          <li class="collection-item"><a href="12Dez.html">Dezembro</a></li>
-        </ul>
-      </div>
-	  <div class="col s6">
-        <ul class="collection collection-columns">
-          <li class="collection-item"><a href="privacy.html">Privacidade</a></li>
-        </ul>
+      <div class="col s12">
+        <div class="card-columns">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="1Jan.html">Janeiro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="2Fev.html">Fevereiro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="3Mar.html">Março</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="4Abr.html">Abril</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="5Mai.html">Maio</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="6Jun.html">Junho</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="7Jul.html">Julho</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="8Ago.html">Agosto</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="9Set.html">Setembro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="10Out.html">Outubro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="11Nov.html">Novembro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="12Dez.html">Dezembro</a></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><a href="privacy.html">Privacidade</a></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+
 </html>

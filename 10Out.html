@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Sua calculadora financeira prática">
+  <meta name="description" content="Sua calculadora financeira prática para Outubro">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
   <title>Outubro</title>
 </head>
+
 <body>
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToSet()" class="btn btn-default">&lt;</button>
+        <button onclick="redirectToSetembro()" class="btn btn-default">&lt;</button>
         <span class="brand-logo center">Outubro</span>
-        <button onclick="redirectToNov()" class="btn btn-default">&gt;</button>
+        <button onclick="redirectToNovembro()" class="btn btn-default">&gt;</button>
       </div>
     </nav>
   </div>
@@ -23,30 +25,33 @@
     <div class="iframe-container">
       <iframe src="chart.html" frameborder="0"></iframe>
     </div>
+
     <div class="card">
       <div class="card-content">
         <span class="card-title">Saldo Inicial de Outubro</span>
-        <p><span id="OctInitialBalance">0.00</span></p>
+        <p><span id="OutubroInitialBalance">0.00</span></p>
       </div>
     </div>
+
     <div class="card">
       <div class="card-content">
         <span class="card-title">Fazer lançamento</span>
         <div class="input-field">
-          <input type="text" class="description form-control" id="octDescription" placeholder="Descrição">
-          <label for="octDescription">Descrição</label>
+          <input type="text" class="description form-control" id="outubroDescription" placeholder="Descrição">
+          <label for="outubroDescription">Descrição</label>
         </div>
         <div class="input-field">
-          <input type="number" class="debit form-control" id="octDebit" placeholder="Débito">
-          <label for="octDebit">Débito</label>
+          <input type="number" class="debit form-control" id="outubroDebit" placeholder="Débito">
+          <label for="outubroDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="octCredit" placeholder="Crédito">
-          <label for="octCredit">Crédito</label>
+          <input type="number" class="credit form-control" id="outubroCredit" placeholder="Crédito">
+          <label for="outubroCredit">Crédito</label>
         </div>
         <button onclick="addData()" class="btn btn-default">Adicionar</button>
       </div>
     </div>
+
     <div id="dataCards">
       <!-- Os cards de dados adicionados aparecerão aqui -->
     </div>
@@ -63,45 +68,36 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-    // Função para gerar IDs únicos
-    function uuidv4() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-          v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
-    function resizeIframe() {
-      var iframe = document.querySelector('.iframe-container iframe');
-      var container = document.querySelector('.iframe-container');
-      var containerWidth = container.offsetWidth;
-      var aspectRatio = 9 / 16; // Ajuste conforme necessário
-      var newHeight = containerWidth * aspectRatio;
-      iframe.style.height = newHeight + 'px';
-    }
-    window.addEventListener('load', resizeIframe);
-    window.addEventListener('resize', resizeIframe);
     // Função para redirecionar para outras páginas
-    function redirectToSet() {
+    function redirectToSetembro() {
       window.location.href = '9Set.html';
     }
-    function redirectToNov() {
+
+    function redirectToNovembro() {
       window.location.href = '11Nov.html';
     }
+
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
     });
+
+    // Variáveis locais dentro do escopo da função
+    var data = []; // Para armazenar os dados dos cards
+    var inputData = []; // Para armazenar os dados inseridos
+
     // Função para calcular o total
     function calculateTotal() {
-      var initialBalance = Number(document.getElementById("OctInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+      var initialBalance = Number(document.getElementById("OutubroInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
       var debitTotal = 0;
       var creditTotal = 0;
+
       // Calcular totais usando os dados armazenados
       for (var i = 0; i < data.length; i++) {
         debitTotal += Number(data[i].debit);
         creditTotal += Number(data[i].credit);
       }
+
       var total = initialBalance + creditTotal - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
@@ -118,40 +114,49 @@
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
       savedata();
     }
+
     // Função para salvar o saldo inicial
     function saveInitialBalance() {
-      var initialBalance = document.getElementById("OctInitialBalance").textContent;
+      var initialBalance = document.getElementById("OutubroInitialBalance").textContent;
       localStorage.setItem("initialBalanceOutubro", initialBalance);
     }
+
     // Função para salvar os dados
     function savedata() {
       var totalOutubro = {};
-      totalOutubro.initialBalance = document.getElementById("OctInitialBalance").value;
+      totalOutubro.initialBalance = document.getElementById("OutubroInitialBalance").textContent;
       totalOutubro.total = document.getElementById("totalOutubro").textContent;
       totalOutubro.rows = data;
+
       localStorage.setItem("totalOutubro", JSON.stringify(totalOutubro));
     }
+
     // Função para carregar os dados
     function loaddata() {
       var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
       var totalSetembro = JSON.parse(localStorage.getItem("totalSetembro"));
+
       if (totalOutubro) {
         // Defina o saldo inicial de outubro como o valor de totalSetembro
-        document.getElementById("OctInitialBalance").textContent = totalSetembro ? totalSetembro.total : '0.00';
+        document.getElementById("OutubroInitialBalance").textContent = totalSetembro ? totalSetembro.total : '0.00';
+
         data = totalOutubro.rows;
         updateDataCards();
         calculateTotal();
       }
     }
+
     // Função para adicionar dados
     function addData() {
-      var description = document.getElementById("octDescription").value;
-      var debit = document.getElementById("octDebit").value;
-      var credit = document.getElementById("octCredit").value;
+      var description = document.getElementById("outubroDescription").value;
+      var debit = document.getElementById("outubroDebit").value;
+      var credit = document.getElementById("outubroCredit").value;
+
       // Verifique se pelo menos a descrição está preenchida
       if (description.trim() !== '') {
         // Crie um ID único
         var id = uuidv4();
+
         // Crie um objeto de dados
         var newData = {
           id: id,
@@ -159,14 +164,18 @@
           debit: debit,
           credit: credit
         };
+
         // Adicione os novos dados à array data
         data.push(newData);
+
         // Limpe os campos de entrada
-        document.getElementById("octDescription").value = "";
-        document.getElementById("octDebit").value = "";
-        document.getElementById("octCredit").value = "";
+        document.getElementById("outubroDescription").value = "";
+        document.getElementById("outubroDebit").value = "";
+        document.getElementById("outubroCredit").value = "";
+
         // Atualize os cards de dados
         updateDataCards();
+
         // Chame a função calculateTotal para atualizar os totais
         calculateTotal();
       } else {
@@ -174,35 +183,29 @@
         alert("Preencha a descrição antes de adicionar.");
       }
     }
-// Função para excluir dados com base no ID do card
-function deleteData(cardId) {
-  // Verifique e exclua o card do array 'data'
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].id === cardId) {
-      data.splice(i, 1);
-      break;
+
+    // Função para excluir dados com base no ID do card
+    function deleteData(cardId) {
+      // Verifique e exclua o card do array 'data'
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id === cardId) {
+          data.splice(i, 1);
+          break;
+        }
+      }
+
+      // Atualize os dados salvos no localStorage
+      savedata();
+
+      // Atualize os cards após a exclusão
+      updateDataCards();
     }
-  }
-
-  // Verifique e exclua o card do array 'inputData'
-  for (var j = 0; j < inputData.length; j++) {
-    if (inputData[j].id === cardId) {
-      inputData.splice(j, 1);
-      break;
-    }
-  }
-
-  // Atualize os dados salvos no localStorage
-  savedata();
-
-  // Atualize os cards após a exclusão
-  updateDataCards();
-}
 
     // Função para criar um card de dados
     function createDataCard(dataItem) {
       var card = document.createElement("div");
       card.className = "card";
+
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
       cardContent.innerHTML = `
@@ -210,6 +213,7 @@ function deleteData(cardId) {
         <p>Débito: ${dataItem.debit}</p>
         <p>Crédito: ${dataItem.credit}</p>
       `;
+
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");
@@ -219,11 +223,15 @@ function deleteData(cardId) {
       deleteButton.onclick = function () {
         deleteData(dataItem.id);
       };
+
       cardAction.appendChild(deleteButton);
+
       card.appendChild(cardContent);
       card.appendChild(cardAction);
+
       return card;
     }
+
     // Função para atualizar os cards de dados
     function updateDataCards() {
       var dataCards = document.getElementById("dataCards");
@@ -237,6 +245,27 @@ function deleteData(cardId) {
       // Calcular totais e atualizar os resultados
       calculateTotal();
     }
+
+    // Função para gerar IDs únicos
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function resizeIframe() {
+      var iframe = document.querySelector('.iframe-container iframe');
+      var container = document.querySelector('.iframe-container');
+      var containerWidth = container.offsetWidth;
+      var aspectRatio = 9 / 16; // Ajuste conforme necessário
+      var newHeight = containerWidth * aspectRatio;
+      iframe.style.height = newHeight + 'px';
+    }
+    window.addEventListener('load', resizeIframe);
+    window.addEventListener('resize', resizeIframe);
   </script>
 </body>
+
 </html>

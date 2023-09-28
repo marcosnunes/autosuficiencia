@@ -223,29 +223,31 @@
       }
     }
 
-    // Função para excluir dados com base no ID do card
-    function deleteData(cardId) {
-      var indexToDelete = -1;
-
-      // Encontre o índice do elemento no array de inputData com base no ID do card
-      for (var i = 0; i < inputData.length; i++) {
-        if (inputData[i].id === cardId) {
-          indexToDelete = i;
-          break;
-        }
-      }
-
-      // Se o índice for encontrado, remova o elemento do array
-      if (indexToDelete !== -1) {
-        inputData.splice(indexToDelete, 1);
-
-        // Atualize os dados salvos no localStorage
-        savedata();
-
-        // Atualize os cards após a exclusão
-        updateDataCards();
-      }
+// Função para excluir dados com base no ID do card
+function deleteData(cardId) {
+  // Verifique e exclua o card do array 'data'
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].id === cardId) {
+      data.splice(i, 1);
+      break;
     }
+  }
+
+  // Verifique e exclua o card do array 'inputData'
+  for (var j = 0; j < inputData.length; j++) {
+    if (inputData[j].id === cardId) {
+      inputData.splice(j, 1);
+      break;
+    }
+  }
+
+  // Atualize os dados salvos no localStorage
+  savedata();
+
+  // Atualize os cards após a exclusão
+  updateDataCards();
+}
+
 
     // Função para criar um card de dados
     function createDataCard(dataItem) {

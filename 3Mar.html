@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Sua calculadora financeira prática para Março">
+  <meta name="description" content="Sua calculadora financeira prática">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
   <title>Março</title>
 </head>
-
 <body>
   <div class="navigation">
     <nav>
@@ -25,14 +23,12 @@
     <div class="iframe-container">
       <iframe src="chart.html" frameborder="0"></iframe>
     </div>
-
     <div class="card">
       <div class="card-content">
         <span class="card-title">Saldo Inicial de Março</span>
         <p><span id="MarInitialBalance">0.00</span></p>
       </div>
     </div>
-
     <div class="card">
       <div class="card-content">
         <span class="card-title">Fazer lançamento</span>
@@ -51,7 +47,6 @@
         <button onclick="addData()" class="btn btn-default">Adicionar</button>
       </div>
     </div>
-
     <div id="dataCards">
       <!-- Os cards de dados adicionados aparecerão aqui -->
     </div>
@@ -69,19 +64,31 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
+    // Função para gerar IDs únicos
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    function resizeIframe() {
+      var iframe = document.querySelector('.iframe-container iframe');
+      var container = document.querySelector('.iframe-container');
+      var containerWidth = container.offsetWidth;
+      var aspectRatio = 9 / 16; // Ajuste conforme necessário
+      var newHeight = containerWidth * aspectRatio;
+      iframe.style.height = newHeight + 'px';
+    }
+    window.addEventListener('load', resizeIframe);
+    window.addEventListener('resize', resizeIframe);
     // Função para redirecionar para outras páginas
     function redirectToFeb() {
       window.location.href = '2Fev.html';
     }
-<<<<<<< HEAD
     function redirectToApr() {
-=======
-
-    function redirectToAbr() {
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       window.location.href = '4Abr.html';
     }
-
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
@@ -92,35 +99,21 @@
         calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
       }
     });
-<<<<<<< HEAD
     // Variáveis locais dentro do escopo da função
     var data = []; // Para armazenar os dados dos cards
     var inputData = []; // Para armazenar os dados inseridos
-=======
-
-    // Variáveis locais dentro do escopo da função
-    var data = []; // Para armazenar os dados dos cards
-    var inputData = []; // Para armazenar os dados inseridos
-
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
     // Função para calcular o total
     function calculateTotal() {
       var creditCardBalance = Number(document.getElementById("marchCreditCardBalance").textContent);
       var initialBalance = Number(document.getElementById("MarInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
       var debitTotal = 0;
       var creditTotal = 0;
-
       // Calcular totais usando os dados armazenados
       for (var i = 0; i < data.length; i++) {
         debitTotal += Number(data[i].debit);
         creditTotal += Number(data[i].credit);
       }
-<<<<<<< HEAD
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
-=======
-
-      var total = initialBalance + creditTotal - debitTotal;
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
@@ -136,36 +129,26 @@
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
       savedata();
     }
-
     // Função para salvar o saldo inicial
     function saveInitialBalance() {
       var initialBalance = document.getElementById("MarInitialBalance").textContent;
       localStorage.setItem("initialBalanceMar", initialBalance);
     }
-
     // Função para salvar os dados
     function savedata() {
       var totalMarço = {};
-      totalMarço.initialBalance = document.getElementById("MarInitialBalance").textContent;
+      totalMarço.initialBalance = document.getElementById("MarInitialBalance").value;
       totalMarço.total = document.getElementById("totalMarço").textContent;
       totalMarço.rows = data;
-
       localStorage.setItem("totalMarço", JSON.stringify(totalMarço));
     }
-
     // Função para carregar os dados
     function loaddata() {
       var totalMarço = JSON.parse(localStorage.getItem("totalMarço"));
       var totalFevereiro = JSON.parse(localStorage.getItem("totalFevereiro"));
-
       if (totalMarço) {
         // Defina o saldo inicial de março como o valor de totalFevereiro
-<<<<<<< HEAD
         document.getElementById("MarInitialBalance").textContent = totalFevereiro ? totalFevereiro.total : '0.00'; // Alteração aqui
-=======
-        document.getElementById("MarInitialBalance").textContent = totalFevereiro ? totalFevereiro.total : '0.00';
-
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         data = totalMarço.rows;
         // Recuperar o valor do cartão de crédito
         var marchCreditCardBalance = localStorage.getItem("marchCreditCardBalance");
@@ -176,18 +159,15 @@
         calculateTotal();
       }
     }
-
     // Função para adicionar dados
     function addData() {
       var description = document.getElementById("marDescription").value;
       var debit = document.getElementById("marDebit").value;
       var credit = document.getElementById("marCredit").value;
-
       // Verifique se pelo menos a descrição está preenchida
       if (description.trim() !== '') {
         // Crie um ID único
         var id = uuidv4();
-
         // Crie um objeto de dados
         var newData = {
           id: id,
@@ -195,18 +175,14 @@
           debit: debit,
           credit: credit
         };
-
         // Adicione os novos dados à array data
         data.push(newData);
-
         // Limpe os campos de entrada
         document.getElementById("marDescription").value = "";
         document.getElementById("marDebit").value = "";
         document.getElementById("marCredit").value = "";
-
         // Atualize os cards de dados
         updateDataCards();
-
         // Chame a função calculateTotal para atualizar os totais
         calculateTotal();
       } else {
@@ -214,7 +190,6 @@
         alert("Preencha a descrição antes de adicionar.");
       }
     }
-
     // Função para excluir dados com base no ID do card
     function deleteData(cardId) {
       // Verifique e exclua o card do array 'data'
@@ -224,36 +199,22 @@
           break;
         }
       }
-<<<<<<< HEAD
       // Atualize os dados salvos no localStorage
       savedata();
-=======
-
-      // Atualize os dados salvos no localStorage
-      savedata();
-
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       // Atualize os cards após a exclusão
       updateDataCards();
     }
-
     // Função para criar um card de dados
     function createDataCard(dataItem) {
       var card = document.createElement("div");
       card.className = "card";
-
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
       cardContent.innerHTML =  `
         <span class="card-title">${dataItem.description}</span>
         <p>Débito: ${dataItem.debit}</p>
         <p>Crédito: ${dataItem.credit}</p>
-<<<<<<< HEAD
       ` ;
-=======
-      `;
-
->>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");
@@ -263,15 +224,11 @@
       deleteButton.onclick = function () {
         deleteData(dataItem.id);
       };
-
       cardAction.appendChild(deleteButton);
-
       card.appendChild(cardContent);
       card.appendChild(cardAction);
-
       return card;
     }
-
     // Função para atualizar os cards de dados
     function updateDataCards() {
       var dataCards = document.getElementById("dataCards");
@@ -285,27 +242,6 @@
       // Calcular totais e atualizar os resultados
       calculateTotal();
     }
-
-    // Função para gerar IDs únicos
-    function uuidv4() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-          v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
-
-    function resizeIframe() {
-      var iframe = document.querySelector('.iframe-container iframe');
-      var container = document.querySelector('.iframe-container');
-      var containerWidth = container.offsetWidth;
-      var aspectRatio = 9 / 16; // Ajuste conforme necessário
-      var newHeight = containerWidth * aspectRatio;
-      iframe.style.height = newHeight + 'px';
-    }
-    window.addEventListener('load', resizeIframe);
-    window.addEventListener('resize', resizeIframe);
   </script>
 </body>
-
 </html>

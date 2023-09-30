@@ -119,7 +119,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var monthsPT = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    var monthsPT = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     var ano = new Date().getFullYear();
     var data = [];
     document.addEventListener('DOMContentLoaded', function () {
@@ -209,7 +209,7 @@
           var purchase = {
             id: uuidv4(),
             month: months[currentMonthIndex],
-            description: monthsPT[currentMonthIndex] + " - Parcela " + (i + 1) + " (" + ano + ")",
+            description: monthsPT[currentMonthIndex] + " - Parc. " + (i + 1),
             value: dividedValue
           };
           data[groupedCardIndex].purchases.push(purchase);

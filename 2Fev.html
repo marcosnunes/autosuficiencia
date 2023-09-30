@@ -58,6 +58,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Cartão de Crédito: <span id="februaryCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalFevereiro">0.00</span></p>
@@ -100,6 +101,12 @@
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
+      // Carregar o valor de februaryCreditCardBalance
+      var februaryCreditCardBalance = localStorage.getItem("februaryCreditCardBalance");
+      if (februaryCreditCardBalance) {
+        document.getElementById("februaryCreditCardBalance").textContent = februaryCreditCardBalance;
+        calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
+      }
     });
 
     // Variáveis locais dentro do escopo da função
@@ -108,6 +115,7 @@
 
     // Função para calcular o total
     function calculateTotal() {
+      var creditCardBalance = Number(document.getElementById("februaryCreditCardBalance").textContent);
       var initialBalance = Number(document.getElementById("FebInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
       var debitTotal = 0;
       var creditTotal = 0;
@@ -118,7 +126,7 @@
         creditTotal += Number(data[i].credit);
       }
 
-      var total = initialBalance + creditTotal - debitTotal;
+      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
@@ -162,6 +170,11 @@
         document.getElementById("FebInitialBalance").textContent = totalJaneiro ? totalJaneiro.total : '0.00'; // Alteração aqui
 
         data = totalFevereiro.rows;
+        // Recuperar o valor do cartão de crédito
+        var februaryCreditCardBalance = localStorage.getItem("februaryCreditCardBalance");
+        if (februaryCreditCardBalance) {
+          document.getElementById("februaryCreditCardBalance").textContent = februaryCreditCardBalance;
+        }
         updateDataCards();
         calculateTotal();
       }

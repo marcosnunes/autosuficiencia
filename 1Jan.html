@@ -57,6 +57,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Cartão de Crédito: <span id="januaryCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalJaneiro">0.00</span></p>
@@ -105,6 +106,7 @@
     });
 
     function calculateTotal() {
+      var creditCardBalance = Number(document.getElementById("januaryCreditCardBalance").textContent);
       var initialBalance = Number(document.getElementById("JanInitialBalance").value);
       var debitTotal = 0;
       var creditTotal = 0;
@@ -121,20 +123,24 @@
         creditTotal += Number(inputData[j].credit);
       }
 
-      var total = initialBalance + creditTotal - debitTotal;
+      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
+
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
+
       document.getElementById("balance").textContent = formattedBalance;
       document.getElementById("totalJaneiro").textContent = formattedTotal;
       document.getElementById("totalCredit").textContent = !isNaN(creditTotal) ? creditTotal.toFixed(2) : '0.00';
       document.getElementById("totalDebit").textContent = !isNaN(debitTotal) ? debitTotal.toFixed(2) : '0.00';
+
       var percentage = 0;
       if (creditTotal !== 0) {
         percentage = (debitTotal / creditTotal) * 100;
       }
       var formattedPercentage = !isNaN(percentage) ? percentage.toFixed(2) + "%" : '0.00%';
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
+
       savedata();
     }
 
@@ -170,6 +176,11 @@
         inputData = totalJaneiro.rows; // Certifique-se de que os dados são atribuídos a inputData
         updateDataCards();
         calculateTotal();
+        // Recuperar o valor do cartão de crédito
+        var januaryCreditCardBalance = localStorage.getItem("januaryCreditCardBalance");
+        if (januaryCreditCardBalance) {
+          document.getElementById("januaryCreditCardBalance").textContent = januaryCreditCardBalance;
+        }
       } else {
         inputData = []; // Inicialize como um array vazio se não houver dados no localStorage
       }
@@ -223,6 +234,31 @@
       }
     }
 
+<<<<<<< HEAD
+    // Função para excluir dados com base no ID do card
+    function deleteData(cardId) {
+      // Verifique e exclua o card do array 'data'
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].id === cardId) {
+          data.splice(i, 1);
+          break;
+        }
+      }
+
+      // Verifique e exclua o card do array 'inputData'
+      for (var j = 0; j < inputData.length; j++) {
+        if (inputData[j].id === cardId) {
+          inputData.splice(j, 1);
+          break;
+        }
+      }
+
+      // Atualize os dados salvos no localStorage
+      savedata();
+
+      // Atualize os cards após a exclusão
+      updateDataCards();
+=======
 // Função para excluir dados com base no ID do card
 function deleteData(cardId) {
   // Verifique e exclua o card do array 'data'
@@ -230,6 +266,7 @@ function deleteData(cardId) {
     if (data[i].id === cardId) {
       data.splice(i, 1);
       break;
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
     }
   }
 
@@ -247,6 +284,7 @@ function deleteData(cardId) {
   // Atualize os cards após a exclusão
   updateDataCards();
 }
+
 
 
     // Função para criar um card de dados

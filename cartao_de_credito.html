@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Sua Calculadora Financeira Prática">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Cartão de Crédito</title>
+  <style>
+    .card-balance-content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .purchase-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
+        <span class="brand-logo center">Cartão de Crédito</span>
+        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="balance-value" id="balanceValue">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Valores das faturas</span>
+          <div class="card-balance-content">
+            <div class="card-content">
+              <span class="card-title">Janeiro</span>
+              <p><span id="januaryCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Fevereiro</span>
+              <p><span id="februaryCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Março</span>
+              <p><span id="marchCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Abril</span>
+              <p><span id="aprilCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Maio</span>
+              <p><span id="mayCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Junho</span>
+              <p><span id="juneCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Julho</span>
+              <p><span id="julyCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Agosto</span>
+              <p><span id="augustCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Setembro</span>
+              <p><span id="septemberCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Outubro</span>
+              <p><span id="octoberCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Novembro</span>
+              <p><span id="novemberCreditCardBalance">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Dezembro</span>
+              <p><span id="decemberCreditCardBalance">0.00</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Registrar compra</span>
+        <div class="input-field">
+          <select class="month-select form-control" id="month">
+            <option value="" disabled selected>Mês da compra</option>
+            <option value="January">Janeiro</option>
+            <option value="February">Fevereiro</option>
+            <option value="March">Março</option>
+            <option value="April">Abril</option>
+            <option value="May">Maio</option>
+            <option value="June">Junho</option>
+            <option value="July">Julho</option>
+            <option value="August">Agosto</option>
+            <option value="September">Setembro</option>
+            <option value="October">Outubro</option>
+            <option value="November">Novembro</option>
+            <option value="December">Dezembro</option>
+          </select>
+        </div>
+        <div class="input-field">
+          <input type="text" class="description form-control" id="description" placeholder="Descrição">
+          <label for="description">Descrição</label>
+        </div>
+        <div class="input-field">
+          <input type="number" class="multiplicator form-control" id="multiplicator" placeholder="Qtd de parcelas">
+          <label for="multiplicator">Qtd de parcelas</label>
+        </div>
+        <div class="input-field">
+          <input type="number" class="value form-control" id="billingValue" placeholder="Valor da Compra">
+          <label for="billingValue">Valor da Compra</label>
+        </div>
+        <button onclick="addData()" class="btn btn-default">Adicionar</button>
+      </div>
+    </div>
+    <div id="groupedCardContainer"></div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthsPT = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    var ano = new Date().getFullYear();
+    var data = [];
+    document.addEventListener('DOMContentLoaded', function () {
+      M.AutoInit();
+      loaddata();
+      updateGroupedCardContainer();
+      createLocalStorageKeys();
+    });
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    function redirectToIndex() {
+      window.location.href = 'index.html';
+    }
+    function savedata() {
+      localStorage.setItem('creditCardData', JSON.stringify(data));
+    }
+    function loaddata() {
+      var storedData = localStorage.getItem('creditCardData');
+      if (storedData) {
+        data = JSON.parse(storedData);
+        updateGroupedCardContainer();
+      }
+    }
+    function updateGroupedCardContainer() {
+      var groupedCardContainer = document.getElementById("groupedCardContainer");
+      groupedCardContainer.innerHTML = "";
+      var monthSums = {};
+      var currentYear = new Date().getFullYear();
+      for (var i = 0; i < data.length; i++) {
+        var groupedCard = createGroupedCard(data[i].id, data[i].month, data[i].description, data[i].purchases);
+        groupedCardContainer.appendChild(groupedCard);
+        for (var j = 0; j < data[i].purchases.length; j++) {
+          var purchase = data[i].purchases[j];
+          if (parseInt(purchase.description.split("(")[1]) !== currentYear) {
+            continue;
+          }
+          var monthKey = purchase.month.toLowerCase();
+          if (!monthSums[monthKey]) {
+            monthSums[monthKey] = 0;
+          }
+          monthSums[monthKey] += parseFloat(purchase.value);
+        }
+      }
+      for (var monthKey in monthSums) {
+        if (monthSums.hasOwnProperty(monthKey)) {
+          var monthBalanceElement = document.getElementById(monthKey + "CreditCardBalance");
+          if (monthBalanceElement) {
+            monthBalanceElement.textContent = monthSums[monthKey].toFixed(2);
+          }
+        }
+      }
+    }
+    function addData() {
+      var selectedMonthIndex = document.getElementById("month").selectedIndex;
+      var description = document.getElementById("description").value;
+      var value = parseFloat(document.getElementById("billingValue").value);
+      var multiplicator = parseInt(document.getElementById("multiplicator").value);
+      if (description.trim() !== '' && !isNaN(value) && value > 0 && multiplicator > 0) {
+        var id = uuidv4();
+        var monthIndex = selectedMonthIndex;
+        var month = months[monthIndex];
+        var groupedCardIndex = -1;
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].month === month && data[i].description === description) {
+            groupedCardIndex = i;
+            break;
+          }
+        }
+        if (groupedCardIndex === -1) {
+          var newGroupedCard = {
+            id: id,
+            month: month,
+            description: description,
+            purchases: []
+          };
+          data.push(newGroupedCard);
+          groupedCardIndex = data.length - 1;
+        }
+        var dividedValue = (value / multiplicator).toFixed(2);
+        var currentMonthIndex = monthIndex;
+        for (var i = 0; i < multiplicator; i++) {
+          var purchase = {
+            id: uuidv4(),
+            month: months[currentMonthIndex],
+            description: monthsPT[currentMonthIndex] + " - Parcela " + (i + 1) + " (" + ano + ")",
+            value: dividedValue
+          };
+          data[groupedCardIndex].purchases.push(purchase);
+          currentMonthIndex = (currentMonthIndex + 1) % 12;
+          if (currentMonthIndex === 0) {
+            ano++;
+          }
+        }
+        savedata();
+        updateGroupedCardContainer();
+        clearForm();
+        location.reload();
+      } else {
+        alert("Por favor, preencha todos os campos corretamente.");
+      }
+    }
+    function createGroupedCard(id, month, description, purchases) {
+      var groupedCard = document.createElement("div");
+      groupedCard.classList.add("card");
+      var cardContent = document.createElement("div");
+      cardContent.classList.add("card-content");
+      var cardTitle = document.createElement("span");
+      cardTitle.classList.add("card-title");
+      var monthIndex = months.indexOf(month);
+      var monthPT = monthsPT[monthIndex];
+      cardTitle.textContent = description + " (" + monthPT + " " + ano + ")";
+      var ul = document.createElement("ul");
+      var total = 0;
+      for (var i = 0; i < purchases.length; i++) {
+        var li = document.createElement("li");
+        li.textContent = purchases[i].description + ": R$ " + purchases[i].value + " (" + ano + ")";
+        total += parseFloat(purchases[i].value);
+        ul.appendChild(li);
+      }
+      var totalLi = document.createElement("li");
+      totalLi.textContent = "Total: R$ " + total.toFixed(2);
+      ul.appendChild(totalLi);
+      var deleteGroupButton = document.createElement("button");
+      deleteGroupButton.textContent = "Excluir compra";
+      deleteGroupButton.classList.add("btn", "btn-small", "btn-delete-group");
+      deleteGroupButton.addEventListener("click", function () {
+        deleteGroup(id);
+      });
+      ul.appendChild(deleteGroupButton);
+      cardContent.appendChild(cardTitle);
+      cardContent.appendChild(ul);
+      groupedCard.appendChild(cardContent);
+      return groupedCard;
+    }
+    function deleteGroup(groupedCardId) {
+      var groupedCardIndex = data.findIndex(function (item) {
+        return item.id === groupedCardId;
+      });
+      if (groupedCardIndex !== -1) {
+        var groupToDelete = data[groupedCardIndex];
+        var monthSums = {};
+        for (var i = 0; i < data.length; i++) {
+          if (i !== groupedCardIndex) {
+            for (var j = 0; j < data[i].purchases.length; j++) {
+              var purchase = data[i].purchases[j];
+              var monthKey = purchase.month.toLowerCase();
+              if (!monthSums[monthKey]) {
+                monthSums[monthKey] = 0;
+              }
+              monthSums[monthKey] += parseFloat(purchase.value);
+            }
+          }
+        }
+        for (var k = 0; k < groupToDelete.purchases.length; k++) {
+          var deletedPurchase = groupToDelete.purchases[k];
+          var monthKey = deletedPurchase.month.toLowerCase();
+          if (!monthSums[monthKey]) {
+            monthSums[monthKey] = 0;
+          }
+          monthSums[monthKey] += parseFloat(deletedPurchase.value);
+        }
+        localStorage.removeItem('creditCardData');
+        for (var monthKey in monthSums) {
+          if (monthSums.hasOwnProperty(monthKey)) {
+            var monthBalanceElement = document.getElementById(monthKey + "CreditCardBalance");
+            if (monthBalanceElement) {
+              monthBalanceElement.textContent = monthSums[monthKey].toFixed(2);
+            }
+          }
+        }
+        data.splice(groupedCardIndex, 1);
+        savedata();
+        location.reload();
+      }
+    }
+    function clearForm() {
+      document.getElementById("month").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("multiplicator").value = "";
+      document.getElementById("billingValue").value = "";
+    }
+    function createLocalStorageKeys() {
+      var months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+      for (var i = 0; i < months.length; i++) {
+        var monthKey = months[i] + "CreditCardBalance";
+        var monthBalanceElement = document.getElementById(monthKey);
+        var monthBalance = monthBalanceElement.textContent;
+        localStorage.setItem(monthKey, monthBalance);
+      }
+    }
+  </script>
+</body>
+
+</html>

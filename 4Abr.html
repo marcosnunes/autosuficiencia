@@ -17,7 +17,7 @@
       <div class="nav-wrapper">
         <button onclick="redirectToMar()" class="btn btn-default">&lt;</button>
         <span class="brand-logo center">Abril</span>
-        <button onclick="redirectToMaio()" class="btn btn-default">&gt;</button>
+        <button onclick="redirectToMay()" class="btn btn-default">&gt;</button>
       </div>
     </nav>
   </div>
@@ -29,7 +29,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Saldo Inicial de Abril</span>
-        <p><span id="AbrInitialBalance">0.00</span></p>
+        <p><span id="AprInitialBalance">0.00</span></p>
       </div>
     </div>
 
@@ -37,16 +37,16 @@
       <div class="card-content">
         <span class="card-title">Fazer lançamento</span>
         <div class="input-field">
-          <input type="text" class="description form-control" id="abrDescription" placeholder="Descrição">
-          <label for="abrDescription">Descrição</label>
+          <input type="text" class="description form-control" id="aprDescription" placeholder="Descrição">
+          <label for="aprDescription">Descrição</label>
         </div>
         <div class="input-field">
-          <input type="number" class="debit form-control" id="abrDebit" placeholder="Débito">
-          <label for="abrDebit">Débito</label>
+          <input type="number" class="debit form-control" id="aprDebit" placeholder="Débito">
+          <label for="aprDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="abrCredit" placeholder="Crédito">
-          <label for="abrCredit">Crédito</label>
+          <input type="number" class="credit form-control" id="aprCredit" placeholder="Crédito">
+          <label for="aprCredit">Crédito</label>
         </div>
         <button onclick="addData()" class="btn btn-default">Adicionar</button>
       </div>
@@ -58,6 +58,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Cartão de Crédito: <span id="aprilCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalAbril">0.00</span></p>
@@ -72,23 +73,40 @@
     function redirectToMar() {
       window.location.href = '3Mar.html';
     }
+<<<<<<< HEAD
+    function redirectToMay() {
+=======
 
     function redirectToMaio() {
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       window.location.href = '5Mai.html';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
+      // Carregar o valor de aprilCreditCardBalance
+      var aprilCreditCardBalance = localStorage.getItem("aprilCreditCardBalance");
+      if (aprilCreditCardBalance) {
+        document.getElementById("aprilCreditCardBalance").textContent = aprilCreditCardBalance;
+        calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
+      }
     });
+<<<<<<< HEAD
+    // Variáveis locais dentro do escopo da função
+    var data = []; // Para armazenar os dados dos cards
+    var inputData = []; // Para armazenar os dados inseridos
+=======
 
     // Variáveis locais dentro do escopo da função
     var data = []; // Para armazenar os dados dos cards
     var inputData = []; // Para armazenar os dados inseridos
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
     // Função para calcular o total
     function calculateTotal() {
-      var initialBalance = Number(document.getElementById("AbrInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+      var creditCardBalance = Number(document.getElementById("aprilCreditCardBalance").textContent);
+      var initialBalance = Number(document.getElementById("AprInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
       var debitTotal = 0;
       var creditTotal = 0;
 
@@ -97,8 +115,12 @@
         debitTotal += Number(data[i].debit);
         creditTotal += Number(data[i].credit);
       }
+<<<<<<< HEAD
+      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
+=======
 
       var total = initialBalance + creditTotal - debitTotal;
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
@@ -117,14 +139,18 @@
 
     // Função para salvar o saldo inicial
     function saveInitialBalance() {
-      var initialBalance = document.getElementById("AbrInitialBalance").textContent;
-      localStorage.setItem("initialBalanceAbr", initialBalance);
+      var initialBalance = document.getElementById("AprInitialBalance").textContent;
+      localStorage.setItem("initialBalanceApr", initialBalance);
     }
 
     // Função para salvar os dados
     function savedata() {
       var totalAbril = {};
+<<<<<<< HEAD
+      totalAbril.initialBalance = document.getElementById("AprInitialBalance").value;
+=======
       totalAbril.initialBalance = document.getElementById("AbrInitialBalance").textContent;
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       totalAbril.total = document.getElementById("totalAbril").textContent;
       totalAbril.rows = data;
 
@@ -138,9 +164,18 @@
 
       if (totalAbril) {
         // Defina o saldo inicial de abril como o valor de totalMarço
+<<<<<<< HEAD
+        document.getElementById("AprInitialBalance").textContent = totalMarço ? totalMarço.total : '0.00'; // Alteração aqui
+=======
         document.getElementById("AbrInitialBalance").textContent = totalMarço ? totalMarço.total : '0.00';
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         data = totalAbril.rows;
+        // Recuperar o valor do cartão de crédito
+        var aprilCreditCardBalance = localStorage.getItem("aprilCreditCardBalance");
+        if (aprilCreditCardBalance) {
+          document.getElementById("aprilCreditCardBalance").textContent = aprilCreditCardBalance;
+        }
         updateDataCards();
         calculateTotal();
       }
@@ -148,10 +183,16 @@
 
     // Função para adicionar dados
     function addData() {
+<<<<<<< HEAD
+      var description = document.getElementById("aprDescription").value;
+      var debit = document.getElementById("aprDebit").value;
+      var credit = document.getElementById("aprCredit").value;
+=======
       var description = document.getElementById("abrDescription").value;
       var debit = document.getElementById("abrDebit").value;
       var credit = document.getElementById("abrCredit").value;
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       // Verifique se pelo menos a descrição está preenchida
       if (description.trim() !== '') {
         // Crie um ID único
@@ -169,10 +210,16 @@
         data.push(newData);
 
         // Limpe os campos de entrada
+<<<<<<< HEAD
+        document.getElementById("aprDescription").value = "";
+        document.getElementById("aprDebit").value = "";
+        document.getElementById("aprCredit").value = "";
+=======
         document.getElementById("abrDescription").value = "";
         document.getElementById("abrDebit").value = "";
         document.getElementById("abrCredit").value = "";
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         // Atualize os cards de dados
         updateDataCards();
 
@@ -193,10 +240,15 @@
           break;
         }
       }
+<<<<<<< HEAD
+      // Atualize os dados salvos no localStorage
+      savedata();
+=======
 
       // Atualize os dados salvos no localStorage
       savedata();
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       // Atualize os cards após a exclusão
       updateDataCards();
     }
@@ -208,12 +260,16 @@
 
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
-      cardContent.innerHTML = `
+      cardContent.innerHTML =  `
         <span class="card-title">${dataItem.description}</span>
         <p>Débito: ${dataItem.debit}</p>
         <p>Crédito: ${dataItem.credit}</p>
+<<<<<<< HEAD
+      ` ;
+=======
       `;
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");

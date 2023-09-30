@@ -17,7 +17,11 @@
       <div class="nav-wrapper">
         <button onclick="redirectToJulho()" class="btn btn-default">&lt;</button>
         <span class="brand-logo center">Agosto</span>
+<<<<<<< HEAD
+        <button onclick="redirectToSep()" class="btn btn-default">&gt;</button>
+=======
         <button onclick="redirectToSetembro()" class="btn btn-default">&gt;</button>
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       </div>
     </nav>
   </div>
@@ -58,6 +62,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Cartão de Crédito: <span id="augustCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalAgosto">0.00</span></p>
@@ -72,15 +77,34 @@
     function redirectToJulho() {
       window.location.href = '7Jul.html';
     }
+<<<<<<< HEAD
+    function redirectToSep() {
+=======
 
     function redirectToSetembro() {
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       window.location.href = '9Set.html';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
+      // Carregar o valor de augustCreditCardBalance
+      var augustCreditCardBalance = localStorage.getItem("augustCreditCardBalance");
+      if (augustCreditCardBalance) {
+        document.getElementById("augustCreditCardBalance").textContent = augustCreditCardBalance;
+        calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
+      }
     });
+<<<<<<< HEAD
+    // Variáveis locais dentro do escopo da função
+    var data = []; // Para armazenar os dados dos cards
+    var inputData = []; // Para armazenar os dados inseridos
+    // Função para calcular o total
+    function calculateTotal() {
+      var creditCardBalance = Number(document.getElementById("augustCreditCardBalance").textContent);
+      var initialBalance = Number(document.getElementById("AugInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+=======
 
     // Variáveis locais dentro do escopo da função
     var data = []; // Para armazenar os dados dos cards
@@ -89,6 +113,7 @@
     // Função para calcular o total
     function calculateTotal() {
       var initialBalance = Number(document.getElementById("AgostoInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var debitTotal = 0;
       var creditTotal = 0;
 
@@ -97,8 +122,12 @@
         debitTotal += Number(data[i].debit);
         creditTotal += Number(data[i].credit);
       }
+<<<<<<< HEAD
+      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
+=======
 
       var total = initialBalance + creditTotal - debitTotal;
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
@@ -117,8 +146,13 @@
 
     // Função para salvar o saldo inicial
     function saveInitialBalance() {
+<<<<<<< HEAD
+      var initialBalance = document.getElementById("AugInitialBalance").textContent;
+      localStorage.setItem("initialBalanceAug", initialBalance);
+=======
       var initialBalance = document.getElementById("AgostoInitialBalance").textContent;
       localStorage.setItem("initialBalanceAgosto", initialBalance);
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
     }
 
     // Função para salvar os dados
@@ -138,9 +172,18 @@
 
       if (totalAgosto) {
         // Defina o saldo inicial de agosto como o valor de totalJulho
+<<<<<<< HEAD
+        document.getElementById("AugInitialBalance").textContent = totalJulho ? totalJulho.total : '0.00'; // Alteração aqui
+=======
         document.getElementById("AgostoInitialBalance").textContent = totalJulho ? totalJulho.total : '0.00';
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         data = totalAgosto.rows;
+        // Recuperar o valor do cartão de crédito
+        var augustCreditCardBalance = localStorage.getItem("augustCreditCardBalance");
+        if (augustCreditCardBalance) {
+          document.getElementById("augustCreditCardBalance").textContent = augustCreditCardBalance;
+        }
         updateDataCards();
         calculateTotal();
       }
@@ -193,10 +236,15 @@
           break;
         }
       }
+<<<<<<< HEAD
+      // Atualize os dados salvos no localStorage
+      savedata();
+=======
 
       // Atualize os dados salvos no localStorage
       savedata();
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       // Atualize os cards após a exclusão
       updateDataCards();
     }
@@ -208,12 +256,16 @@
 
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
-      cardContent.innerHTML = `
+      cardContent.innerHTML =  `
         <span class="card-title">${dataItem.description}</span>
         <p>Débito: ${dataItem.debit}</p>
         <p>Crédito: ${dataItem.credit}</p>
+<<<<<<< HEAD
+      ` ;
+=======
       `;
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");

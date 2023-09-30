@@ -15,7 +15,11 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
+<<<<<<< HEAD
+        <button onclick="redirectToSep()" class="btn btn-default">&lt;</button>
+=======
         <button onclick="redirectToSetembro()" class="btn btn-default">&lt;</button>
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         <span class="brand-logo center">Outubro</span>
         <button onclick="redirectToNovembro()" class="btn btn-default">&gt;</button>
       </div>
@@ -58,6 +62,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Cartão de Crédito: <span id="octoberCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalOutubro">0.00</span></p>
@@ -69,7 +74,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
     // Função para redirecionar para outras páginas
+<<<<<<< HEAD
+    function redirectToSep() {
+=======
     function redirectToSetembro() {
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       window.location.href = '9Set.html';
     }
 
@@ -80,7 +89,22 @@
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
+      // Carregar o valor de octoberCreditCardBalance
+      var octoberCreditCardBalance = localStorage.getItem("octoberCreditCardBalance");
+      if (octoberCreditCardBalance) {
+        document.getElementById("octoberCreditCardBalance").textContent = octoberCreditCardBalance;
+        calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
+      }
     });
+<<<<<<< HEAD
+    // Variáveis locais dentro do escopo da função
+    var data = []; // Para armazenar os dados dos cards
+    var inputData = []; // Para armazenar os dados inseridos
+    // Função para calcular o total
+    function calculateTotal() {
+      var creditCardBalance = Number(document.getElementById("octoberCreditCardBalance").textContent);
+      var initialBalance = Number(document.getElementById("OctInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+=======
 
     // Variáveis locais dentro do escopo da função
     var data = []; // Para armazenar os dados dos cards
@@ -89,6 +113,7 @@
     // Função para calcular o total
     function calculateTotal() {
       var initialBalance = Number(document.getElementById("OutubroInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var debitTotal = 0;
       var creditTotal = 0;
 
@@ -97,8 +122,12 @@
         debitTotal += Number(data[i].debit);
         creditTotal += Number(data[i].credit);
       }
+<<<<<<< HEAD
+      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
+=======
 
       var total = initialBalance + creditTotal - debitTotal;
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
@@ -117,8 +146,13 @@
 
     // Função para salvar o saldo inicial
     function saveInitialBalance() {
+<<<<<<< HEAD
+      var initialBalance = document.getElementById("OctInitialBalance").textContent;
+      localStorage.setItem("initialBalanceOct", initialBalance);
+=======
       var initialBalance = document.getElementById("OutubroInitialBalance").textContent;
       localStorage.setItem("initialBalanceOutubro", initialBalance);
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
     }
 
     // Função para salvar os dados
@@ -138,9 +172,18 @@
 
       if (totalOutubro) {
         // Defina o saldo inicial de outubro como o valor de totalSetembro
+<<<<<<< HEAD
+        document.getElementById("OctInitialBalance").textContent = totalSetembro ? totalSetembro.total : '0.00'; // Alteração aqui
+=======
         document.getElementById("OutubroInitialBalance").textContent = totalSetembro ? totalSetembro.total : '0.00';
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
         data = totalOutubro.rows;
+        // Recuperar o valor do cartão de crédito
+        var octoberCreditCardBalance = localStorage.getItem("octoberCreditCardBalance");
+        if (octoberCreditCardBalance) {
+          document.getElementById("octoberCreditCardBalance").textContent = octoberCreditCardBalance;
+        }
         updateDataCards();
         calculateTotal();
       }
@@ -193,10 +236,15 @@
           break;
         }
       }
+<<<<<<< HEAD
+      // Atualize os dados salvos no localStorage
+      savedata();
+=======
 
       // Atualize os dados salvos no localStorage
       savedata();
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       // Atualize os cards após a exclusão
       updateDataCards();
     }
@@ -208,12 +256,16 @@
 
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
-      cardContent.innerHTML = `
+      cardContent.innerHTML =   `
         <span class="card-title">${dataItem.description}</span>
         <p>Débito: ${dataItem.debit}</p>
         <p>Crédito: ${dataItem.credit}</p>
+<<<<<<< HEAD
+      `  ;
+=======
       `;
 
+>>>>>>> 745a7923dec9c79cc153cd9de5d6c56d0d641685
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");

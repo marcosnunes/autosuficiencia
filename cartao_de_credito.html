@@ -240,7 +240,7 @@
       var total = 0;
       for (var i = 0; i < purchases.length; i++) {
         var li = document.createElement("li");
-        li.textContent = purchases[i].description + ": R$ " + purchases[i].value + " (" + ano + ")";
+        li.textContent = purchases[i].description + ": R$ " + purchases[i].value;
         total += parseFloat(purchases[i].value);
         ul.appendChild(li);
       }

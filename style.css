@@ -78,4 +78,15 @@
   box-shadow: none !important;
 }
 
+.card-balance-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
+.purchase-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -28,14 +28,14 @@
         { month: "Novembro", key: "totalNovembro", value: 0, debit: 0, credit: 0 },
         { month: "Dezembro", key: "totalDezembro", value: 0, debit: 0, credit: 0 },
       ];
-      // Recuperar os valores de fechamento de cada mês do localStorage
+
       monthlyData.forEach(function (month) {
         var monthData = JSON.parse(localStorage.getItem(month.key));
         month.value = monthData && monthData.total ? parseFloat(monthData.total) : 0;
         var debitTotal = 0;
         var creditTotal = 0;
-        if (monthData && monthData.data) {
-          monthData.data.forEach(function (row) {
+        if (monthData && monthData.rows) {
+          monthData.rows.forEach(function (row) {
             if (!isNaN(parseFloat(row.debit))) {
               debitTotal += parseFloat(row.debit);
             }
@@ -47,43 +47,50 @@
         month.debit = debitTotal;
         month.credit = creditTotal;
       });
+
       var labels = monthlyData.map(function (month) {
         return month.month;
       });
+
       var data = monthlyData.map(function (month) {
         return month.value;
       });
+
       var dataDebit = monthlyData.map(function (month) {
         return month.debit;
       });
+
       var dataCredit = monthlyData.map(function (month) {
         return month.credit;
       });
+
       var chart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
-          datasets: [{
-            label: 'Fechamento Mensal',
-            data: data,
-            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-            borderColor: 'rgba(0, 123, 255, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Total Débito',
-            data: dataDebit,
-            backgroundColor: 'rgba(255, 0, 0, 0.5)',
-            borderColor: 'rgba(255, 0, 0, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Total Crédito',
-            data: dataCredit,
-            backgroundColor: 'rgba(0, 255, 0, 0.5)',
-            borderColor: 'rgba(0, 255, 0, 1)',
-            borderWidth: 1
-          }]
+          datasets: [
+            {
+              label: 'Fechamento Mensal',
+              data: data,
+              backgroundColor: 'rgba(0, 123, 255, 0.5)',
+              borderColor: 'rgba(0, 123, 255, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Total Débito',
+              data: dataDebit,
+              backgroundColor: 'rgba(255, 0, 0, 0.5)',
+              borderColor: 'rgba(255, 0, 0, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Total Crédito',
+              data: dataCredit,
+              backgroundColor: 'rgba(0, 255, 0, 0.5)',
+              borderColor: 'rgba(0, 255, 0, 1)',
+              borderWidth: 1
+            }
+          ]
         },
         options: {
           scales: {

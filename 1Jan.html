@@ -165,7 +165,6 @@
       for (var j = 0; j < inputData.length; j++) {
         totalJaneiro.rows.push(inputData[j]);
       }
-
       localStorage.setItem("totalJaneiro", JSON.stringify(totalJaneiro));
     }
 
@@ -228,6 +227,7 @@
 
         // Salvar os dados atualizados
         savedata();
+        location.reload();
       } else {
         // Exibir uma mensagem de erro quando a descrição estiver em branco
         alert("Preencha a descrição antes de adicionar.");

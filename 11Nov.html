@@ -13,9 +13,9 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToOct()" class="btn btn-default">&lt;</button>
+        <button onclick="redirectToOut()" class="btn btn-default">&lt;</button>
         <span class="brand-logo center">Novembro</span>
-        <button onclick="redirectToDec()" class="btn btn-default">&gt;</button>
+        <button onclick="redirectToDez()" class="btn btn-default">&gt;</button>
       </div>
     </nav>
   </div>
@@ -37,14 +37,19 @@
           <label for="novDescription">Descrição</label>
         </div>
         <div class="input-field">
-          <input type="number" class="debit form-control" id="novDebit" placeholder="Débito">
+          <input type="number" class="debit form-control" id="novDebit" oninput="calculateTotal()" placeholder="Débito">
           <label for="novDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="novCredit" placeholder="Crédito">
+          <input type="number" class="credit form-control" id="novCredit" oninput="calculateTotal()"
+            placeholder="Crédito">
           <label for="novCredit">Crédito</label>
         </div>
-        <button onclick="addData()" class="btn btn-default">Adicionar</button>
+        <div class="input-field">
+          <input type="number" class="day form-control" id="novDay" placeholder="Dia">
+          <label for="novDay">Dia</label>
+        </div>
+        <button onclick="addData('Novembro')" class="btn btn-default">Adicionar</button>
       </div>
     </div>
     <div id="dataCards">
@@ -53,7 +58,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
-        <p>Cartão de Crédito: <span id="novemberCreditCardBalance" class="orange-text">0.00</span></p>
+        <p>Cartão de Crédito: <span id="novCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalNovembro">0.00</span></p>
@@ -68,7 +73,7 @@
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
-          v = c === 'x' ? r : (r & 0x3 | 0x8);
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
     }
@@ -76,42 +81,115 @@
       var iframe = document.querySelector('.iframe-container iframe');
       var container = document.querySelector('.iframe-container');
       var containerWidth = container.offsetWidth;
-      var aspectRatio = 9 / 16; // Ajuste conforme necessário
+      var aspectRatio = 9 / 16;
       var newHeight = containerWidth * aspectRatio;
       iframe.style.height = newHeight + 'px';
     }
     window.addEventListener('load', resizeIframe);
     window.addEventListener('resize', resizeIframe);
-    // Função para redirecionar para outras páginas
-    function redirectToOct() {
-      window.location.href = '10Out.html';
-    }
-    function redirectToDec() {
-      window.location.href = '12Dez.html';
-    }
+    // Inicializar arrays para os dados digitados e os dados armazenados
+    var data = []; // Dados armazenados
+    var inputData = []; // Dados digitados
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
-      // Carregar o valor de novemberCreditCardBalance
-      var novemberCreditCardBalance = localStorage.getItem("novemberCreditCardBalance");
-      if (novemberCreditCardBalance) {
-        document.getElementById("novemberCreditCardBalance").textContent = novemberCreditCardBalance;
-        calculateTotal(); // Chame a função calculateTotal() para atualizar os totais
+      // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
+      var savedCurrentBalance = localStorage.getItem('currentBalance');
+      if (savedCurrentBalance) {
+        document.getElementById('NovInitialBalance').value = savedCurrentBalance;
+        calculateTotal();
       }
     });
-    // Variáveis locais dentro do escopo da função
-    var data = []; // Para armazenar os dados dos cards
-    var inputData = []; // Para armazenar os dados inseridos
-    // Função para calcular o total
+    function saveInitialBalance() {
+      var initialBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
+      localStorage.setItem("currentBalance", initialBalance);
+      // Atualize o saldo do dia em todos os dados com base no novo saldo inicial
+      var currentDayBalance = parseFloat(initialBalance) || 0; // Inicializar com o novo saldo inicial
+      for (var i = 0; i < data.length; i++) {
+        var dayDebit = parseFloat(data[i].debit) || 0;
+        var dayCredit = parseFloat(data[i].credit) || 0;
+        if (data[i].credit !== "") {
+          // Se for um lançamento de crédito, adicione ao saldo do dia atual
+          currentDayBalance += dayCredit;
+        } else {
+          // Se for um lançamento de débito, subtraia do saldo do dia atual
+          currentDayBalance -= dayDebit;
+        }
+        // Atualize o saldo do dia no objeto de dados
+        data[i].dayBalance = currentDayBalance;
+      }
+      for (var j = 0; j < inputData.length; j++) {
+        var dayDebit = parseFloat(inputData[j].debit) || 0;
+        var dayCredit = parseFloat(inputData[j].credit) || 0;
+        if (inputData[j].credit !== "") {
+          // Se for um lançamento de crédito, adicione ao saldo do dia atual
+          currentDayBalance += dayCredit;
+        } else {
+          // Se for um lançamento de débito, subtraia do saldo do dia atual
+          currentDayBalance -= dayDebit;
+        }
+        // Atualize o saldo do dia no objeto de dados
+        inputData[j].dayBalance = currentDayBalance;
+      }
+      // Atualizar os cards de dados
+      updateDataCards();
+      calculateTotal();
+    }
+    function savedata() {
+      var totalNovembro = {};
+      totalNovembro.initialBalance = document.getElementById("NovInitialBalance").textContent;
+      totalNovembro.total = document.getElementById("totalNovembro").textContent;
+      totalNovembro.rows = [];
+      // Adicione os dados armazenados ao array totalNovembro.rows
+      for (var i = 0; i < data.length; i++) {
+        totalNovembro.rows.push(data[i]);
+      }
+      // Adicione os dados digitados ao array totalNovembro.rows
+      for (var j = 0; j < inputData.length; j++) {
+        totalNovembro.rows.push(inputData[j]);
+      }
+      localStorage.setItem("totalNovembro", JSON.stringify(totalNovembro));
+    }
+    // Função para carregar os dados
+    function loaddata() {
+      var totalNovembro = JSON.parse(localStorage.getItem("totalNovembro"));
+      var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
+      if (totalNovembro) {
+        // Defina o saldo inicial de novembro como o valor total de outubro
+        document.getElementById("NovInitialBalance").textContent = totalOutubro ? totalOutubro.total : '0.00';
+        data = totalNovembro.rows;
+        // Recuperar o valor do cartão de crédito
+        var novCreditCardBalance = localStorage.getItem("novCreditCardBalance");
+        if (novCreditCardBalance) {
+          document.getElementById("novCreditCardBalance").textContent = novCreditCardBalance;
+        }
+        updateDataCards();
+        calculateTotal();
+      }
+    }
+    // Redirecionar para outras páginas
+    function redirectToOut() {
+      window.location.href = '10Out.html';
+      savedata();
+    }
+    function redirectToDez() {
+      window.location.href = '12Dez.html';
+      savedata();
+    }
     function calculateTotal() {
-      var creditCardBalance = Number(document.getElementById("novemberCreditCardBalance").textContent);
-      var initialBalance = Number(document.getElementById("NovInitialBalance").textContent); // Obtém o saldo inicial do elemento <span>
-      var debitTotal = 0;
+      var creditCardBalance = Number(document.getElementById("novCreditCardBalance").textContent);
+      var initialBalance = Number(document.getElementById("NovInitialBalance").textContent);
       var creditTotal = 0;
+      var debitTotal = 0;
       // Calcular totais usando os dados armazenados
       for (var i = 0; i < data.length; i++) {
-        debitTotal += Number(data[i].debit);
-        creditTotal += Number(data[i].credit);
+        creditTotal += parseFloat(data[i].credit) || 0;
+        debitTotal += parseFloat(data[i].debit) || 0;
+      }
+      // Calcular totais usando os dados digitados
+      for (var j = 0; j < inputData.length; j++) {
+        creditTotal += parseFloat(inputData[j].credit) || 0;
+        debitTotal += parseFloat(inputData[j].debit) || 0;
       }
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
@@ -129,66 +207,60 @@
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
       savedata();
     }
-    // Função para salvar o saldo inicial
-    function saveInitialBalance() {
-      var initialBalance = document.getElementById("NovInitialBalance").textContent;
-      localStorage.setItem("initialBalanceNov", initialBalance);
-    }
-    // Função para salvar os dados
-    function savedata() {
-      var totalNovembro = {};
-      totalNovembro.initialBalance = document.getElementById("NovInitialBalance").value;
-      totalNovembro.total = document.getElementById("totalNovembro").textContent;
-      totalNovembro.rows = data;
-      localStorage.setItem("totalNovembro", JSON.stringify(totalNovembro));
-    }
-    // Função para carregar os dados
-    function loaddata() {
-      var totalNovembro = JSON.parse(localStorage.getItem("totalNovembro"));
-      var totalOutubro = JSON.parse(localStorage.getItem("totalOutubro"));
-      if (totalNovembro) {
-        // Defina o saldo inicial de novembro como o valor de totalOutubro
-        document.getElementById("NovInitialBalance").textContent = totalOutubro ? totalOutubro.total : '0.00'; // Alteração aqui
-        data = totalNovembro.rows;
-        // Recuperar o valor do cartão de crédito
-        var novemberCreditCardBalance = localStorage.getItem("novemberCreditCardBalance");
-        if (novemberCreditCardBalance) {
-          document.getElementById("novemberCreditCardBalance").textContent = novemberCreditCardBalance;
-        }
-        updateDataCards();
-        calculateTotal();
-      }
-    }
     // Função para adicionar dados
-    function addData() {
+    function addData(month) {
       var description = document.getElementById("novDescription").value;
       var debit = document.getElementById("novDebit").value;
       var credit = document.getElementById("novCredit").value;
-      // Verifique se pelo menos a descrição está preenchida
-      if (description.trim() !== '') {
-        // Crie um ID único
+      var day = document.getElementById("novDay").value;
+      // Verifique se pelo menos a descrição e o dia estão preenchidos
+      if (description.trim() !== "" && day.trim() !== "") {
+        // Gere um ID único para os novos dados
         var id = uuidv4();
-        // Crie um objeto de dados
+        // Crie um objeto com os dados e o ID gerado
         var newData = {
           id: id,
           description: description,
           debit: debit,
-          credit: credit
+          credit: credit,
+          day: day,
+          dayBalance: 0 // Valor inicial do saldo do dia
         };
-        // Adicione os novos dados à array data
-        data.push(newData);
-        // Limpe os campos de entrada
+        // Adicione os novos dados ao array de dados digitados
+        inputData.push(newData);
+        // Limpar os campos de entrada
         document.getElementById("novDescription").value = "";
         document.getElementById("novDebit").value = "";
         document.getElementById("novCredit").value = "";
-        // Atualize os cards de dados
+        document.getElementById("novDay").value = "";
+        // Ordenar o array inputData com base no campo "dia"
+        inputData.sort(function (a, b) {
+          return parseInt(a.day) - parseInt(b.day);
+        });
+        // Inicialize o saldo do dia atual com o saldo inicial
+        var currentDayBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
+        // Atualize o saldo do dia em todos os dados com base na ordem
+        for (var i = 0; i < inputData.length; i++) {
+          var dayDebit = parseFloat(inputData[i].debit) || 0;
+          var dayCredit = parseFloat(inputData[i].credit) || 0;
+          if (inputData[i].credit !== "") {
+            // Se for um lançamento de crédito, adicione ao saldo do dia atual
+            currentDayBalance += dayCredit;
+          } else {
+            // Se for um lançamento de débito, subtraia do saldo do dia atual
+            currentDayBalance -= dayDebit;
+          }
+          // Atualize o saldo do dia no objeto de dados
+          inputData[i].dayBalance = currentDayBalance;
+        }
+        // Atualizar os cards de dados
         updateDataCards();
-        // Chame a função calculateTotal para atualizar os totais
-        calculateTotal();
+        // Salvar os dados atualizados
+        savedata();
         location.reload();
       } else {
-        // Exiba uma mensagem de erro quando a descrição estiver em branco
-        alert("Preencha a descrição antes de adicionar.");
+        // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
+        alert("Preencha a descrição e o dia antes de adicionar.");
       }
     }
     // Função para excluir dados com base no ID do card
@@ -200,22 +272,55 @@
           break;
         }
       }
+      // Verifique e exclua o card do array 'inputData'
+      for (var j = 0; j < inputData.length; j++) {
+        if (inputData[j].id === cardId) {
+          inputData.splice(j, 1);
+          break;
+        }
+      }
       // Atualize os dados salvos no localStorage
       savedata();
       // Atualize os cards após a exclusão
       updateDataCards();
     }
     // Função para criar um card de dados
-    function createDataCard(dataItem) {
+    function createDataCard(dataItem, previousDayBalance) {
       var card = document.createElement("div");
       card.className = "card";
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
-      cardContent.innerHTML =   `
-        <span class="card-title">${dataItem.description}</span>
-        <p>Débito: ${dataItem.debit}</p>
-        <p>Crédito: ${dataItem.credit}</p>
-      `  ;
+      // Verificar se a descrição foi preenchida
+      if (dataItem.description.trim() !== "") {
+        var description = document.createElement("p");
+        description.textContent = "Descrição: " + dataItem.description;
+        cardContent.appendChild(description);
+      }
+      // Verificar se o dia foi preenchido
+      if (dataItem.day.trim() !== "") {
+        var day = document.createElement("p");
+        day.textContent = "Dia: " + dataItem.day;
+        cardContent.appendChild(day);
+      }
+      // Verificar se o débito foi preenchido
+      if (dataItem.debit.trim() !== "") {
+        var debit = document.createElement("p");
+        debit.textContent = "Débito: " + dataItem.debit;
+        cardContent.appendChild(debit);
+      }
+      // Verificar se o crédito foi preenchido
+      if (dataItem.credit.trim() !== "") {
+        var credit = document.createElement("p");
+        credit.textContent = "Crédito: " + dataItem.credit;
+        cardContent.appendChild(credit);
+      }
+      // Calcular o saldo do dia considerando o valor do saldo do dia anterior
+      var dayDebit = parseFloat(dataItem.debit) || 0;
+      var dayCredit = parseFloat(dataItem.credit) || 0;
+      var dayBalance = previousDayBalance + dayCredit - dayDebit;
+      var dayBalanceElement = document.createElement("p");
+      dayBalanceElement.textContent = "Saldo do Dia: " + dayBalance.toFixed(2);
+      cardContent.appendChild(dayBalanceElement);
       var cardAction = document.createElement("div");
       cardAction.className = "card-action";
       var deleteButton = document.createElement("button");
@@ -228,6 +333,10 @@
       cardAction.appendChild(deleteButton);
       card.appendChild(cardContent);
       card.appendChild(cardAction);
+      // Verificar se o card possui conteúdo preenchido
+      if (cardContent.innerHTML.trim() === "") {
+        return null; // Retorna null se o card estiver vazio
+      }
       return card;
     }
     // Função para atualizar os cards de dados
@@ -235,13 +344,26 @@
       var dataCards = document.getElementById("dataCards");
       // Limpar os cards existentes
       dataCards.innerHTML = "";
-      // Iterar sobre os dados inseridos e criar um card para cada conjunto de dados
-      for (var j = 0; j < data.length; j++) {
-        var card = createDataCard(data[j]);
-        dataCards.appendChild(card);
+      var previousDayBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
+      var currentDayBalance = previousDayBalance; // Inicializar com o saldo inicial
+      // Iterar sobre os dados armazenados e criar um card para cada conjunto de dados
+      for (var i = 0; i < data.length; i++) {
+        var card = createDataCard(data[i], currentDayBalance);
+        if (card) {
+          dataCards.appendChild(card);
+          // Atualizar o saldo do dia atual com base no saldo do dia do card atual
+          currentDayBalance = parseFloat(data[i].dayBalance) || 0;
+        }
       }
-      // Calcular totais e atualizar os resultados
-      calculateTotal();
+      // Iterar sobre os dados digitados e criar um card para cada conjunto de dados
+      for (var j = 0; j < inputData.length; j++) {
+        var card = createDataCard(inputData[j], currentDayBalance);
+        if (card) {
+          dataCards.appendChild(card);
+          // Atualizar o saldo do dia atual com base no saldo do dia do card atual
+          currentDayBalance = parseFloat(inputData[j].dayBalance) || 0;
+        }
+      }
     }
   </script>
 </body>

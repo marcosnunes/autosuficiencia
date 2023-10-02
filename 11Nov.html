@@ -234,74 +234,74 @@
 
     // Função para adicionar dados
     function addData(month) {
-      var description = document.getElementById("novDescription").value;
-      var debit = document.getElementById("novDebit").value;
-      var credit = document.getElementById("novCredit").value;
-      var day = document.getElementById("novDay").value;
+  var description = document.getElementById("novDescription").value;
+  var debit = document.getElementById("novDebit").value;
+  var credit = document.getElementById("novCredit").value;
+  var day = document.getElementById("novDay").value;
 
-      // Verifique se pelo menos a descrição e o dia estão preenchidos
-      if (description.trim() !== "" && day.trim() !== "") {
-        // Gere um ID único para os novos dados
-        var id = uuidv4();
+  // Verifique se pelo menos a descrição e o dia estão preenchidos
+  if (description.trim() !== "" && day.trim() !== "") {
+    // Gere um ID único para os novos dados
+    var id = uuidv4();
 
-        // Crie um objeto com os dados e o ID gerado
-        var newData = {
-          id: id,
-          description: description,
-          debit: debit,
-          credit: credit,
-          day: day,
-          dayBalance: 0 // Valor inicial do saldo do dia
-        };
+    // Calcule o saldo do dia considerando o saldo inicial
+    var currentDayBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
 
-        // Adicione os novos dados ao array de dados digitados
-        inputData.push(newData);
+    // Crie um objeto com os dados e o ID gerado
+    var newData = {
+      id: id,
+      description: description,
+      debit: debit,
+      credit: credit,
+      day: day,
+      dayBalance: 0 // Valor inicial do saldo do dia
+    };
 
-        // Limpar os campos de entrada
-        document.getElementById("novDescription").value = "";
-        document.getElementById("novDebit").value = "";
-        document.getElementById("novCredit").value = "";
-        document.getElementById("novDay").value = "";
+    // Adicione os novos dados ao array de dados digitados
+    inputData.push(newData);
 
-        // Ordenar o array inputData com base no campo "dia"
-        inputData.sort(function (a, b) {
-          return parseInt(a.day) - parseInt(b.day);
-        });
+    // Limpar os campos de entrada
+    document.getElementById("novDescription").value = "";
+    document.getElementById("novDebit").value = "";
+    document.getElementById("novCredit").value = "";
+    document.getElementById("novDay").value = "";
 
-        // Inicialize o saldo do dia atual com o saldo inicial
-        var currentDayBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
+    // Ordenar o array inputData com base no campo "dia"
+    inputData.sort(function (a, b) {
+      return parseInt(a.day) - parseInt(b.day);
+    });
 
-        // Atualize o saldo do dia em todos os dados com base na ordem
-        for (var i = 0; i < inputData.length; i++) {
-          var dayDebit = parseFloat(inputData[i].debit) || 0;
-          var dayCredit = parseFloat(inputData[i].credit) || 0;
-          if (inputData[i].credit !== "") {
-            // Se for um lançamento de crédito, adicione ao saldo do dia atual
-            currentDayBalance += dayCredit;
-          } else {
-            // Se for um lançamento de débito, subtraia do saldo do dia atual
-            currentDayBalance -= dayDebit;
-          }
-          // Atualize o saldo do dia no objeto de dados
-          inputData[i].dayBalance = currentDayBalance;
-        }
+    // Inicialize o saldo do dia atual com o saldo inicial
+    currentDayBalance = parseFloat(document.getElementById("NovInitialBalance").textContent) || 0;
 
-        // Ordenar os dados por dia
-        sortDataByDay();
-
-        // Atualizar os cards de dados
-        updateDataCards();
-
-        // Salvar os dados atualizados
-        savedata();
-
-        // Recalcular os totais
-        calculateTotal();
+    // Atualize o saldo do dia em todos os dados com base na ordem
+    for (var i = 0; i < inputData.length; i++) {
+      var dayDebit = parseFloat(inputData[i].debit) || 0;
+      var dayCredit = parseFloat(inputData[i].credit) || 0;
+      if (inputData[i].credit !== "") {
+        // Se for um lançamento de crédito, adicione ao saldo do dia atual
+        currentDayBalance += dayCredit;
       } else {
-        // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
-        alert("Preencha a descrição e o dia antes de adicionar.");
+        // Se for um lançamento de débito, subtraia do saldo do dia atual
+        currentDayBalance -= dayDebit;
       }
+      // Atualize o saldo do dia no objeto de dados
+      inputData[i].dayBalance = currentDayBalance;
     }
+
+    // Atualizar os cards de dados
+    updateDataCards();
+
+    // Salvar os dados atualizados
+    savedata();
+
+    // Recalcular os totais
+    calculateTotal();
+  } else {
+    // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
+    alert("Preencha a descrição e o dia antes de adicionar.");
+  }
+}
 
     function sortDataByDay() {
       data.sort(function (a, b) {

@@ -70,86 +70,149 @@
     <div class="row">
       <div class="col s12">
         <div class="card-columns">
-          <div class="card">
+          <div class="card" id="card1">
             <div class="card-content">
-              <span class="card-title"><a href="1Jan.html">Janeiro</a></span>
+              <span class="card-title">Janeiro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card2">
             <div class="card-content">
-              <span class="card-title"><a href="2Fev.html">Fevereiro</a></span>
+              <span class="card-title">Fevereiro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card3">
             <div class="card-content">
-              <span class="card-title"><a href="3Mar.html">Março</a></span>
+              <span class="card-title">Março</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card4">
             <div class="card-content">
-              <span class="card-title"><a href="4Abr.html">Abril</a></span>
+              <span class="card-title">Abril</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card5">
             <div class="card-content">
-              <span class="card-title"><a href="5Mai.html">Maio</a></span>
+              <span class="card-title">Maio</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card6">
             <div class="card-content">
-              <span class="card-title"><a href="6Jun.html">Junho</a></span>
+              <span class="card-title">Junho</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card7">
             <div class="card-content">
-              <span class="card-title"><a href="7Jul.html">Julho</a></span>
+              <span class="card-title">Julho</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card8">
             <div class="card-content">
-              <span class="card-title"><a href="8Ago.html">Agosto</a></span>
+              <span class="card-title">Agosto</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card9">
             <div class="card-content">
-              <span class="card-title"><a href="9Set.html">Setembro</a></span>
+              <span class="card-title">Setembro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card10">
             <div class="card-content">
-              <span class="card-title"><a href="10Out.html">Outubro</a></span>
+              <span class="card-title">Outubro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card11">
             <div class="card-content">
-              <span class="card-title"><a href="11Nov.html">Novembro</a></span>
+              <span class="card-title">Novembro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card12">
             <div class="card-content">
-              <span class="card-title"><a href="12Dez.html">Dezembro</a></span>
+              <span class="card-title">Dezembro</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card13">
             <div class="card-content">
-              <span class="card-title"><a href="cartao_de_credito.html">Cartão de crédito</a></span>
+              <span class="card-title">Cartão de crédito</span>
             </div>
           </div>
-          <div class="card">
+          <div class="card" id="card14">
             <div class="card-content">
-              <span class="card-title"><a href="perguntas_frequentes.html">Perguntas Frequêntes</a></span>
+              <span class="card-title">Perguntas Frequêntes</span>
+            </div>
+          </div>
+          <div class="card" id="card15">
+            <div class="card-content">
+              <span class="card-title">Privacidade</span>
             </div>
           </div>
           <div class="card" id="limparDadosCard">
             <div class="card-content">
-              <span class="card-title"><a href="privacy.html">Privacidade</a></span>
+              <span class="card-title" style="color: #d50000">Recomeçar</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  // Função para limpar o localStorage e mostrar uma mensagem
+  function limparLocalStorage() {
+    localStorage.clear(); // Limpar todos os dados no localStorage
+    alert("Os dados foram apagados."); // Exibir uma mensagem de confirmação
+  }
+
+  // Adicione um evento de clique ao card
+  document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
+
+  document.getElementById("card1").addEventListener("click", function() {
+    window.location.href = "1Jan.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card2").addEventListener("click", function() {
+    window.location.href = "2Fev.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card3").addEventListener("click", function() {
+    window.location.href = "3Mar.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card4").addEventListener("click", function() {
+    window.location.href = "4Abr.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card5").addEventListener("click", function() {
+    window.location.href = "5Mai.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card6").addEventListener("click", function() {
+    window.location.href = "6Jun.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card7").addEventListener("click", function() {
+    window.location.href = "7Jul.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card8").addEventListener("click", function() {
+    window.location.href = "8Ago.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card9").addEventListener("click", function() {
+    window.location.href = "9Set.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card10").addEventListener("click", function() {
+    window.location.href = "10Out.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card11").addEventListener("click", function() {
+    window.location.href = "11Nov.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card12").addEventListener("click", function() {
+    window.location.href = "12Dez.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card13").addEventListener("click", function() {
+    window.location.href = "cartao_de_credito.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card14").addEventListener("click", function() {
+    window.location.href = "perguntas_frequentes.html"; // Redireciona para o URL desejado
+  });
+  document.getElementById("card15").addEventListener("click", function() {
+    window.location.href = "privacy.html"; // Redireciona para o URL desejado
+  });
+</script>
+
+   
 </body>
 
 </html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Sua Calculadora Financeira Prática">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Dízimo</title>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
+        <span class="brand-logo center">Dízimo</span>
+        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <p>Nesta tela você tem os valores dos seus dízimos calculados para cada mês. Eles não são lançados no cálculo dos resultados de cada mês, apenas são exibidos aqui e na tela de cada mês. Você precisa fazer um lançamento como débito na tela do mês correspondente com o valor que aparece aqui para que o dízimo seja computado e calculado no movimento mensal.</p>
+      </div>
+    </div>
+    <div class="balance-value" id="balanceValue">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Totais mensais</span>
+          <div class="card-balance-content">
+            <div class="card-content">
+              <span class="card-title">Jan</span>
+              <p><span id="januaryTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Fev</span>
+              <p><span id="februaryTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Mar</span>
+              <p><span id="marchTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Abr</span>
+              <p><span id="aprilTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Mai</span>
+              <p><span id="mayTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Jun</span>
+              <p><span id="juneTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Jul</span>
+              <p><span id="julyTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Ago</span>
+              <p><span id="augustTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Set</span>
+              <p><span id="septemberTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Out</span>
+              <p><span id="octoberTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Nov</span>
+              <p><span id="novemberTithe">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Dez</span>
+              <p><span id="decemberTithe">0.00</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Recupere o valor do dízimo do localStorage para cada mês
+      var januaryTithe = localStorage.getItem("januaryTithe");
+      var februaryTithe = localStorage.getItem("februaryTithe");
+      var marchTithe = localStorage.getItem("marchTithe");
+      var aprilTithe = localStorage.getItem("aprilTithe");
+      var mayTithe = localStorage.getItem("mayTithe");
+      var juneTithe = localStorage.getItem("juneTithe");
+      var julyTithe = localStorage.getItem("julyTithe");
+      var augustTithe = localStorage.getItem("augustTithe");
+      var septemberTithe = localStorage.getItem("septemberTithe");
+      var octoberTithe = localStorage.getItem("octoberTithe");
+      var novemberTithe = localStorage.getItem("novemberTithe");
+      var decemberTithe = localStorage.getItem("decemberTithe");
+
+      // Atualize os elementos HTML com os valores recuperados
+      document.getElementById("januaryTithe").textContent = januaryTithe || "0.00";
+      document.getElementById("februaryTithe").textContent = februaryTithe || "0.00";
+      document.getElementById("marchTithe").textContent = marchTithe || "0.00";
+      document.getElementById("aprilTithe").textContent = aprilTithe || "0.00";
+      document.getElementById("mayTithe").textContent = mayTithe || "0.00";
+      document.getElementById("juneTithe").textContent = juneTithe || "0.00";
+      document.getElementById("julyTithe").textContent = julyTithe || "0.00";
+      document.getElementById("augustTithe").textContent = augustTithe || "0.00";
+      document.getElementById("septemberTithe").textContent = septemberTithe || "0.00";
+      document.getElementById("octoberTithe").textContent = octoberTithe || "0.00";
+      document.getElementById("novemberTithe").textContent = novemberTithe || "0.00";
+      document.getElementById("decemberTithe").textContent = decemberTithe || "0.00";
+    });
+
+    function redirectToIndex() {
+      window.location.href = 'index.html';
+    }
+
+  </script>
+</body>
+
+</html>

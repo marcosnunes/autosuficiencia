@@ -58,6 +58,7 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
+        <p>Dízimo: <span id="julyTithe" class="blue-text">0.00</span></p>
         <p>Cartão de Crédito: <span id="julyCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
@@ -217,6 +218,17 @@
         creditTotal += dayCredit;
         debitTotal += dayDebit;
       }
+
+      // Calcular o dízimo (10% do Total Crédito)
+      var totalCredit = Number(document.getElementById("totalCredit").textContent);
+      var tithe = totalCredit * 0.1; // Dízimo é 10% do Total Crédito
+      var formattedTithe = !isNaN(tithe) ? tithe.toFixed(2) : '0.00';
+
+      document.getElementById("julyTithe").textContent = formattedTithe;
+
+      // Salvar o valor do dízimo no localStorage
+      localStorage.setItem("julyTithe", formattedTithe);
+
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
       var balance = creditTotal - debitTotal - creditCardBalance;

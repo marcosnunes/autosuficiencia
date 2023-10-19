@@ -217,7 +217,7 @@
       }
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
-      var balance = creditTotal - debitTotal;
+      var balance = creditTotal - debitTotal - creditCardBalance;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
       document.getElementById("balance").textContent = formattedBalance;
       document.getElementById("totalAbril").textContent = formattedTotal;

@@ -65,24 +65,12 @@
         <p>Saldo Final: <span id="totalAgosto">0.00</span></p>
         <p>Balanço: <span id="balance"></span></p>
         <p>Débito ÷ Crédito: <span id="totalPorcentagem">0.00%</span></p>
-        <button id="pdfButton" class="btn btn-default">Exportar para PDF</button>
+        <button id="pdfButton" onclick="window.print()" class="btn btn-default">Exportar para PDF</button>
       </div>
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-
-    // Função para acionar a janela de impressão como PDF
-    function printAsPDF() {
-      window.print();
-    }
-
-    // Adicione um ouvinte de clique ao botão
-    document.getElementById("pdfButton").addEventListener("click", function () {
-      printAsPDF();
-    });
-
-
     // Função para gerar IDs únicos
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

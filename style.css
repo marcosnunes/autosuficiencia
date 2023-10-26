@@ -3,58 +3,64 @@
   padding: 0;
 }
 
+@media screen and (max-width: 767px) {
+  #pdfButton {
+    display: none;
+  }
+}
+
 @media print {
-/* Redefine as margens para zero (ou outro valor desejado) */
-* {
-  margin: 0;
-  padding: 0;
-}
+  /* Redefine as margens para zero (ou outro valor desejado) */
+  * {
+    margin: 0;
+    padding: 0;
+  }
 
-/* Redefine as bordas para nenhum (ou outro estilo desejado) */
-.card {
-  width: 100%;
-  padding: 20px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-}
+   /* Redefine as bordas para nenhum (ou outro estilo desejado) */
+  .card {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
 
-.card-content {
-  font-size: 14px;
-}
+  .card-content {
+    font-size: 14px;
+  }
 
-.navigation {
-  position: relative;
-  top: 0;
-  width: 100%;
-  border: none;
-}
+  .navigation {
+    position: relative;
+    top: 0;
+    width: 100%;
+    border: none;
+  }
 
-.container {
-  position: absolute;
-  width: 100%;
-}
+  .container {
+    position: absolute;
+    width: 100%;
+  }
 
-.brand-logo {
-  flex: 1;
-  text-align: center;
-}
-
-/* Oculte elementos que não devem ser impressos */
-#pdfButton {
-  display: none;
-}
-#card-lancamento {
-  display: none;
-}
-#chart {
-  display: none;
-}
-#button-delete {
-  display: none;
-}
-.btn-default {
-  display: none;
-}
+  .brand-logo {
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* Oculte elementos que não devem ser impressos */
+  #pdfButton {
+    display: none;
+  }
+  #card-lancamento {
+    display: none;
+  }
+  #chart {
+    display: none;
+  }
+  #button-delete {
+    display: none;
+  }
+  .btn-default {
+    display: none;
+  }
 }
 
 

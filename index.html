@@ -35,7 +35,7 @@
      background-color: #fce4ec;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 1024px) {
       .card {
         width: calc(50% - 20px);
       }
@@ -44,6 +44,18 @@
     @media (max-width: 600px) {
       .card {
         width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #whatsapp-tela-grande {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      #whatsapp {
+        display: none;
       }
     }
 
@@ -176,6 +188,12 @@
               <span class="card-title" style="color: #07d500">Whatsapp</span>
             </div>
           </div>
+          <div class="card" id="whatsapp-tela-grande">
+            <div class="card-content">
+              <img src="assets/wp.jpeg">
+              <span class="card-title" style="color: #07d500">Whatsapp</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -191,6 +209,9 @@
   // Adicione um evento de clique ao card
   document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
 
+  document.getElementById("whatsapp-tela-grande").addEventListener("click", function() {
+    window.location.href = "https://chat.whatsapp.com/CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
+  });
   document.getElementById("whatsapp").addEventListener("click", function() {
     window.location.href = "whatsapp://chat/?code=CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
   });

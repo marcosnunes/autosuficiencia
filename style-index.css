@@ -21,7 +21,7 @@
     .card-content img {
       max-width: 24px;
       max-height: 24px;
-      margin-right: 10px;     
+      margin: 0 10 5 0;     
     }
     
     #limparDadosCard {

@@ -161,6 +161,11 @@
               <span class="card-title" style="color: #d50000">Recomeçar</span>
             </div>
           </div>
+          <div class="card" id="whatsapp">
+            <div class="card-content">
+              <span class="card-title" style="color: #07d500">Whatsapp</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -176,6 +181,9 @@
   // Adicione um evento de clique ao card
   document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
 
+  document.getElementById("whatsapp").addEventListener("click", function() {
+    window.location.href = "https://chat.whatsapp.com/CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
+  });
   document.getElementById("card1").addEventListener("click", function() {
     window.location.href = "1Jan.html"; // Redireciona para o URL desejado
   });

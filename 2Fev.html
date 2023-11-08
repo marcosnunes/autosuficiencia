@@ -25,10 +25,8 @@
     <div class="iframe-container" id="chart">
       <iframe src="chart.html" frameborder="0"></iframe>
     </div>
-    <div class="card" id="home">
-      <div class="card-content">
-        <span class="card-title"><< Voltar</span>
-      </div>
+    <div>
+      <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
     </div>
     <div class="card">
       <div class="card-content" id="initBalance">
@@ -78,12 +76,7 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
-  
-  document.getElementById("home").addEventListener("click", function() {
-    window.location.href = "index.html"; // Redireciona para o URL desejado
-  });
-
-    // Função para gerar IDs únicos
+   // Função para gerar IDs únicos
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,
@@ -208,6 +201,12 @@
     // Redirecionar para outras páginas
     function redirectToJan() {
       window.location.href = '1Jan.html';
+      calculateTotal();
+      savedata();
+    }
+
+    function redirectToIndex() {
+      window.location.href = 'index.html';
       calculateTotal();
       savedata();
     }

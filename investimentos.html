@@ -36,8 +36,8 @@
           <label for="annualInterestRate">Taxa de Juros Anual (%)</label>
         </div>
         <div class="input-field">
-          <input type="number" class="investment-duration" id="investmentDuration" placeholder="Duração do Investimento (meses)">
-          <label for="investmentDuration">Duração do Investimento (meses)</label>
+          <input type="number" class="investment-duration" id="investmentDuration" placeholder="(meses)">
+          <label for="investmentDuration">Duração do Investimento</label>
         </div>
         <button onclick="calculateInvestment()" class="btn btn-default">Calcular</button>
         <div class="result">
@@ -48,9 +48,9 @@
     </div>
     <div class="card">
       <div class="card-content">
-        <h3 class="card-title">Valores Atuais:</h3>
+        <h3 class="card-title">Valores Diários:</h3>
         <p>Tx Poupança: <span id="poupancaValue">Carregando...</span></p>
-        <p>Tx CDI: <span id="cdiValue">Carregando...</span></p>
+        <p>Tx selic: <span id="cdiValue">Carregando...</span></p>
       </div>
     </div>
   </div>
@@ -79,7 +79,7 @@
     function fetchCurrentValue() {
       // URL da API para os valores da poupança e do CDI
       var apiUrlPoupanca = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.4390/dados?formato=json";
-      var apiUrlCDI = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1179/dados?formato=json";
+      var apiUrlCDI = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados/ultimos/10?formato=json";
       // Realiza a busca dos valores da poupança
       fetch(apiUrlPoupanca)
         .then(function (response) {

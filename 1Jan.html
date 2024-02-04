@@ -29,6 +29,16 @@
       <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
     </div>
     <div class="card">
+      <div class="card-content">
+        <p>Esta página é a única página dos meses em que o saldo inicial é editável. Ainda que você inicie os seus
+          lançamentos no meio do ano, você precisa adicionar o seu saldo inicial, que é o saldo atual que você tem na
+          sua conta bancária. Este valor deve ser digitado aqui nesta página. Nas outras este campo será preenchido
+          automaticamente conforme o fechamento do mês anterior. É importante também que você faça os lançamentos pelo
+          ano inteiro com as mesmas descrições, ou seja, você deve digitar a palavra de forma igual na descrição do
+          lançamento para cada mês do ano para que o relatório seja preenchido corretamente.</p>
+      </div>
+    </div>
+    <div class="card">
       <div class="card-content" id="initBalance">
         <span class="card-title">Saldo inicial do ano</span>
         <input type="number" class="form-control" id="JanInitialBalance" oninput="saveInitialBalance()"

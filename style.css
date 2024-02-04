@@ -16,8 +16,8 @@
     padding: 0;
   }
 
-  #launchDataContainer {
-    margin-bottom: 20px;
+  #aviso-saldo-inicial {
+    display: none;
   }
 
    /* Redefine as bordas para nenhum (ou outro estilo desejado) */

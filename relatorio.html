@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Sua Calculadora Financeira Prática">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Relatório</title>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
+        <span class="brand-logo center">Relatório</span>
+        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <p>Nesta tela você tem um demonstrativo anual dos seus resultados. O Débito é tudo o que você gastou, neste caso
+          exibido aqui, no ano inteiro e o Crédito é tudo o que você recebeu. O Balanço mostra a diferença entre o
+          Crédito e o Débito. Também é exibido o balanço em porcentagem. 100% representa que você gastou tudo o que
+          recebeu. Um valor maior que 100% você gastou mais do que recebeu. Para manter o seu patrimônio sempre em
+          ascenção é importante manter o balanço sempre não maior que 80%. O ideal é 70% para que você consiga fazer uma
+          reserva de emergência.</p>
+      </div>
+    </div>
+    <div class="balance-value" id="balanceValue">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Totais anual</span>
+          <div class="card-balance-content">
+            <div class="card-content">
+              <span class="card-title">Débito</span>
+              <p><span id="debitTotal" style="color: #d50000">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Crédito</span>
+              <p><span id="creditTotal">0.00</span></p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Balanço</span>
+              <p><span id="balance">0.00</span></p>
+              <p><span id="balancePercentage">0.00%</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Lançamentos anuais</span>
+          <div id="launchDataContainer"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var creditTotal = 0;
+        var debitTotal = 0;
+        var launchData = {};
+
+        // Loop através de todos os itens do localStorage
+        for (var key in localStorage) {
+          if (localStorage.hasOwnProperty(key) && key.startsWith('total')) {
+            var item = JSON.parse(localStorage.getItem(key));
+            var rows = item.rows;
+
+            // Loop através das linhas de cada item
+            for (var i = 0; i < rows.length; i++) {
+              var row = rows[i];
+              var description = row.description;
+              var credit = parseFloat(row.credit) || 0;
+              var debit = parseFloat(row.debit) || 0;
+
+              // Somar os valores de crédito e débito
+              creditTotal += credit;
+              debitTotal += debit;
+
+              // Verificar se a descrição já existe no objeto launchData
+              if (launchData.hasOwnProperty(description)) {
+                // Se a descrição já existe, adicione o valor do lançamento ao valor total correspondente
+                launchData[description] += credit - debit;
+              } else {
+                // Se a descrição não existe, crie uma nova chave no objeto com o valor do lançamento
+                launchData[description] = credit - debit;
+              }
+            }
+          }
+        }
+
+        // Exibir os totais nos spans desejados
+        document.getElementById('creditTotal').textContent = creditTotal.toFixed(2);
+        document.getElementById('debitTotal').textContent = debitTotal.toFixed(2);
+
+        // Calcular o balanço
+        var balance = creditTotal - debitTotal;
+
+        // Exibir o balanço nos spans desejados
+        document.getElementById('balance').textContent = balance.toFixed(2);
+
+        // Calcular a porcentagem do balanço em relação ao crédito total
+        var percentage = (debitTotal / creditTotal) * 100;
+
+        // Exibir a porcentagem no span desejado
+        document.getElementById('balancePercentage').textContent = percentage.toFixed(2) + '%';
+
+        // Verificar se há lançamentos no objeto launchData
+        if (Object.keys(launchData).length > 0) {
+          var container = document.getElementById('launchDataContainer');
+
+          // Loop através das descrições e valores totais no objeto launchData
+          for (var description in launchData) {
+            var total = launchData[description];
+
+            // Criar os elementos HTML para a descrição e valor total
+            var descriptionSpan = document.createElement('span');
+            descriptionSpan.textContent = 'Descrição: ' + description;
+
+            var totalSpan = document.createElement('span');
+            totalSpan.textContent = 'Total: ' + total.toFixed(2);
+
+            // Adicionar os elementos ao contêiner
+            container.appendChild(descriptionSpan);
+            container.appendChild(document.createElement('br'));
+            container.appendChild(totalSpan);
+            container.appendChild(document.createElement('br'));
+          }
+        }
+      });
+
+      function redirectToIndex() {
+        window.location.href = 'index.html';
+      }
+    </script>
+</body>
+
+</html>

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="description" content="Sua calculadora financeira prática">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
   <title>Janeiro</title>
 </head>
+
 <body>
   <div class="navigation">
     <nav>
@@ -21,7 +23,7 @@
   </div>
   <div class="container">
     <div class="iframe-container" id="chart">
-      <iframe src="chart.html" frameborder="0"></iframe>
+      <iframe title="Grafico" src="chart.html" frameborder="0"></iframe>
     </div>
     <div>
       <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
@@ -104,6 +106,9 @@
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
+      calculateTotal();
+
+      console.log(localStorage); // Exibir o conteúdo do localStorage no console
 
       // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
       var savedCurrentBalance = localStorage.getItem('currentBalance');
@@ -280,6 +285,7 @@
           day: day,
           dayBalance: 0 // Valor inicial do saldo do dia
         };
+        localStorage.setItem("monthlyData", JSON.stringify(newData));
 
         // Adicione os novos dados ao array de dados digitados
         inputData.push(newData);
@@ -460,4 +466,5 @@
     }
   </script>
 </body>
+
 </html>

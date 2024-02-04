@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -109,6 +110,11 @@
               <span class="card-title">Dízimos</span>
             </div>
           </div>
+          <div class="card" id="card18">
+            <div class="card-content">
+              <span class="card-title">Relatório</span>
+            </div>
+          </div>
           <div class="card" id="limparDadosCard">
             <div class="card-content">
               <span class="card-title" style="color: #d50000">Recomeçar</span>
@@ -116,13 +122,13 @@
           </div>
           <div class="card" id="whatsapp">
             <div class="card-content">
-              <img src="assets/wp.jpeg">
+              <img title="whatsapp-icon" src="assets/wp.jpeg">
               <span class="card-title" style="color: #07d500">Whatsapp</span>
             </div>
           </div>
           <div class="card" id="whatsapp-tela-grande">
             <div class="card-content">
-              <img src="assets/wp.jpeg">
+              <img title="whatsapp-icon" src="assets/wp.jpeg">
               <span class="card-title" style="color: #07d500">Whatsapp</span>
             </div>
           </div>
@@ -131,76 +137,79 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-  // Função para limpar o localStorage e mostrar uma mensagem
-  function limparLocalStorage() {
-    localStorage.clear(); // Limpar todos os dados no localStorage
-    alert("Os dados foram apagados."); // Exibir uma mensagem de confirmação
-  }
+  <script>
+    // Função para limpar o localStorage e mostrar uma mensagem
+    function limparLocalStorage() {
+      localStorage.clear(); // Limpar todos os dados no localStorage
+      alert("Os dados foram apagados."); // Exibir uma mensagem de confirmação
+    }
 
-  // Adicione um evento de clique ao card
-  document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
+    // Adicione um evento de clique ao card
+    document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
 
-  document.getElementById("whatsapp-tela-grande").addEventListener("click", function() {
-    window.location.href = "https://chat.whatsapp.com/CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
-  });
-  document.getElementById("whatsapp").addEventListener("click", function() {
-    window.location.href = "whatsapp://chat/?code=CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card1").addEventListener("click", function() {
-    window.location.href = "1Jan.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card2").addEventListener("click", function() {
-    window.location.href = "2Fev.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card3").addEventListener("click", function() {
-    window.location.href = "3Mar.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card4").addEventListener("click", function() {
-    window.location.href = "4Abr.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card5").addEventListener("click", function() {
-    window.location.href = "5Mai.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card6").addEventListener("click", function() {
-    window.location.href = "6Jun.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card7").addEventListener("click", function() {
-    window.location.href = "7Jul.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card8").addEventListener("click", function() {
-    window.location.href = "8Ago.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card9").addEventListener("click", function() {
-    window.location.href = "9Set.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card10").addEventListener("click", function() {
-    window.location.href = "10Out.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card11").addEventListener("click", function() {
-    window.location.href = "11Nov.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card12").addEventListener("click", function() {
-    window.location.href = "12Dez.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card13").addEventListener("click", function() {
-    window.location.href = "cartao_de_credito.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card14").addEventListener("click", function() {
-    window.location.href = "perguntas_frequentes.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card15").addEventListener("click", function() {
-    window.location.href = "privacy.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card16").addEventListener("click", function() {
-    window.location.href = "investimentos.html"; // Redireciona para o URL desejado
-  });
-  document.getElementById("card17").addEventListener("click", function() {
-    window.location.href = "dizimo.html"; // Redireciona para o URL desejado
-  });
-</script>
+    document.getElementById("whatsapp-tela-grande").addEventListener("click", function () {
+      window.location.href = "https://chat.whatsapp.com/CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
+    });
+    document.getElementById("whatsapp").addEventListener("click", function () {
+      window.location.href = "whatsapp://chat/?code=CM8DvPDscGPASUgg8WwtQi"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card1").addEventListener("click", function () {
+      window.location.href = "1Jan.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card2").addEventListener("click", function () {
+      window.location.href = "2Fev.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card3").addEventListener("click", function () {
+      window.location.href = "3Mar.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card4").addEventListener("click", function () {
+      window.location.href = "4Abr.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card5").addEventListener("click", function () {
+      window.location.href = "5Mai.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card6").addEventListener("click", function () {
+      window.location.href = "6Jun.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card7").addEventListener("click", function () {
+      window.location.href = "7Jul.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card8").addEventListener("click", function () {
+      window.location.href = "8Ago.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card9").addEventListener("click", function () {
+      window.location.href = "9Set.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card10").addEventListener("click", function () {
+      window.location.href = "10Out.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card11").addEventListener("click", function () {
+      window.location.href = "11Nov.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card12").addEventListener("click", function () {
+      window.location.href = "12Dez.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card13").addEventListener("click", function () {
+      window.location.href = "cartao_de_credito.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card14").addEventListener("click", function () {
+      window.location.href = "perguntas_frequentes.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card15").addEventListener("click", function () {
+      window.location.href = "privacy.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card16").addEventListener("click", function () {
+      window.location.href = "investimentos.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card17").addEventListener("click", function () {
+      window.location.href = "dizimo.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card18").addEventListener("click", function () {
+      window.location.href = "relatorio.html"; // Redireciona para o URL desejado
+    });
+  </script>
 
-   
+
 </body>
 
 </html>

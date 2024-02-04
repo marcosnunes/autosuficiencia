@@ -16,6 +16,10 @@
     padding: 0;
   }
 
+  #launchDataContainer {
+    margin-bottom: 20px;
+  }
+
    /* Redefine as bordas para nenhum (ou outro estilo desejado) */
   .card {
     width: 100%;

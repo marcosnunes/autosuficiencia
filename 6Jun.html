@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="description" content="Sua calculadora financeira prática">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
   <title>Junho</title>
 </head>
+
 <body>
   <div class="navigation">
     <nav>
@@ -21,7 +23,7 @@
   </div>
   <div class="container">
     <div class="iframe-container" id="chart">
-      <iframe src="chart.html" frameborder="0"></iframe>
+      <iframe title="Grafico" src="chart.html" frameborder="0"></iframe>
     </div>
     <div>
       <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
@@ -99,6 +101,7 @@
       M.AutoInit();
       loaddata();
       calculateTotal();
+      console.log(localStorage); // Exibir o conteúdo do localStorage no console
       // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
       var savedCurrentBalance = localStorage.getItem('currentBalance');
       if (savedCurrentBalance) {
@@ -259,74 +262,74 @@
 
     // Função para adicionar dados
     function addData(month) {
-  var description = document.getElementById("junDescription").value;
-  var debit = document.getElementById("junDebit").value;
-  var credit = document.getElementById("junCredit").value;
-  var day = document.getElementById("junDay").value;
+      var description = document.getElementById("junDescription").value;
+      var debit = document.getElementById("junDebit").value;
+      var credit = document.getElementById("junCredit").value;
+      var day = document.getElementById("junDay").value;
 
-  // Verifique se pelo menos a descrição e o dia estão preenchidos
-  if (description.trim() !== "" && day.trim() !== "") {
-    // Gere um ID único para os novos dados
-    var id = uuidv4();
+      // Verifique se pelo menos a descrição e o dia estão preenchidos
+      if (description.trim() !== "" && day.trim() !== "") {
+        // Gere um ID único para os novos dados
+        var id = uuidv4();
 
-    // Calcule o saldo do dia considerando o saldo inicial
-    var currentDayBalance = parseFloat(document.getElementById("JunInitialBalance").textContent) || 0;
+        // Calcule o saldo do dia considerando o saldo inicial
+        var currentDayBalance = parseFloat(document.getElementById("JunInitialBalance").textContent) || 0;
 
-    // Crie um objeto com os dados e o ID gerado
-    var newData = {
-      id: id,
-      description: description,
-      debit: debit,
-      credit: credit,
-      day: day,
-      dayBalance: 0 // Valor inicial do saldo do dia
-    };
+        // Crie um objeto com os dados e o ID gerado
+        var newData = {
+          id: id,
+          description: description,
+          debit: debit,
+          credit: credit,
+          day: day,
+          dayBalance: 0 // Valor inicial do saldo do dia
+        };
 
-    // Adicione os novos dados ao array de dados digitados
-    inputData.push(newData);
+        // Adicione os novos dados ao array de dados digitados
+        inputData.push(newData);
 
-    // Limpar os campos de entrada
-    document.getElementById("junDescription").value = "";
-    document.getElementById("junDebit").value = "";
-    document.getElementById("junCredit").value = "";
-    document.getElementById("junDay").value = "";
+        // Limpar os campos de entrada
+        document.getElementById("junDescription").value = "";
+        document.getElementById("junDebit").value = "";
+        document.getElementById("junCredit").value = "";
+        document.getElementById("junDay").value = "";
 
-    // Ordenar o array inputData com base no campo "dia"
-    inputData.sort(function (a, b) {
-      return parseInt(a.day) - parseInt(b.day);
-    });
+        // Ordenar o array inputData com base no campo "dia"
+        inputData.sort(function (a, b) {
+          return parseInt(a.day) - parseInt(b.day);
+        });
 
-    // Inicialize o saldo do dia atual com o saldo inicial
-    currentDayBalance = parseFloat(document.getElementById("JunInitialBalance").textContent) || 0;
+        // Inicialize o saldo do dia atual com o saldo inicial
+        currentDayBalance = parseFloat(document.getElementById("JunInitialBalance").textContent) || 0;
 
-    // Atualize o saldo do dia em todos os dados com base na ordem
-    for (var i = 0; i < inputData.length; i++) {
-      var dayDebit = parseFloat(inputData[i].debit) || 0;
-      var dayCredit = parseFloat(inputData[i].credit) || 0;
-      if (inputData[i].credit !== "") {
-        // Se for um lançamento de crédito, adicione ao saldo do dia atual
-        currentDayBalance += dayCredit;
+        // Atualize o saldo do dia em todos os dados com base na ordem
+        for (var i = 0; i < inputData.length; i++) {
+          var dayDebit = parseFloat(inputData[i].debit) || 0;
+          var dayCredit = parseFloat(inputData[i].credit) || 0;
+          if (inputData[i].credit !== "") {
+            // Se for um lançamento de crédito, adicione ao saldo do dia atual
+            currentDayBalance += dayCredit;
+          } else {
+            // Se for um lançamento de débito, subtraia do saldo do dia atual
+            currentDayBalance -= dayDebit;
+          }
+          // Atualize o saldo do dia no objeto de dados
+          inputData[i].dayBalance = currentDayBalance;
+        }
+
+        // Atualizar os cards de dados
+        updateDataCards();
+
+        // Salvar os dados atualizados
+        savedata();
+
+        // Recalcular os totais
+        calculateTotal();
       } else {
-        // Se for um lançamento de débito, subtraia do saldo do dia atual
-        currentDayBalance -= dayDebit;
+        // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
+        alert("Preencha a descrição e o dia antes de adicionar.");
       }
-      // Atualize o saldo do dia no objeto de dados
-      inputData[i].dayBalance = currentDayBalance;
     }
-
-    // Atualizar os cards de dados
-    updateDataCards();
-
-    // Salvar os dados atualizados
-    savedata();
-
-    // Recalcular os totais
-    calculateTotal();
-  } else {
-    // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
-    alert("Preencha a descrição e o dia antes de adicionar.");
-  }
-}
 
     function sortDataByDay() {
       data.sort(function (a, b) {
@@ -469,4 +472,5 @@
     }
   </script>
 </body>
+
 </html>

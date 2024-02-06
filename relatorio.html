@@ -46,11 +46,15 @@
               <p><span id="creditTotal">0.00</span></p>
             </div>
             <div class="card-content">
+              <span class="card-title">Cartão de Crédito</span>
+              <p><span id="creditCardBalance">0.00</span></p>
+            </div>
+          </div>
+            <div class="card-content">
               <span class="card-title">Balanço</span>
               <p><span id="balance">0.00</span></p>
               <p><span id="balancePercentage">0.00%</span></p>
             </div>
-          </div>
         </div>
       </div>
       <div class="card">
@@ -66,24 +70,22 @@
         var creditTotal = 0;
         var debitTotal = 0;
         var launchData = {};
+        var creditCardBalanceTotal = 0;
 
         // Loop através de todos os itens do localStorage
         for (var key in localStorage) {
           if (localStorage.hasOwnProperty(key) && key.startsWith('total')) {
             var item = JSON.parse(localStorage.getItem(key));
             var rows = item.rows;
-
             // Loop através das linhas de cada item
             for (var i = 0; i < rows.length; i++) {
               var row = rows[i];
               var description = row.description;
               var credit = parseFloat(row.credit) || 0;
               var debit = parseFloat(row.debit) || 0;
-
               // Somar os valores de crédito e débito
               creditTotal += credit;
               debitTotal += debit;
-
               // Verificar se a descrição já existe no objeto launchData
               if (launchData.hasOwnProperty(description)) {
                 // Se a descrição já existe, adicione o valor do lançamento ao valor total correspondente
@@ -95,38 +97,17 @@
             }
           }
         }
-
-        // Exibir os totais nos spans desejados
-        document.getElementById('creditTotal').textContent = creditTotal.toFixed(2);
-        document.getElementById('debitTotal').textContent = debitTotal.toFixed(2);
-
-        // Calcular o balanço
-        var balance = creditTotal - debitTotal;
-
-        // Exibir o balanço nos spans desejados
-        document.getElementById('balance').textContent = balance.toFixed(2);
-
-        // Calcular a porcentagem do balanço em relação ao crédito total
-        var percentage = (debitTotal / creditTotal) * 100;
-
-        // Exibir a porcentagem no span desejado
-        document.getElementById('balancePercentage').textContent = percentage.toFixed(2) + '%';
-
         // Verificar se há lançamentos no objeto launchData
         if (Object.keys(launchData).length > 0) {
           var container = document.getElementById('launchDataContainer');
-
           // Loop através das descrições e valores totais no objeto launchData
           for (var description in launchData) {
             var total = launchData[description];
-
             // Criar os elementos HTML para a descrição e valor total
             var descriptionSpan = document.createElement('span');
             descriptionSpan.textContent = 'Descrição: ' + description;
-
             var totalSpan = document.createElement('span');
             totalSpan.textContent = 'Total: ' + total.toFixed(2);
-
             // Adicionar os elementos ao contêiner
             container.appendChild(descriptionSpan);
             container.appendChild(document.createElement('br'));
@@ -134,6 +115,25 @@
             container.appendChild(document.createElement('br'));
           }
         }
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        // Loop através de todos os meses do ano
+        for (var i = 0; i < 12; i++) {
+          var monthKey = months[i].toLowerCase() + "CreditCardBalance";
+          var monthBalance = parseFloat(localStorage.getItem(monthKey)) || 0;
+          creditCardBalanceTotal += monthBalance;
+        }
+        // Exibir os totais nos spans desejados
+        document.getElementById('creditTotal').textContent = creditTotal.toFixed(2);
+        document.getElementById('creditCardBalance').textContent = creditCardBalanceTotal.toFixed(2);
+        document.getElementById('debitTotal').textContent = debitTotal.toFixed(2);
+        // Calcular o balanço
+        var balance = creditTotal - debitTotal - creditCardBalanceTotal;
+        // Exibir o balanço nos spans desejados
+        document.getElementById('balance').textContent = balance.toFixed(2);
+        // Calcular a porcentagem do balanço em relação ao crédito total
+        var percentage = ((debitTotal + creditCardBalanceTotal) / creditTotal) * 100;
+        // Exibir a porcentagem no span desejado
+        document.getElementById('balancePercentage').textContent = percentage.toFixed(2) + '%';
       });
 
       function redirectToIndex() {

@@ -15,7 +15,7 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToAbr()" class="btn btn-default">&lt;</button>
+        <button onclick="redirectToApr()" class="btn btn-default">&lt;</button>
         <span class="brand-logo center">Maio</span>
         <button onclick="redirectToJun()" class="btn btn-default">&gt;</button>
       </div>
@@ -31,28 +31,28 @@
     <div class="card">
       <div class="card-content" id="initBalance">
         <span class="card-title">Saldo Inicial de Maio</span>
-        <p><span id="MayInitialBalance">0.00</span></p>
+        <p><span id="MaiInitialBalance">0.00</span></p>
       </div>
     </div>
     <div class="card" id="card-lancamento">
       <div class="card-content">
         <span class="card-title">Fazer lançamento</span>
         <div class="input-field">
-          <input type="text" class="description form-control" id="mayDescription" placeholder="Descrição">
-          <label for="mayDescription">Descrição</label>
+          <input type="text" class="description form-control" id="maiDescription" placeholder="Descrição">
+          <label for="maiDescription">Descrição</label>
         </div>
         <div class="input-field">
-          <input type="number" class="debit form-control" id="mayDebit" oninput="calculateTotal()" placeholder="Débito">
-          <label for="mayDebit">Débito</label>
+          <input type="number" class="debit form-control" id="maiDebit" oninput="calculateTotal()" placeholder="Débito">
+          <label for="maiDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="mayCredit" oninput="calculateTotal()"
+          <input type="number" class="credit form-control" id="maiCredit" oninput="calculateTotal()"
             placeholder="Crédito">
-          <label for="mayCredit">Crédito</label>
+          <label for="maiCredit">Crédito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="day form-control" id="mayDay" placeholder="Dia">
-          <label for="mayDay">Dia</label>
+          <input type="number" class="day form-control" id="maiDay" placeholder="Dia">
+          <label for="maiDay">Dia</label>
         </div>
         <button onclick="addData('Maio')" class="btn btn-default">Adicionar</button>
       </div>
@@ -63,8 +63,8 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Resultados</span>
-        <p>Dízimo: <span id="mayTithe" class="blue-text">0.00</span></p>
-        <p>Cartão de Crédito: <span id="mayCreditCardBalance" class="orange-text">0.00</span></p>
+        <p>Dízimo: <span id="aprilTithe" class="blue-text">0.00</span></p>
+        <p>Cartão de Crédito: <span id="maiCreditCardBalance" class="orange-text">0.00</span></p>
         <p>Total Crédito: <span id="totalCredit" class="green-text">0.00</span></p>
         <p>Total Débito: <span id="totalDebit" class="orange-text">0.00</span></p>
         <p>Saldo Final: <span id="totalMaio">0.00</span></p>
@@ -84,6 +84,8 @@
         return v.toString(16);
       });
     }
+
+    // Função para redimensionar o iframe
     function resizeIframe() {
       var iframe = document.querySelector('.iframe-container iframe');
       var container = document.querySelector('.iframe-container');
@@ -92,31 +94,54 @@
       var newHeight = containerWidth * aspectRatio;
       iframe.style.height = newHeight + 'px';
     }
+
     window.addEventListener('load', resizeIframe);
     window.addEventListener('resize', resizeIframe);
+
     // Inicializar arrays para os dados digitados e os dados armazenados
     var data = []; // Dados armazenados
     var inputData = []; // Dados digitados
+
+    // Reatribuir eventos após o carregamento da página
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
       calculateTotal();
       console.log(localStorage); // Exibir o conteúdo do localStorage no console
-      // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
-      var savedCurrentBalance = localStorage.getItem('currentBalance');
-      if (savedCurrentBalance) {
-        document.getElementById('MayInitialBalance').value = savedCurrentBalance;
-        calculateTotal();
-      }
+      // Adicionar evento de clique ao contêiner pai dos cartões de dados
+      document.getElementById('dataCards').addEventListener('click', function (event) {
+        var target = event.target;
+        // Verificar se o botão "Editar" foi clicado
+        if (target.classList.contains('btn-edit')) {
+          makeEditable(target);
+        }
+        // Verificar se o botão "Excluir" foi clicado
+        else if (target.classList.contains('btn-delete')) {
+          var cardId = target.parentNode.parentNode.getAttribute('data-id');
+          deleteData(cardId);
+        }
+        // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
+        var savedCurrentBalance = localStorage.getItem('currentBalance');
+        if (savedCurrentBalance) {
+          document.getElementById('MaiInitialBalance').value = savedCurrentBalance;
+          calculateTotal();
+        }
+      });
     });
+
+
     function saveInitialBalance() {
-      var initialBalance = parseFloat(document.getElementById("MayInitialBalance").textContent) || 0;
+      // Altere o seletor para buscar o elemento pelo novo ID "MaiInitialBalance"
+      var initialBalance = parseFloat(document.getElementById("MaiInitialBalance").textContent) || 0;
       localStorage.setItem("currentBalance", initialBalance);
+
       // Atualize o saldo do dia em todos os dados com base no novo saldo inicial
-      var currentDayBalance = parseFloat(initialBalance) || 0; // Inicializar com o novo saldo inicial
+      var currentDayBalance = parseFloat(initialBalance) || 0;
+
       for (var i = 0; i < data.length; i++) {
         var dayDebit = parseFloat(data[i].debit) || 0;
         var dayCredit = parseFloat(data[i].credit) || 0;
+
         if (data[i].credit !== "") {
           // Se for um lançamento de crédito, adicione ao saldo do dia atual
           currentDayBalance += dayCredit;
@@ -124,12 +149,15 @@
           // Se for um lançamento de débito, subtraia do saldo do dia atual
           currentDayBalance -= dayDebit;
         }
+
         // Atualize o saldo do dia no objeto de dados
         data[i].dayBalance = currentDayBalance;
       }
+
       for (var j = 0; j < inputData.length; j++) {
         var dayDebit = parseFloat(inputData[j].debit) || 0;
         var dayCredit = parseFloat(inputData[j].credit) || 0;
+
         if (inputData[j].credit !== "") {
           // Se for um lançamento de crédito, adicione ao saldo do dia atual
           currentDayBalance += dayCredit;
@@ -137,47 +165,60 @@
           // Se for um lançamento de débito, subtraia do saldo do dia atual
           currentDayBalance -= dayDebit;
         }
+
         // Atualize o saldo do dia no objeto de dados
         inputData[j].dayBalance = currentDayBalance;
       }
+
       // Atualizar os cards de dados
       updateDataCards();
       calculateTotal();
+      savedata();
     }
+
     function savedata() {
       var totalMaio = {};
-      totalMaio.initialBalance = document.getElementById("MayInitialBalance").textContent;
+      totalMaio.initialBalance = document.getElementById("MaiInitialBalance").textContent;
       totalMaio.total = document.getElementById("totalMaio").textContent;
       totalMaio.rows = [];
+
       // Adicione os dados armazenados ao array totalMaio.rows
       for (var i = 0; i < data.length; i++) {
         totalMaio.rows.push(data[i]);
       }
+
       // Adicione os dados digitados ao array totalMaio.rows
       for (var j = 0; j < inputData.length; j++) {
         totalMaio.rows.push(inputData[j]);
       }
+
       localStorage.setItem("totalMaio", JSON.stringify(totalMaio));
     }
+
     // Função para carregar os dados
     function loaddata() {
-      var totalMaio = JSON.parse(localStorage.getItem("totalMaio"));
       var totalAbril = JSON.parse(localStorage.getItem("totalAbril"));
+      var totalMaio = JSON.parse(localStorage.getItem("totalMaio"));
+
       if (totalMaio) {
-        // Defina o saldo inicial de maio como o valor total de abril
-        document.getElementById("MayInitialBalance").textContent = totalAbril ? totalAbril.total : '0.00';
+        // Defina o saldo inicial de maio como o valor total de Abril
+        document.getElementById("MaiInitialBalance").textContent = totalAbril ? totalAbril.total : '0.00';
         data = totalMaio.rows;
-        // Recuperar o valor do cartão de crédito
-        var mayCreditCardBalance = localStorage.getItem("mayCreditCardBalance");
-        if (mayCreditCardBalance) {
-          document.getElementById("mayCreditCardBalance").textContent = mayCreditCardBalance;
-        }
         updateDataCards();
         calculateTotal();
+
+        // Recuperar o valor do cartão de crédito
+        var maiCreditCardBalance = localStorage.getItem("maiCreditCardBalance");
+        if (maiCreditCardBalance) {
+          document.getElementById("maiCreditCardBalance").textContent = maiCreditCardBalance;
+        }
+      } else {
+        inputData = []; // Inicialize como um array vazio se não houver dados no localStorage
       }
     }
+
     // Redirecionar para outras páginas
-    function redirectToAbr() {
+    function redirectToApr() {
       window.location.href = '4Abr.html';
       calculateTotal();
       savedata();
@@ -194,9 +235,10 @@
       calculateTotal();
       savedata();
     }
+
     function calculateTotal() {
-      var creditCardBalance = Number(document.getElementById("mayCreditCardBalance").textContent);
-      var initialBalance = Number(document.getElementById("MayInitialBalance").textContent);
+      var creditCardBalance = Number(document.getElementById("maiCreditCardBalance").textContent);
+      var initialBalance = Number(document.getElementById("MaiInitialBalance").textContent);
       var creditTotal = 0;
       var debitTotal = 0;
       var currentDayBalance = initialBalance; // Inicializar com o saldo inicial
@@ -238,10 +280,10 @@
       var tithe = totalCredit * 0.1; // Dízimo é 10% do Total Crédito
       var formattedTithe = !isNaN(tithe) ? tithe.toFixed(2) : '0.00';
 
-      document.getElementById("mayTithe").textContent = formattedTithe;
+      document.getElementById("aprilTithe").textContent = formattedTithe;
 
       // Salvar o valor do dízimo no localStorage
-      localStorage.setItem("mayTithe", formattedTithe);
+      localStorage.setItem("aprilTithe", formattedTithe);
 
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
@@ -262,20 +304,19 @@
 
     // Função para adicionar dados
     function addData(month) {
-      var description = document.getElementById("mayDescription").value;
-      var debit = document.getElementById("mayDebit").value;
-      var credit = document.getElementById("mayCredit").value;
-      var day = document.getElementById("mayDay").value;
+      // Obter dados dos campos de entrada
+      var description = document.getElementById("maiDescription").value;
+      var debit = document.getElementById("maiDebit").value;
+      var credit = document.getElementById("maiCredit").value;
+      var day = document.getElementById("maiDay").value;
 
-      // Verifique se pelo menos a descrição e o dia estão preenchidos
+      // Verificar se pelo menos a descrição e o dia estão preenchidos
       if (description.trim() !== "" && day.trim() !== "") {
-        // Gere um ID único para os novos dados
+        // Gerar um ID único para os novos dados
         var id = uuidv4();
+        console.log("Novo ID do card:", id);
 
-        // Calcule o saldo do dia considerando o saldo inicial
-        var currentDayBalance = parseFloat(document.getElementById("MayInitialBalance").textContent) || 0;
-
-        // Crie um objeto com os dados e o ID gerado
+        // Criar um objeto com os dados e o ID gerado
         var newData = {
           id: id,
           description: description,
@@ -285,27 +326,31 @@
           dayBalance: 0 // Valor inicial do saldo do dia
         };
 
-        // Adicione os novos dados ao array de dados digitados
+        // Adicionar os novos dados ao array de dados digitados
         inputData.push(newData);
 
+        // Salvar inputData no localStorage após adicionar novos dados
+        localStorage.setItem("inputData", JSON.stringify(inputData));
+
         // Limpar os campos de entrada
-        document.getElementById("mayDescription").value = "";
-        document.getElementById("mayDebit").value = "";
-        document.getElementById("mayCredit").value = "";
-        document.getElementById("mayDay").value = "";
+        document.getElementById("maiDescription").value = "";
+        document.getElementById("maiDebit").value = "";
+        document.getElementById("maiCredit").value = "";
+        document.getElementById("maiDay").value = "";
 
         // Ordenar o array inputData com base no campo "dia"
         inputData.sort(function (a, b) {
           return parseInt(a.day) - parseInt(b.day);
         });
 
-        // Inicialize o saldo do dia atual com o saldo inicial
-        currentDayBalance = parseFloat(document.getElementById("MayInitialBalance").textContent) || 0;
+        // Inicializar o saldo do dia atual com o saldo inicial
+        var currentDayBalance = parseFloat(document.getElementById("MaiInitialBalance").value) || 0;
 
-        // Atualize o saldo do dia em todos os dados com base na ordem
+        // Atualizar o saldo do dia em todos os dados com base na ordem
         for (var i = 0; i < inputData.length; i++) {
           var dayDebit = parseFloat(inputData[i].debit) || 0;
           var dayCredit = parseFloat(inputData[i].credit) || 0;
+
           if (inputData[i].credit !== "") {
             // Se for um lançamento de crédito, adicione ao saldo do dia atual
             currentDayBalance += dayCredit;
@@ -313,23 +358,27 @@
             // Se for um lançamento de débito, subtraia do saldo do dia atual
             currentDayBalance -= dayDebit;
           }
-          // Atualize o saldo do dia no objeto de dados
+
+          // Atualizar o saldo do dia no objeto de dados
           inputData[i].dayBalance = currentDayBalance;
         }
 
+        // Ordenar os dados após salvar as alterações no campo dia
+        sortDataByDay();
+
+        // Recalcular os saldos do dia
+        recalculateDayBalances();
+        
         // Atualizar os cards de dados
         updateDataCards();
-
-        // Salvar os dados atualizados
-        savedata();
-
-        // Recalcular os totais
         calculateTotal();
+        savedata();
+        location.reload();
       } else {
-        // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
-        alert("Preencha a descrição e o dia antes de adicionar.");
+        alert("Por favor, preencha pelo menos a descrição e o dia.");
       }
     }
+
 
     function sortDataByDay() {
       data.sort(function (a, b) {
@@ -364,7 +413,6 @@
       // Atualize os cards após a exclusão
       updateDataCards();
 
-      // Recalcular os totais
       calculateTotal();
     }
 
@@ -372,104 +420,235 @@
     function createDataCard(dataItem, previousDayBalance) {
       var card = document.createElement("div");
       card.className = "card";
+      card.setAttribute("data-id", dataItem.id); // Adicionar o ID do card como um atributo data-id
 
       var cardContent = document.createElement("div");
       cardContent.className = "card-content";
 
-      // Verificar se a descrição foi preenchida
+      // Adicionar os campos de dados ao card
       if (dataItem.description.trim() !== "") {
         var description = document.createElement("p");
         description.textContent = "Descrição: " + dataItem.description;
         cardContent.appendChild(description);
       }
 
-      // Verificar se o dia foi preenchido
       if (dataItem.day.trim() !== "") {
         var day = document.createElement("p");
         day.textContent = "Dia: " + dataItem.day;
         cardContent.appendChild(day);
       }
 
-      // Verificar se o débito foi preenchido
       if (dataItem.debit.trim() !== "") {
         var debit = document.createElement("p");
         debit.textContent = "Débito: " + dataItem.debit;
         cardContent.appendChild(debit);
       }
 
-      // Verificar se o crédito foi preenchido
       if (dataItem.credit.trim() !== "") {
         var credit = document.createElement("p");
         credit.textContent = "Crédito: " + dataItem.credit;
         cardContent.appendChild(credit);
       }
 
-      // Calcular o saldo do dia considerando o valor do saldo do dia anterior
       var dayDebit = parseFloat(dataItem.debit) || 0;
       var dayCredit = parseFloat(dataItem.credit) || 0;
       var dayBalance = previousDayBalance + dayCredit - dayDebit;
-
       var dayBalanceElement = document.createElement("p");
       dayBalanceElement.textContent = "Saldo do Dia: " + dayBalance.toFixed(2);
       cardContent.appendChild(dayBalanceElement);
 
-      var cardAction = document.createElement("div");
-      cardAction.className = "card-action";
+      var editButton = document.createElement("button");
+      editButton.className = "btn btn-edit";
+      editButton.textContent = "Editar";
+      editButton.onclick = function () {
+        makeEditable(this);
+      };
+      cardContent.appendChild(editButton);
 
       var deleteButton = document.createElement("button");
       deleteButton.className = "btn btn-delete red";
-      deleteButton.id = "button-delete";
       deleteButton.textContent = "Excluir";
-
-      // Configure o evento de clique para chamar a função deleteData com o ID do card
       deleteButton.onclick = function () {
         deleteData(dataItem.id);
       };
+      cardContent.appendChild(deleteButton);
 
-      cardAction.appendChild(deleteButton);
       card.appendChild(cardContent);
-      card.appendChild(cardAction);
-
-      // Verificar se o card possui conteúdo preenchido
-      if (cardContent.innerHTML.trim() === "") {
-        return null; // Retorna null se o card estiver vazio
-      }
 
       return card;
     }
+
 
     // Função para atualizar os cards de dados
     function updateDataCards() {
       var dataCards = document.getElementById("dataCards");
       // Limpar os cards existentes
       dataCards.innerHTML = "";
-
-      var previousDayBalance = parseFloat(document.getElementById("MayInitialBalance").textContent) || 0;
+      var previousDayBalance = parseFloat(document.getElementById("MaiInitialBalance").textContent) || 0;
       var currentDayBalance = previousDayBalance; // Inicializar com o saldo inicial
-
-      // Iterar sobre os dados armazenados e criar um card para cada conjunto de dados
-      for (var i = 0; i < data.length; i++) {
-        var card = createDataCard(data[i], currentDayBalance);
+      // Concatenar os arrays de dados e inputData
+      var allData = data.concat(inputData);
+      // Ordenar todos os dados por dia
+      allData.sort(function (a, b) {
+        return parseInt(a.day) - parseInt(b.day);
+      });
+      // Iterar sobre os dados e criar um card para cada conjunto de dados
+      for (var i = 0; i < allData.length; i++) {
+        var card = createDataCard(allData[i], currentDayBalance);
         if (card) {
           dataCards.appendChild(card);
           // Atualizar o saldo do dia atual com base no saldo do dia do card atual
-          currentDayBalance = parseFloat(data[i].dayBalance) || 0;
+          currentDayBalance = parseFloat(allData[i].dayBalance) || 0;
         }
+      }
+      // Ordenar os dados após salvar as alterações
+      sortDataByDay();
+      // Recalcular os saldos do dia
+      recalculateDayBalances();
+      // Calcular totais e atualizar os resultados
+      calculateTotal();
+      savedata();
+    }
+
+    function makeEditable(button) {
+      console.log("Botão 'Editar' clicado.");
+
+      var card = button.parentNode.parentNode;
+      var cardId = card.getAttribute('data-id');
+      console.log("ID do card:", cardId);
+
+      // Verificar primeiro no array de dados recuperados
+      var editedData = data.find(function (item) {
+        return item.id === cardId;
+      });
+
+      // Se o objeto de dados não for encontrado no array de dados recuperados,
+      // verifique no array de dados digitados
+      if (!editedData) {
+        editedData = inputData.find(function (item) {
+          return item.id === cardId;
+        });
       }
 
-      // Iterar sobre os dados digitados e criar um card para cada conjunto de dados
-      for (var j = 0; j < inputData.length; j++) {
-        var card = createDataCard(inputData[j], currentDayBalance);
-        if (card) {
-          dataCards.appendChild(card);
-          // Atualizar o saldo do dia atual com base no saldo do dia do card atual
-          currentDayBalance = parseFloat(inputData[j].dayBalance) || 0;
-        }
+      // Se o objeto de dados editado for encontrado, continue com o código para tornar os campos editáveis
+      if (editedData) {
+        var cardContent = card.querySelector('.card-content');
+
+        // Adicionar um evento de clique ao botão "Salvar"
+        button.addEventListener('click', function () {
+          console.log("Botão 'Salvar' clicado");
+
+          // Ordenar os dados após salvar as alterações no campo dia
+          sortDataByDay();
+
+          // Recalcular os saldos do dia
+          recalculateDayBalances();
+
+          // Atualizar os cards de dados para refletir as mudanças
+          updateDataCards();
+        });
+
+        // Alterar o texto do botão "Editar" para "Salvar"
+        button.textContent = 'Salvar';
+
+        // Remover o evento de clique do botão "Editar" para evitar múltiplas chamadas
+        button.removeEventListener('click', makeEditable);
+
+        // Adicionar rótulos e eventos de entrada (input) para cada campo
+
+        // Campo de descrição
+        var descriptionElement = cardContent.querySelector('p:nth-of-type(1)');
+        var descriptionInput = document.createElement('input');
+        descriptionInput.setAttribute('type', 'text');
+        descriptionInput.setAttribute('value', editedData.description); // Define o valor inicial como o valor atual
+        descriptionInput.addEventListener('input', function () {
+          saveChanges('description', this.value, editedData);
+        });
+        descriptionElement.textContent = 'Descrição: '; // Adiciona o rótulo
+        descriptionElement.appendChild(descriptionInput); // Adicionar o campo de input ao elemento
+
+        // Campo de dia
+        var dayElement = cardContent.querySelector('p:nth-of-type(2)');
+        var dayInput = document.createElement('input');
+        dayInput.setAttribute('type', 'text');
+        dayInput.setAttribute('value', editedData.day); // Define o valor inicial como o valor atual
+        dayInput.addEventListener('input', function () {
+          // Atualizar o dia apenas no objeto de dados editado
+          editedData.day = this.value;
+        });
+        dayElement.textContent = 'Dia: '; // Adiciona o rótulo
+        dayElement.appendChild(dayInput); // Adicionar o campo de input ao elemento
+
+        // Campo de débito ou crédito
+        var debitOrCreditElement = cardContent.querySelector('p:nth-of-type(3)');
+        var debitOrCreditInput = document.createElement('input');
+        debitOrCreditInput.setAttribute('type', 'text');
+        var label = editedData.debit.trim() !== "" ? 'Valor do Débito: ' : 'Valor do Crédito: '; // Rótulo dinâmico
+        debitOrCreditInput.setAttribute('value', editedData.debit || editedData.credit); // Define o valor inicial como o valor atual
+        debitOrCreditInput.addEventListener('input', function () {
+          // Mantém o tipo de lançamento (débito ou crédito) sem alterar
+          if (editedData.debit.trim() !== "") {
+            editedData.debit = this.value;
+          } else {
+            editedData.credit = this.value;
+          }
+        });
+        debitOrCreditElement.textContent = label; // Adiciona o rótulo dinâmico
+        debitOrCreditElement.appendChild(debitOrCreditInput); // Adicionar o campo de input ao elemento
+      } else {
+        console.log("Objeto de dados não encontrado para o ID do card:", cardId);
       }
+    }
+
+    // Função para salvar as alterações feitas nos campos editáveis
+    function saveChanges(fieldName, newValue, editedData) {
+      console.log("Salvando alterações para o campo:", fieldName, "com o valor:", newValue);
+
+      // Verificar se o campo editado é descrição, débito ou crédito
+      switch (fieldName) {
+        case 'description':
+          editedData.description = newValue;
+          break;
+        case 'debit':
+          editedData.debit = newValue;
+          recalculateDayBalances(); // Recalcular os saldos do dia após editar o débito
+          break;
+        case 'credit':
+          editedData.credit = newValue;
+          recalculateDayBalances(); // Recalcular os saldos do dia após editar o crédito
+          break;
+        default:
+          console.log("Campo de dados não reconhecido:", fieldName);
+      }
+
+      // Ordenar os dados após salvar as alterações
+      sortDataByDay();
 
       // Recalcular os totais
       calculateTotal();
     }
+
+    // Função para recalcular os saldos do dia para todos os cards
+    function recalculateDayBalances() {
+      var currentDayBalance = parseFloat(document.getElementById("MaiInitialBalance").value) || 0;
+
+      for (var i = 0; i < inputData.length; i++) {
+        var dayDebit = parseFloat(inputData[i].debit) || 0;
+        var dayCredit = parseFloat(inputData[i].credit) || 0;
+
+        if (inputData[i].credit !== "") {
+          // Se for um lançamento de crédito, adicionar ao saldo do dia atual
+          currentDayBalance += dayCredit;
+        } else {
+          // Se for um lançamento de débito, subtrair do saldo do dia atual
+          currentDayBalance -= dayDebit;
+        }
+
+        // Atualizar o saldo do dia no objeto de dados
+        inputData[i].dayBalance = currentDayBalance;
+      }
+    }
+    
   </script>
 </body>
 

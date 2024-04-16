@@ -38,8 +38,8 @@
       <div class="card-content">
         <span class="card-title">Fazer lançamento</span>
         <div class="input-field">
-          <input type="text" class="description form-control" id="DezDescription" placeholder="Descrição">
-          <label for="DezDescription">Descrição</label>
+          <input type="text" class="description form-control" id="dezDescription" placeholder="Descrição">
+          <label for="dezDescription">Descrição</label>
         </div>
         <div class="input-field">
           <input type="number" class="debit form-control" id="dezDebit" oninput="calculateTotal()" placeholder="Débito">
@@ -299,7 +299,7 @@
     // Função para adicionar dados
     function addData(month) {
       // Obter dados dos campos de entrada
-      var description = document.getElementById("DezDescription").value;
+      var description = document.getElementById("dezDescription").value;
       var debit = document.getElementById("dezDebit").value;
       var credit = document.getElementById("dezCredit").value;
       var day = document.getElementById("dezDay").value;
@@ -327,7 +327,7 @@
         localStorage.setItem("inputData", JSON.stringify(inputData));
 
         // Limpar os campos de entrada
-        document.getElementById("DezDescription").value = "";
+        document.getElementById("dezDescription").value = "";
         document.getElementById("dezDebit").value = "";
         document.getElementById("dezCredit").value = "";
         document.getElementById("dezDay").value = "";

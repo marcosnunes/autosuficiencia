@@ -30,12 +30,11 @@
     </div>
     <div class="card" id="aviso-saldo-inicial">
       <div class="card-content">
-        <p>Esta página é a única página dos meses em que o saldo inicial é editável. Ainda que você inicie os seus
-          lançamentos no meio do ano, você precisa adicionar o seu saldo inicial, que é o saldo atual que você tem na
-          sua conta bancária. Este valor deve ser digitado aqui nesta página. Nas outras este campo será preenchido
-          automaticamente conforme o fechamento do mês anterior. É importante também que você faça os lançamentos pelo
-          ano inteiro com as mesmas descrições, ou seja, você deve digitar a palavra de forma igual na descrição do
-          lançamento para cada mês do ano para que o relatório seja preenchido corretamente.</p>
+        <p>Adicione aqui o saldo inicial, ainda que você inicie os seus
+          lançamentos no meio do ano. Marque a caixa "repetir" se você 
+          quer que seu lançamento se repita até dezembro. Clique em editar 
+          para editar o card inserido.
+        </p>
       </div>
     </div>
     <div class="card">
@@ -57,14 +56,22 @@
           <label for="janDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="janCredit" oninput="calculateTotal()" placeholder="Crédito">
+          <input type="number" class="credit form-control" id="janCredit" oninput="calculateTotal()"
+            placeholder="Crédito">
           <label for="janCredit">Crédito</label>
         </div>
         <div class="input-field">
           <input type="number" class="day form-control" id="janDay" placeholder="Dia">
           <label for="janDay">Dia</label>
         </div>
-        <button onclick="addData('Janeiro')" class="btn btn-default">Adicionar</button>
+        <div class="add-container">
+          <button onclick="addData('Janeiro')" class="btn btn-default">Adicionar</button>
+          <span style="margin-right: 20px;"></span> <!-- Espaço entre os elementos -->
+          <label>
+            <input type="checkbox" id="repeatCheckbox">
+            <span>Repetir</span>
+          </label>
+        </div>
       </div>
     </div>
     <div id="dataCards">
@@ -116,7 +123,7 @@
       M.AutoInit();
       loaddata();
       calculateTotal();
-
+      console.log(localStorage); // Exibir o conteúdo do localStorage no console
       // Carregar o saldo atual salvo em localStorage e atualizar a página com o valor salvo
       var savedCurrentBalance = localStorage.getItem('currentBalance');
       if (savedCurrentBalance) {
@@ -276,9 +283,10 @@
       var debit = document.getElementById("janDebit").value;
       var credit = document.getElementById("janCredit").value;
       var day = document.getElementById("janDay").value;
+      var repeat = document.getElementById("repeatCheckbox").checked;
 
-      // Verificar se pelo menos a descrição e o dia estão preenchidos
-      if (description.trim() !== "" && day.trim() !== "") {
+      // Verificar se a descrição, o dia e pelo menos um dos campos débito ou crédito estão preenchidos
+      if (description.trim() !== "" && day.trim() !== "" && (debit.trim() !== "" || credit.trim() !== "")) {
         // Gerar um ID único para os novos dados
         var id = uuidv4();
         console.log("Novo ID do card:", id);
@@ -292,7 +300,6 @@
           day: day,
           dayBalance: 0 // Valor inicial do saldo do dia
         };
-        localStorage.setItem("monthlyData", JSON.stringify(newData));
 
         // Adicionar os novos dados ao array de dados digitados
         inputData.push(newData);
@@ -333,21 +340,68 @@
 
         // Recalcular os saldos do dia
         recalculateDayBalances();
-        
+
         // Atualizar os cards de dados
         updateDataCards();
 
         // Salvar os dados atualizados
         savedata();
-        location.reload();
 
         // Recalcular os totais
         calculateTotal();
+
+        location.reload();
+
+        // Verificar se o checkbox "Repetir" está marcado e se o mês atual não é dezembro
+        if (repeat && month !== "Dezembro") {
+          // Calcular o próximo mês
+          var nextMonth = getNextMonth(month);
+
+          // Adicionar os mesmos dados ao próximo mês
+          addDataToNextMonth(nextMonth, newData);
+        }
       } else {
-        // Exibir uma mensagem de erro quando a descrição ou o dia estiverem em branco
-        alert("Preencha a descrição e o dia antes de adicionar.");
+        // Exibir mensagem de erro se a descrição, o dia e pelo menos um dos campos débito ou crédito estiverem em branco
+        alert("Por favor, preencha a descrição, o dia e pelo menos um dos campos débito ou crédito.");
       }
     }
+
+    // Função para obter o próximo mês
+    function getNextMonth(currentMonth) {
+      var months = [
+        "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+
+      var currentIndex = months.indexOf(currentMonth);
+      var nextIndex = (currentIndex + 1) % 12; // Use o operador módulo para garantir que o índice esteja dentro do intervalo de 0 a 11
+      return months[nextIndex];
+    }
+
+    // Função para adicionar dados ao próximo mês
+    function addDataToNextMonth(nextMonth, newData) {
+      // Verificar se o próximo mês é diferente de janeiro (pois janeiro já é tratado na função addData)
+      if (nextMonth !== "Janeiro") {
+        // Obter a chave de armazenamento correspondente ao próximo mês
+        var nextMonthKey = "total" + nextMonth;
+
+        // Obter os dados salvos para o próximo mês (se houver)
+        var savedNextMonthData = JSON.parse(localStorage.getItem(nextMonthKey)) || { initialBalance: "", total: "", rows: [] };
+
+        // Adicionar os novos dados ao array de dados do próximo mês
+        savedNextMonthData.rows.push(newData);
+
+        // Salvar os dados atualizados para o próximo mês
+        localStorage.setItem(nextMonthKey, JSON.stringify(savedNextMonthData));
+
+        // Calcular o próximo mês recursivamente
+        var nextNextMonth = getNextMonth(nextMonth);
+
+        // Adicionar os mesmos dados ao próximo mês
+        addDataToNextMonth(nextNextMonth, newData);
+      }
+    }
+
 
     // Função para excluir dados com base no ID do card
     function deleteData(cardId) {

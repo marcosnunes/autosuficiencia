@@ -54,7 +54,14 @@
           <input type="number" class="day form-control" id="febDay" placeholder="Dia">
           <label for="febDay">Dia</label>
         </div>
-        <button onclick="addData('Fevereiro')" class="btn btn-default">Adicionar</button>
+        <div class="add-container">
+          <button onclick="addData('Fevereiro')" class="btn btn-default">Adicionar</button>
+          <span style="margin-right: 20px;"></span> <!-- Espaço entre os elementos -->
+          <label>
+            <input type="checkbox" id="repeatCheckbox">
+            <span>Repetir</span>
+          </label>
+        </div>
       </div>
     </div>
     <div id="dataCards">
@@ -304,14 +311,14 @@
 
     // Função para adicionar dados
     function addData(month) {
-      // Obter dados dos campos de entrada
       var description = document.getElementById("febDescription").value;
       var debit = document.getElementById("febDebit").value;
       var credit = document.getElementById("febCredit").value;
       var day = document.getElementById("febDay").value;
+      var repeat = document.getElementById("repeatCheckbox").checked;
 
-      // Verificar se pelo menos a descrição e o dia estão preenchidos
-      if (description.trim() !== "" && day.trim() !== "") {
+      // Verificar se a descrição, o dia e pelo menos um dos campos débito ou crédito estão preenchidos
+      if (description.trim() !== "" && day.trim() !== "" && (debit.trim() !== "" || credit.trim() !== "")) {
         // Gerar um ID único para os novos dados
         var id = uuidv4();
         console.log("Novo ID do card:", id);
@@ -328,9 +335,6 @@
 
         // Adicionar os novos dados ao array de dados digitados
         inputData.push(newData);
-
-        // Salvar inputData no localStorage após adicionar novos dados
-        localStorage.setItem("inputData", JSON.stringify(inputData));
 
         // Limpar os campos de entrada
         document.getElementById("febDescription").value = "";
@@ -371,11 +375,62 @@
 
         // Atualizar os cards de dados
         updateDataCards();
-        calculateTotal();
+
+        // Salvar os dados atualizados
         savedata();
+
+        // Recalcular os totais
+        calculateTotal();
+
         location.reload();
+
+        // Verificar se o checkbox "Repetir" está marcado e se o mês atual não é dezembro
+        if (repeat && month !== "Dezembro") {
+          // Calcular o próximo mês
+          var nextMonth = getNextMonth(month);
+
+          // Adicionar os mesmos dados ao próximo mês
+          addDataToNextMonth(nextMonth, newData);
+        }
       } else {
-        alert("Por favor, preencha pelo menos a descrição e o dia.");
+        // Exibir mensagem de erro se a descrição, o dia e pelo menos um dos campos débito ou crédito estiverem em branco
+        alert("Por favor, preencha a descrição, o dia e pelo menos um dos campos débito ou crédito.");
+      }
+    }
+
+    // Função para obter o próximo mês
+    function getNextMonth(currentMonth) {
+      var months = [
+        "Fevereiro", "Marco", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+      ];
+
+      var currentIndex = months.indexOf(currentMonth);
+      var nextIndex = (currentIndex + 1) % 11; // Use o operador módulo para garantir que o índice esteja dentro do intervalo de 0 a 10
+      return months[nextIndex];
+    }
+
+    // Função para adicionar dados ao próximo mês
+    function addDataToNextMonth(nextMonth, newData) {
+      // Verificar se o próximo mês é diferente de fevereiro (pois fevereiro já é tratado na função addData)
+      if (nextMonth !== "Fevereiro") {
+        // Obter a chave de armazenamento correspondente ao próximo mês
+        var nextMonthKey = "total" + nextMonth;
+
+        // Obter os dados salvos para o próximo mês (se houver)
+        var savedNextMonthData = JSON.parse(localStorage.getItem(nextMonthKey)) || { initialBalance: "", total: "", rows: [] };
+
+        // Adicionar os novos dados ao array de dados do próximo mês
+        savedNextMonthData.rows.push(newData);
+
+        // Salvar os dados atualizados para o próximo mês
+        localStorage.setItem(nextMonthKey, JSON.stringify(savedNextMonthData));
+
+        // Calcular o próximo mês recursivamente
+        var nextNextMonth = getNextMonth(nextMonth);
+
+        // Adicionar os mesmos dados ao próximo mês
+        addDataToNextMonth(nextNextMonth, newData);
       }
     }
 
@@ -648,7 +703,7 @@
         inputData[i].dayBalance = currentDayBalance;
       }
     }
-    
+
   </script>
 </body>
 

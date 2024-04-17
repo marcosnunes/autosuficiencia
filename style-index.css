@@ -95,6 +95,12 @@
       background-color: #f8f9fa;
     }
 
+/* Adicione estilos ao rodapé */
+.page-footer {
+  bottom: 0; /* Alinha o rodapé à parte inferior da página */
+  position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
+}
+
 /* Adiciona margem superior ao conteúdo principal para compensar o rodapé fixo */
 .container {
   margin-bottom: 40px;

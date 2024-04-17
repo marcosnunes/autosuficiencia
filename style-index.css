@@ -31,6 +31,10 @@
       .card {
         width: calc(50% - 20px);
       }
+     .page-footer {
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
+      }
       .container {
       margin-bottom: 40px;
       margin-top: 40px;
@@ -41,6 +45,10 @@
       .card {
         width: 100%;
       }
+     .page-footer {
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
+      }        
       .container {
       margin-bottom: 40px;
       margin-top: 40px;
@@ -51,6 +59,10 @@
       #whatsapp-tela-grande {
         display: none;
       }
+     .page-footer {
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
+      }        
       .container {
       margin-bottom: 40px;
       margin-top: 40px;
@@ -61,6 +73,10 @@
       #whatsapp {
         display: none;
       }
+     .page-footer {
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
+      }        
       .container {
       margin-bottom: 40px;
       margin-top: 40px;

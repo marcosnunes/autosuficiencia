@@ -290,7 +290,7 @@
       document.getElementById("mayTithe").textContent = formattedTithe;
 
       // Salvar o valor do dízimo no localStorage
-      localStorage.setItem("aprilTithe", formattedTithe);
+      localStorage.setItem("mayTithe", formattedTithe);
 
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';

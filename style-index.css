@@ -89,5 +89,6 @@
 
 /* Adiciona margem superior ao conteúdo principal para compensar o rodapé fixo */
 .main-content {
-  margin-bottom: 80px; /* Ajuste conforme necessário */
+  margin-bottom: 80px;
+  margin-top: 80px;
 }

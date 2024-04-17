@@ -66,3 +66,16 @@
       justify-content: space-between;
       padding: 10px;
     }
+
+    .card {
+      background-color: #5765ca;
+    }
+    
+    .card-title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+    }

@@ -31,40 +31,24 @@
       .card {
         width: calc(50% - 20px);
       }
-     .page-footer {
-      bottom: 0; /* Alinha o rodapé à parte inferior da página */
-      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
-      }
     }
 
     @media (max-width: 600px) {
       .card {
         width: 100%;
-      }
-     .page-footer {
-      bottom: 0; /* Alinha o rodapé à parte inferior da página */
-      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
-      }        
+      }       
     }
 
     @media (max-width: 768px) {
       #whatsapp-tela-grande {
         display: none;
-      }
-     .page-footer {
-      bottom: 0; /* Alinha o rodapé à parte inferior da página */
-      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
-      }        
+      }       
     }
 
     @media (min-width: 1024px) {
       #whatsapp {
         display: none;
-      }
-     .page-footer {
-      bottom: 0; /* Alinha o rodapé à parte inferior da página */
-      position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
-      }        
+      }       
     }
 
     .navigation {
@@ -95,8 +79,8 @@
       background-color: #f8f9fa;
     }
 
-/* Adicione estilos ao rodapé */
+/* Adicione estilos ao rodapé 
 .page-footer {
   bottom: 0; /* Alinha o rodapé à parte inferior da página */
   position: fixed; /* Fixa o rodapé na parte inferior da janela do navegador */
-}
+}*/

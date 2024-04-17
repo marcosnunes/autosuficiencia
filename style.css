@@ -171,3 +171,16 @@
   display: flex;
   align-items: center;
 }
+
+/* Adiciona estilos ao rodapé */
+.page-footer {
+  position: absolute; /* Fixa o rodapé na parte inferior da página */
+  width: 100%; /* Define a largura total do rodapé */
+  bottom: 0; /* Alinha o rodapé à parte inferior da página */
+}
+
+/* Adiciona margem superior ao conteúdo principal para compensar o rodapé fixo */
+.conteiner {
+  margin-bottom: 40px;
+  margin-top: 40px;
+}

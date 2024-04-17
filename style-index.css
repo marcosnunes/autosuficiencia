@@ -32,7 +32,6 @@
         width: calc(50% - 20px);
       }
     .page-footer {
-      position: absolute; /* Fixa o rodapé na parte inferior da página */
       width: 100%; /* Define a largura total do rodapé */
       bottom: 0; /* Alinha o rodapé à parte inferior da página */
       }
@@ -47,7 +46,6 @@
         width: 100%;
       }
     .page-footer {
-      position: absolute; /* Fixa o rodapé na parte inferior da página */
       width: 100%; /* Define a largura total do rodapé */
       bottom: 0; /* Alinha o rodapé à parte inferior da página */
       }
@@ -62,7 +60,6 @@
         display: none;
       }
     .page-footer {
-      position: absolute; /* Fixa o rodapé na parte inferior da página */
       width: 100%; /* Define a largura total do rodapé */
       bottom: 0; /* Alinha o rodapé à parte inferior da página */
       }
@@ -77,7 +74,6 @@
         display: none;
       }
     .page-footer {
-      position: absolute; /* Fixa o rodapé na parte inferior da página */
       width: 100%; /* Define a largura total do rodapé */
       bottom: 0; /* Alinha o rodapé à parte inferior da página */
       }
@@ -117,7 +113,6 @@
 
 /* Adiciona estilos ao rodapé */
 .page-footer {
-  position: absolute; /* Fixa o rodapé na parte inferior da página */
   width: 100%; /* Define a largura total do rodapé */
   bottom: 0; /* Alinha o rodapé à parte inferior da página */
 }

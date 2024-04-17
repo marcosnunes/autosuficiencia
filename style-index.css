@@ -27,10 +27,18 @@
     #limparDadosCard {
      background-color: #fce4ec;
     }
-
     @media (max-width: 1024px) {
       .card {
         width: calc(50% - 20px);
+      }
+    .page-footer {
+      position: absolute; /* Fixa o rodapé na parte inferior da página */
+      width: 100%; /* Define a largura total do rodapé */
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      }
+      .conteiner {
+      margin-bottom: 40px;
+      margin-top: 40px;
       }
     }
 
@@ -38,17 +46,44 @@
       .card {
         width: 100%;
       }
+    .page-footer {
+      position: absolute; /* Fixa o rodapé na parte inferior da página */
+      width: 100%; /* Define a largura total do rodapé */
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      }
+      .conteiner {
+      margin-bottom: 40px;
+      margin-top: 40px;
+      }
     }
 
     @media (max-width: 768px) {
       #whatsapp-tela-grande {
         display: none;
       }
+    .page-footer {
+      position: absolute; /* Fixa o rodapé na parte inferior da página */
+      width: 100%; /* Define a largura total do rodapé */
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      }
+      .conteiner {
+      margin-bottom: 40px;
+      margin-top: 40px;
+      }
     }
 
     @media (min-width: 1024px) {
       #whatsapp {
         display: none;
+      }
+    .page-footer {
+      position: absolute; /* Fixa o rodapé na parte inferior da página */
+      width: 100%; /* Define a largura total do rodapé */
+      bottom: 0; /* Alinha o rodapé à parte inferior da página */
+      }
+      .conteiner {
+      margin-bottom: 40px;
+      margin-top: 40px;
       }
     }
 

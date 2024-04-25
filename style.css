@@ -59,10 +59,10 @@
   #chart {
     display: none;
   }
-  #btn-edit {
+  .btn-edit {
     display: none;
   }
-  #btn-delete {
+  .btn-delete {
     display: none;
   }
   .btn-default {

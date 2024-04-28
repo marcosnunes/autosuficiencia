@@ -42,7 +42,7 @@
           <input type="number" class="investment-duration" id="investmentDuration" placeholder="(meses)">
           <label for="investmentDuration">Duração do Investimento</label>
         </div>
-        <button onclick="calculateInvestment()" class="btn btn-default">Calcular</button>
+        <button id="calculateButton" class="btn btn-default">Calcular</button>
         <div class="result">
           <h5>Resultado:</h5>
           <p>Total acumulado após <span id="investmentDurationResult">0</span> meses: R$ <span
@@ -93,13 +93,15 @@
       var elems = document.querySelectorAll('select');
       M.FormSelect.init(elems);
 
+      // Add event listener to the "Calcular" button
+      document.getElementById("calculateButton").addEventListener("click", calculateInvestment);
+
       // Adiciona um evento de mudança ao selecionar a moeda inicial
       document.getElementById("initialAmountSelectionCurrency").addEventListener("change", function () {
         var selectedCurrency = document.getElementById("initialAmountSelectionCurrency").value;
         document.getElementById("initialAmountSelected").textContent = selectedCurrency + " " + parseFloat(document.getElementById("initialAmountCurrency").value || 0).toFixed(2);
         convertCurrency(); // Chama a função para converter a moeda ao mudar a seleção
       });
-
 
       // Adiciona um evento de mudança ao selecionar a moeda inicial
       document.getElementById("initialAmountSelectionCurrency").addEventListener("change", convertCurrency);
@@ -126,6 +128,7 @@
         document.getElementById("investmentDurationResult").textContent = investmentDuration;
         document.getElementById("investmentResult").textContent = "R$ " + totalInvestment.toFixed(2);
       }
+
       // Função para buscar os valores da API e atualizar o span
       function fetchCurrentValue() {
         // URL da API para os valores da poupança e do CDI

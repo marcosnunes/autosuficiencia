@@ -88,19 +88,8 @@
       var creditTotal = 0;
       var debitTotal = 0;
       var launchData = {};
-      var creditCardBalanceTotal = 0;
       var elems = document.querySelectorAll('select');
       M.FormSelect.init(elems);
-
-      // Função para armazenar os valores originais em reais
-      function storeOriginalValues() {
-        originalDebitTotal = parseFloat(document.getElementById('debitTotal').textContent.replace(/[^\d.-]/g, ''));
-        originalCreditTotal = parseFloat(document.getElementById('creditTotal').textContent.replace(/[^\d.-]/g, ''));
-        originalCreditCardBalance = parseFloat(document.getElementById('creditCardBalance').textContent.replace(/[^\d.-]/g, ''));
-      }
-
-      // Chamada inicial para armazenar os valores originais em reais
-      storeOriginalValues();
 
       function formatCurrency(amount, currency) {
         switch (currency) {
@@ -117,14 +106,46 @@
 
       function convertCurrency() {
         console.log("Converting currency...");
+
+        // Obter a moeda selecionada
         var selectedCurrency = document.getElementById("currencySelect").value;
 
-        // Obter os valores originais em reais
-        var originalDebitTotalInBRL = originalDebitTotal;
-        var originalCreditTotalInBRL = originalCreditTotal;
-        var originalCreditCardBalanceInBRL = originalCreditCardBalance;
+        // Converter o saldo total do cartão de crédito para a moeda selecionada
+        fetch('https://open.er-api.com/v6/latest/BRL')
+          .then(response => response.json())
+          .then(data => {
+            var exchangeRates = data.rates;
 
-        // Calcular o saldo total do cartão de crédito em BRL
+            if (exchangeRates.hasOwnProperty(selectedCurrency)) {
+              var exchangeRate = exchangeRates[selectedCurrency];
+              var creditCardBalanceTotalBRL = calculateCreditCardBalanceBRL();
+              var creditCardBalanceTotal = creditCardBalanceTotalBRL * exchangeRate;
+
+              // Atualizar todos os valores com a nova moeda convertida
+              updateAllValues(selectedCurrency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, launchData);
+            } else {
+              console.error("A taxa de câmbio para a moeda selecionada não está disponível.");
+            }
+          })
+          .catch(error => console.error('Erro ao obter taxas de câmbio:', error));
+      }
+
+      // Adicionar um ouvinte de evento para mudanças na seleção de moeda
+      document.getElementById('currencySelect').addEventListener('change', function () {
+        convertCurrency();
+      });
+
+      // Função para atualizar todos os valores após a conversão de moeda
+      function updateAllValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, launchData) {
+        // Atualizar os valores no card "Totais anuais"
+        updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal);
+
+        // Atualizar os valores no card "Lançamentos anuais"
+        updateLaunchData(currency, exchangeRate, launchData);
+      }
+
+      // Função para calcular o saldo total do cartão de crédito em BRL
+      function calculateCreditCardBalanceBRL() {
         var creditCardBalanceTotalBRL = 0;
         if (months && months.length === 12) {
           for (var i = 0; i < 12; i++) {
@@ -135,48 +156,7 @@
         } else {
           console.error("Erro: A matriz de meses não está definida corretamente.");
         }
-
-
-        // Converter o saldo total do cartão de crédito para a moeda selecionada
-        var creditCardBalanceTotal = creditCardBalanceTotalBRL;
-
-        // Se a moeda selecionada for diferente de BRL, converter
-        if (selectedCurrency !== 'BRL') {
-          fetch('https://open.er-api.com/v6/latest/BRL')
-            .then(response => response.json())
-            .then(data => {
-              var exchangeRates = data.rates;
-
-              if (exchangeRates.hasOwnProperty(selectedCurrency)) {
-                var exchangeRate = exchangeRates[selectedCurrency];
-                creditCardBalanceTotal *= exchangeRate;
-
-                // Atualizar todos os valores com a nova moeda convertida
-                updateAllValues(selectedCurrency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, launchData);
-              } else {
-                console.error("A taxa de câmbio para a moeda selecionada não está disponível.");
-              }
-            })
-            .catch(error => console.error('Erro ao obter taxas de câmbio:', error));
-        } else {
-          // Se a moeda selecionada for BRL, exibir o saldo do cartão de crédito em BRL
-          updateAllValues(selectedCurrency, 1, debitTotal, creditTotal, creditCardBalanceTotal, launchData);
-        }
-      }
-
-
-      // Adicionar um ouvinte de evento para mudanças na seleção de moeda
-      document.getElementById('currencySelect').addEventListener('change', function () {
-        convertCurrency();
-      });
-
-      // Função para atualizar todos os valores após a conversão de moeda
-      function updateAllValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalance, launchData) {
-        // Atualizar os valores no card "Totais anuais"
-        updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalance);
-
-        // Atualizar os valores no card "Lançamentos anuais"
-        updateLaunchData(currency, exchangeRate, launchData);
+        return creditCardBalanceTotalBRL;
       }
 
       // Função para atualizar os valores no card "Lançamentos anuais"
@@ -207,8 +187,9 @@
       }
 
       // Função para atualizar os valores de balanço após a conversão de moeda
-      function updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalance) {
+      function updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal) {
         var selectedCurrency = currency || document.getElementById("currencySelect").value;
+        var creditCardBalance = calculateCreditCardBalanceBRL();
 
         // Calculando os valores convertidos
         var convertedDebitTotal = debitTotal * exchangeRate;
@@ -220,82 +201,60 @@
         document.getElementById('creditTotal').textContent = formatCurrency(convertedCreditTotal, selectedCurrency);
         document.getElementById('creditCardBalance').textContent = formatCurrency(convertedCreditCardBalance, selectedCurrency);
 
-        // Calculando o saldo total em moeda selecionada
+        // Atualizando o elemento "Balanço" com o valor convertido
         var balance = convertedCreditTotal - convertedDebitTotal - convertedCreditCardBalance;
-        var balanceCurrency = formatCurrency(balance, selectedCurrency);
-
-        // Exibindo o saldo total na página
-        document.getElementById('balance').textContent = balanceCurrency;
+        document.getElementById('balance').textContent = formatCurrency(balance, selectedCurrency);
 
         // Calculando e exibindo a porcentagem de saldo
         var balancePercentage = ((debitTotal + creditCardBalance) / creditTotal) * 100;
         document.getElementById('balancePercentage').textContent = balancePercentage.toFixed(2) + '%';
       }
 
-      // Adicionando um listener de evento de mudança para o seletor de moeda
-      document.getElementById('currencySelect').addEventListener('change', function () {
-        convertCurrency();
-      });
-
       // Chamada inicial para converter a moeda
       convertCurrency();
 
-
+      // Loop através do localStorage para calcular totais
       for (var key in localStorage) {
         if (localStorage.hasOwnProperty(key) && key.startsWith('total')) {
           var item = JSON.parse(localStorage.getItem(key));
-          var rows = item.rows;
-          for (var i = 0; i < rows.length; i++) {
-            var row = rows[i];
-            var description = row.description;
-            var credit = parseFloat(row.credit) || 0;
-            var debit = parseFloat(row.debit) || 0;
-            creditTotal += credit;
-            debitTotal += debit;
-            if (launchData.hasOwnProperty(description)) {
-              launchData[description] += credit - debit;
-            } else {
-              launchData[description] = credit - debit;
+          if (item.rows) {
+            var rows = item.rows;
+            for (var i = 0; i < rows.length; i++) {
+              var row = rows[i];
+              var description = row.description;
+              var credit = parseFloat(row.credit) || 0;
+              var debit = parseFloat(row.debit) || 0;
+              creditTotal += credit;
+              debitTotal += debit;
+              if (launchData.hasOwnProperty(description)) {
+                launchData[description] += credit - debit;
+              } else {
+                launchData[description] = credit - debit;
+              }
             }
+          } else {
+            console.error("Erro: 'rows' não está definido em " + key);
           }
         }
       }
 
+      // Exibir os lançamentos anuais
       if (Object.keys(launchData).length > 0) {
-        var container = document.getElementById('launchDataContainer');
-        for (var description in launchData) {
-          var total = launchData[description];
-          var descriptionSpan = document.createElement('span');
-          descriptionSpan.textContent = 'Descrição: ' + description;
-          var totalSpan = document.createElement('span');
-          totalSpan.textContent = 'Total: ';
-          var amountSpan = document.createElement('span');
-          amountSpan.textContent = formatCurrency(total, 'BRL');
-          amountSpan.setAttribute('data-amount', total);
-          amountSpan.classList.add('launch-data');
-          totalSpan.appendChild(amountSpan);
-          container.appendChild(descriptionSpan);
-          container.appendChild(document.createElement('br'));
-          container.appendChild(totalSpan);
-          container.appendChild(document.createElement('br'));
-        }
+        updateLaunchData('BRL', 1, launchData);
       }
 
-      var creditCardBalanceTotal = 0; // Reinicializa o saldo total do cartão de crédito
-      for (var i = 0; i < 12; i++) {
-        var monthKey = months[i].toLowerCase() + "CreditCardBalance";
-        var monthBalance = parseFloat(localStorage.getItem(monthKey)) || 0;
-        creditCardBalanceTotal += monthBalance;
-      }
-      updateAllValues('BRL', 1, debitTotal, creditTotal, creditCardBalanceTotal, launchData);
+      // Atualizar todos os valores
+      updateAllValues('BRL', 1, debitTotal, creditTotal, calculateCreditCardBalanceBRL(), launchData);
+
+      // Exibir os valores iniciais
       document.getElementById('creditTotal').textContent = formatCurrency(creditTotal, 'BRL');
-      document.getElementById('creditCardBalance').textContent = formatCurrency(creditCardBalanceTotal, 'BRL');
+      document.getElementById('creditCardBalance').textContent = formatCurrency(calculateCreditCardBalanceBRL(), 'BRL');
       document.getElementById('debitTotal').textContent = formatCurrency(debitTotal, 'BRL');
-      var balance = creditTotal - debitTotal - creditCardBalanceTotal;
+      var balance = creditTotal - debitTotal - calculateCreditCardBalanceBRL();
       document.getElementById('balance').textContent = formatCurrency(balance, 'BRL');
       var percentage = 0;
       if (creditTotal > 0) {
-        percentage = ((debitTotal + creditCardBalanceTotal) / creditTotal) * 100;
+        percentage = ((debitTotal + calculateCreditCardBalanceBRL()) / (creditTotal + calculateCreditCardBalanceBRL())) * 100;
       }
       if (isNaN(percentage)) {
         percentage = 0;

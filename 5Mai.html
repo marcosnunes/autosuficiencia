@@ -292,9 +292,9 @@
       // Salvar o valor do dízimo no localStorage
       localStorage.setItem("mayTithe", formattedTithe);
 
-      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
+      var total = initialBalance + creditTotal - debitTotal;
       var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
-      var balance = creditTotal - debitTotal - creditCardBalance;
+      var balance = creditTotal - debitTotal;
       var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
       document.getElementById("balance").textContent = formattedBalance;
       document.getElementById("totalMaio").textContent = formattedTotal;

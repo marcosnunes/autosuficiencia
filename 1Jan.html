@@ -119,6 +119,9 @@
     var data = []; // Dados armazenados
     var inputData = []; // Dados digitados
 
+    // Selecione o iframe pelo id
+    var iframe = document.getElementById('chart').getElementsByTagName('iframe')[0];
+
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
@@ -130,6 +133,10 @@
         document.getElementById('JanInitialBalance').value = savedCurrentBalance;
         calculateTotal();
       }
+      // Defina a URL para a página do gráfico
+      var chartPageURL = 'chart.html';
+      // Abra a página do gráfico em uma nova janela
+      window.open(chartPageURL, '_blank');
     });
 
     function calculateTotal() {

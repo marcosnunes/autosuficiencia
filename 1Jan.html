@@ -23,7 +23,9 @@
   </div>
   <div class="container">
     <div class="iframe-container" id="chart">
-      <iframe title="Grafico" src="chart.html" frameborder="0"></iframe>
+      <a href="chart.html" target="_blank" class="iframe-container" id="chart">
+        <iframe title="Grafico" src="chart.html" frameborder="0"></iframe>
+      </a>
     </div>
     <div>
       <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
@@ -119,9 +121,6 @@
     var data = []; // Dados armazenados
     var inputData = []; // Dados digitados
 
-    // Selecione o iframe pelo id
-    var iframe = document.getElementById('chart').getElementsByTagName('iframe')[0];
-
     document.addEventListener('DOMContentLoaded', function () {
       M.AutoInit();
       loaddata();
@@ -133,10 +132,6 @@
         document.getElementById('JanInitialBalance').value = savedCurrentBalance;
         calculateTotal();
       }
-      // Defina a URL para a página do gráfico
-      var chartPageURL = 'chart.html';
-      // Abra a página do gráfico em uma nova janela
-      window.open(chartPageURL, '_blank');
     });
 
     function calculateTotal() {

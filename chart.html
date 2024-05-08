@@ -13,6 +13,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // Define a altura do canvas para 300 pixels (ou a altura desejada)
+      var canvas = document.getElementById('chart');
+      canvas.style.height = '300px';
+      
       var ctx = document.getElementById('chart').getContext('2d');
       var monthlyData = [
         { month: "Janeiro", key: "totalJaneiro", value: 0, debit: 0, credit: 0 },

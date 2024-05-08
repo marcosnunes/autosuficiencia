@@ -93,6 +93,16 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
+    // Obtém a referência ao iframe
+    var iframe = document.getElementById("chart");
+
+    // Define a altura desejada do iframe (por exemplo, 300 pixels)
+    var frameHeight = "300px";
+
+    // Define a altura do iframe
+    iframe.style.height = frameHeight;
+  </script>
+  <script>
     // Função para gerar IDs únicos
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

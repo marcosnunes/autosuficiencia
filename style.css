@@ -6,7 +6,7 @@
 /* Oculta o botão PDF em telas menores */
 @media screen and (max-width: 425px) {
   #pdfButton {
-    display: none;
+    display: none !important;
   }
 }
 

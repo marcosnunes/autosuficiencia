@@ -1,26 +1,45 @@
-* { 
+* {
   margin: 0;
   padding: 0;
 }
 
+/* Oculta o botão PDF em telas menores */
 @media screen and (max-width: 425px) {
   #pdfButton {
     display: none;
   }
 }
 
+/* Redefine as margens e outros estilos para a impressão */
 @media print {
-  /* Redefine as margens para zero (ou outro valor desejado) */
   * {
     margin: 0;
     padding: 0;
+    box-shadow: none;
+    background: transparent;
   }
 
-  #aviso-saldo-inicial {
-    display: none;
+  /* Oculta todos os botões na impressão */
+  .btn,
+  #pdfButton,
+  #addButton,
+  #backButton,
+  .btn-edit,
+  .btn-delete {
+    display: none !important;
   }
 
-   /* Redefine as bordas para nenhum (ou outro estilo desejado) */
+  /* Oculta outros elementos desnecessários na impressão */
+  #aviso-saldo-inicial,
+  #card-lancamento,
+  #chart,
+  #tutorial,
+  .navigation,
+  .iframe-container {
+    display: none !important;
+  }
+
+  /* Ajusta a estilização dos cards para impressão */
   .card {
     width: 100%;
     padding: 20px;
@@ -32,46 +51,15 @@
     font-size: 14px;
   }
 
-  .navigation {
-    position: relative;
-    top: 0;
-    width: 100%;
-    border: none;
-  }
-
   .container {
-    position: absolute;
     width: 100%;
   }
 
   .brand-logo {
-    flex: 1;
     text-align: center;
   }
-  
-  /* Oculte elementos que não devem ser impressos */
-  #pdfButton {
-    display: none;
-  }
-  #card-lancamento {
-    display: none;
-  }
-  #chart {
-    display: none;
-  }
-  .btn-edit {
-    display: none;
-  }
-  .btn-delete {
-    display: none;
-  }
-  .btn-default {
-    display: none;
-  }
-  #tutorial {
-    display:none
-  }
 }
+
 
 #home {
   cursor: pointer;
@@ -92,37 +80,215 @@
   height: 100%;
 }
 
+/* Estiliza a barra de navegação */
 .nav-wrapper {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background-color: #007bff;
+  /* Cor de fundo azul */
   padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Sombra sutil */
+  display: flex;
+  justify-content: space-between;
+  /* Espaça os elementos igualmente */
+  align-items: center;
+  /* Alinha verticalmente os itens no centro */
+}
+
+/* Estiliza os botões de navegação */
+.nav-wrapper .btn {
+  background-color: #ffffff;
+  /* Cor de fundo branca */
+  color: #007bff;
+  /* Cor do texto azul */
+  border: 2px solid #007bff;
+  /* Borda azul */
+  border-radius: 5px;
+  /* Bordas arredondadas */
+  padding: 10px 15px;
+  /* Espaçamento interno */
+  font-size: 16px;
+  /* Tamanho da fonte */
+  cursor: pointer;
+  /* Cursor em forma de mão */
+  text-align: center;
+  /* Centraliza o texto horizontalmente */
+  line-height: 1.5;
+  /* Alinha verticalmente o texto */
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  /* Transições suaves */
+  display: inline-flex;
+  /* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center;
+  /* Alinha o texto verticalmente no centro */
+  justify-content: center;
+  /* Alinha o texto horizontalmente no centro */
+}
+
+.nav-wrapper .btn:hover {
+  background-color: #007bff;
+  /* Cor de fundo azul ao passar o mouse */
+  color: #ffffff;
+  /* Cor do texto branca ao passar o mouse */
+  border-color: #007bff;
+  /* Borda azul ao passar o mouse */
+}
+
+.nav-wrapper .btn:focus {
+  outline: none;
+  /* Remove o contorno padrão ao focar no botão */
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+  /* Sombra azul clara ao focar */
 }
 
 .brand-logo {
-  flex: 1;
+  color: #ffffff;
+  /* Cor do texto da marca branca */
+  font-size: 1.5em;
+  /* Tamanho da fonte da marca */
+  font-weight: bold;
+  /* Texto em negrito */
   text-align: center;
+  /* Centraliza o texto horizontalmente */
 }
 
-.btn btn-default,
-.btn btn-default {
+/* Estilo para o botão PDF */
+#pdfButton,
+#addButton,
+#backButton {
+  background-color: #007bff;
+  /* Cor de fundo azul */
+  color: white;
+  /* Cor do texto branca */
+  border-radius: 5px;
+  /* Bordas arredondadas */
   padding: 5px 10px;
-  background-color: #ccc;
-  border: none;
-  font-size: 16px;
+  /* Espaçamento interno */
+  font-size: 14px;
+  /* Tamanho da fonte */
   cursor: pointer;
+  /* Cursor em forma de mão */
+  text-align: center;
+  /* Centraliza o texto horizontalmente */
+  line-height: 1.5;
+  /* Alinha verticalmente o texto */
+  display: inline-flex;
+  /* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center;
+  /* Alinha o texto verticalmente no centro */
+  justify-content: center;
+  /* Alinha o texto horizontalmente no centro */
+  border: none;
+  /* Remove a borda padrão */
+  transition: background-color 0.3s;
+  /* Transição suave para a cor de fundo */
 }
 
-.collection-columns .collection-item {
-  width: 50%;
+#pdfButton:hover,
+#backButton:hover {
+  background-color: #0056b3;
+  /* Cor de fundo azul mais escuro ao passar o mouse */
 }
 
-.navigation {
-  position: sticky;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
+.btn {
+  background-color: #007bff;
+  /* Cor de fundo azul */
+  color: white;
+  /* Cor do texto branca */
+  border-radius: 5px;
+  /* Bordas arredondadas */
+  padding: 5px 10px;
+  /* Espaçamento interno */
+  font-size: 14px;
+  /* Tamanho da fonte */
+  cursor: pointer;
+  /* Cursor em forma de mão */
+  text-align: center;
+  /* Centraliza o texto horizontalmente */
+  line-height: 1.5;
+  /* Alinha verticalmente o texto */
+  display: inline-flex;
+  /* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center;
+  /* Alinha o texto verticalmente no centro */
+  justify-content: center;
+  /* Alinha o texto horizontalmente no centro */
+  border: none;
+  /* Remove a borda padrão */
+  transition: background-color 0.3s;
+  /* Transição suave para a cor de fundo */
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  /* Cor de fundo azul mais escuro ao passar o mouse */
+}
+
+.btn-edit {
+  background-color: #007bff;
+  /* Cor de fundo azul */
+  color: white;
+  /* Cor do texto branca */
+  border-radius: 5px;
+  /* Bordas arredondadas */
+  padding: 5px 10px;
+  /* Espaçamento interno */
+  font-size: 14px;
+  /* Tamanho da fonte */
+  cursor: pointer;
+  /* Cursor em forma de mão */
+  text-align: center;
+  /* Centraliza o texto horizontalmente */
+  line-height: 1.5;
+  /* Alinha verticalmente o texto */
+  display: inline-flex;
+  /* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center;
+  /* Alinha o texto verticalmente no centro */
+  justify-content: center;
+  /* Alinha o texto horizontalmente no centro */
+  border: none;
+  /* Remove a borda padrão */
+  transition: background-color 0.3s;
+  /* Transição suave para a cor de fundo */
+}
+
+.btn-edit:hover {
+  background-color: #0056b3;
+  /* Cor de fundo azul mais escuro ao passar o mouse */
+}
+
+.btn-delete {
+  background-color: #ff0000;
+  /* Cor de fundo vermelha */
+  color: white;
+  /* Cor do texto branca */
+  border-radius: 5px;
+  /* Bordas arredondadas */
+  padding: 5px 10px;
+  /* Espaçamento interno */
+  font-size: 14px;
+  /* Tamanho da fonte */
+  cursor: pointer;
+  /* Cursor em forma de mão */
+  text-align: center;
+  /* Centraliza o texto horizontalmente */
+  line-height: 1.5;
+  /* Alinha verticalmente o texto */
+  display: inline-flex;
+  /* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center;
+  /* Alinha o texto verticalmente no centro */
+  justify-content: center;
+  /* Alinha o texto horizontalmente no centro */
+  border: none;
+  /* Remove a borda padrão */
+  transition: background-color 0.3s;
+  /* Transição suave para a cor de fundo */
+}
+
+.btn-delete:hover {
+  background-color: #0056b3;
+  /* Cor de fundo azul mais escuro ao passar o mouse */
 }
 
 .card-display {
@@ -133,7 +299,8 @@
   width: 100%;
   padding: 20px;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  /* Adiciona margem entre os cards */
 }
 
 .input-field {
@@ -142,12 +309,14 @@
 
 /* Estilo para valores de crédito em verde claro */
 .green-text {
-  color: #00aa00; /* Ou a cor de verde desejada */
+  color: #00aa00;
+  /* Ou a cor de verde desejada */
 }
 
 /* Estilo para valores de débito em laranja */
 .orange-text {
-  color: #ff6600; /* Ou a cor de laranja desejada */
+  color: #ff6600;
+  /* Ou a cor de laranja desejada */
 }
 
 /* Remova a linha de sublinhado do input */
@@ -155,13 +324,6 @@
 .input-field input[type="text"]:focus:not([readonly]) {
   border-bottom: none !important;
   box-shadow: none !important;
-}
-
-.card-balance-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .purchase-list-item {
@@ -175,3 +337,51 @@
   align-items: center;
 }
 
+/* Adiciona um layout de grid ao card de resultados anuais */
+/* Estilo base para a exibição dos cards */
+.card-balance-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+/* Ajustes específicos para telas maiores ou iguais a 1100px */
+@media screen and (min-width: 1100px) {
+  .card-balance-content {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+  }
+}
+
+.card-balance-content .card-content {
+  background-color: #f5f5f5;
+  /* Cor de fundo clara para destacar */
+  border: 1px solid #ddd;
+  /* Borda leve para separar os itens */
+  border-radius: 5px;
+  /* Cantos arredondados */
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Sombra sutil */
+  text-align: center;
+  /* Alinhamento centralizado */
+}
+
+.card-content p {
+  font-size: 1.2em;
+  /* Tamanho maior do texto para destacar */
+  margin: 10px 0;
+}
+
+.card-content span.card-title {
+  display: block;
+  font-weight: bold;
+  /* Destaca o título */
+  margin-bottom: 5px;
+}
+
+/* Ajustes adicionais para a navegação */
+.nav-wrapper .btn {
+  margin: 0 5px;
+  /* Margem horizontal entre os botões */
+}

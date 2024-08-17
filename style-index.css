@@ -1,89 +1,170 @@
-    .card-columns {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
+* { 
+  margin: 0;
+  padding: 0;
+}
 
-    .card {
-      width: calc(25% - 20px);
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
- 
-    .card-content {
-      color: #1e88e5;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa; /* Cor de fundo do body */
+}
 
-    .card-content img {
-      max-width: 24px;
-      max-height: 24px;
-      margin: 0 10 5 0;     
-    }
-    
-    #limparDadosCard {
-     background-color: #fce4ec;
-    }
-    @media (max-width: 1024px) {
-      .card {
-        width: calc(50% - 20px);
-      }
-    }
+.navigation {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
 
-    @media (max-width: 600px) {
-      .card {
-        width: 100%;
-      }       
-    }
+.nav-wrapper {
+  background-color: #007bff; /* Cor de fundo azul */
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza o conteúdo horizontalmente */
+}
 
-    @media (max-width: 768px) {
-      #whatsapp-tela-grande {
-        display: none;
-      }       
-    }
+.brand-logo {
+  color: #ffffff; /* Cor do texto da marca branca */
+  font-size: 1.5em; /* Tamanho da fonte da marca */
+  font-weight: bold; /* Texto em negrito */
+  text-align: center; /* Centraliza o texto horizontalmente */
+}
 
-    @media (min-width: 1024px) {
-      #whatsapp {
-        display: none;
-      }       
-    }
+.main-content {
+  padding: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
 
-    .navigation {
-      position: sticky;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-    }
+.card-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly; /* Espaça os cards uniformemente */
+}
 
-    .nav-wrapper {
-      position: fixed;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px;
-    }
+.card {
+  background-color: #5765ca; /* Cor de fundo dos cards */
+  width: calc(25% - 20px);
+  margin-bottom: 20px;
+  cursor: pointer; /* Indica que o card é clicável */
+  border-radius: 5px; /* Bordas arredondadas dos cards */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
 
-    .card {
-      background-color: #5765ca;
-    }
-    
-    .card-title {
-      color: #ffffff;
-      font-weight: bold;
-    }
-    
-    body {
-      background-color: #f8f9fa;
-    }
+.card-content {
+  color: #1e88e5; /* Cor do texto */
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* Centraliza o conteúdo dentro do card */
+  align-items: center; /* Alinha verticalmente o conteúdo */
+  padding: 20px; /* Espaçamento interno do card */
+}
 
-    .page-footer {
-      width: 100%;
-    }
-    
-    .main-content {
-      margin-bottom: 40px;
-      margin-top: 40px;
-    }
+.card-content img {
+  max-width: 24px;
+  max-height: 24px;
+  margin-right: 10px; /* Margem à direita da imagem */
+}
+
+.card-title {
+  color: #ffffff; /* Cor do texto do título */
+  font-weight: bold; /* Texto em negrito */
+}
+
+#limparDadosCard {
+  background-color: #fce4ec; /* Cor de fundo do card de recomeçar */
+}
+
+.page-footer {
+  background-color: #333; /* Cor de fundo mais escura para melhor contraste */
+  padding: 20px 0; /* Espaçamento interno do rodapé */
+  width: 100%;
+  color: #f8f9fa; /* Cor do texto em branco para contraste */
+}
+
+.custom-flow-text {
+  font-size: 1.2em;
+  text-align: center; /* Centraliza o texto no rodapé */
+  margin-bottom: 20px;
+}
+
+.grey-text.text-lighten-4 {
+  color: #f8f9fa; /* Cor do texto do rodapé em branco */
+  text-align: center; /* Centraliza o texto no rodapé */
+}
+
+.divider {
+  height: 1px;
+  background-color: #444; /* Cor da linha divisória para melhor visibilidade */
+}
+
+
+@media (max-width: 1024px) {
+  .card {
+    width: calc(50% - 20px); /* Ajusta a largura dos cards para telas menores */
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    width: 100%; /* Ajusta a largura dos cards para telas pequenas */
+  }
+}
+
+@media (max-width: 768px) {
+  #whatsapp-tela-grande {
+    display: none; /* Esconde o elemento em telas menores */
+  }
+}
+
+@media (min-width: 1024px) {
+  #whatsapp {
+    display: none; /* Esconde o elemento em telas maiores */
+  }
+}
+
+@media print {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .card {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  .card-content {
+    font-size: 14px;
+  }
+
+  .navigation {
+    position: relative;
+    top: 0;
+    width: 100%;
+    border: none;
+  }
+
+  .container {
+    position: absolute;
+    width: 100%;
+  }
+
+  .brand-logo {
+    flex: 1;
+    text-align: center;
+  }
+
+  #pdfButton,
+  #card-lancamento,
+  #chart,
+  .btn-edit,
+  .btn-delete,
+  .btn-default,
+  #tutorial {
+    display: none;
+  }
+}

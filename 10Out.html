@@ -26,7 +26,7 @@
       <iframe title="Grafico" src="chart.html" frameborder="0"></iframe>
     </div>
     <div>
-      <button onclick="redirectToIndex()" class="btn btn-default">Voltar</button>
+      <button onclick="redirectToIndex()" id="backButton" class="btn btn-default">Voltar</button>
     </div>
     <div class="card">
       <div class="card-content" id="initBalance">
@@ -55,7 +55,7 @@
           <label for="octDay">Dia</label>
         </div>
         <div class="add-container">
-          <button onclick="addData('Outubro')" class="btn btn-default">Adicionar</button>
+          <button onclick="addData('Outubro')" id="addButton" class="btn btn-default">Adicionar</button>
           <span style="margin-right: 20px;"></span> <!-- Espaço entre os elementos -->
           <label>
             <input type="checkbox" id="repeatCheckbox">

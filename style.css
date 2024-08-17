@@ -385,3 +385,31 @@
   margin: 0 5px;
   /* Margem horizontal entre os botões */
 }
+
+/* Estilo para o container de lançamentos anuais */
+#launchDataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaço entre grupos de itens */
+  padding: 10px;
+}
+
+/* Estilo para cada grupo de descrição e total */
+.launch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espaço menor entre descrição e total */
+}
+
+/* Estilo para a descrição */
+.launch-group .description {
+  font-size: 1em;
+  /*font-weight: bold;*/
+  color: #333; /* Cor do texto escura para contraste */
+}
+
+/* Estilo para o total */
+.launch-group .total {
+  font-size: 0.9em;
+  color: #007bff; /* Cor azul para destaque */
+}

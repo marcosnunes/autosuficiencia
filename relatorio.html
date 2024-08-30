@@ -1,380 +1,314 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Sua Calculadora Financeira Prática" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>Relatório</title>
-  </head>
 
-  <body>
-    <div class="navigation">
-      <nav>
-        <div class="nav-wrapper">
-          <button onclick="redirectToIndex()" class="btn btn-default">
-            &lt;
-          </button>
-          <span class="brand-logo center">Relatório</span>
-          <button onclick="redirectToIndex()" class="btn btn-default">
-            &gt;
-          </button>
-        </div>
-      </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Sua Calculadora Financeira Prática" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Relatório</title>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button id="backButton" class="btn btn-default">Voltar</button>
+        <span class="brand-logo center">Relatório</span>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card" id="tutorial">
+      <div class="card-content">
+        <p>
+          Selecione a moeda desejada para aplicar o câmbio e visualizar o seu
+          relatório anual em Euros, Dólares ou Libras Esterlinas
+        </p>
+      </div>
     </div>
-    <div class="container">
-      <div class="card" id="tutorial">
-        <div class="card-content">
-          <p>
-            Selecione a moeda desejada para aplicar o câmbio e visualizar o seu
-            relatório anual em Euros, Dólares ou Libras Esterlinas
-          </p>
-        </div>
-      </div>
 
-      <div class="card" id="currencyConverter">
-        <div class="card-content">
-          <span class="card-title">Converter para:</span>
-          <select id="currencySelect">
-            <option value="BRL">Real (R$)</option>
-            <option value="EUR">Euro (€)</option>
-            <option value="USD">Dólar ($)</option>
-            <option value="GBP">Libra Esterlina (£)</option>
-          </select>
-        </div>
+    <div class="card" id="currencyConverter">
+      <div class="card-content">
+        <span class="card-title">Converter para:</span>
+        <select id="currencySelect">
+          <option value="BRL">Real (R$)</option>
+          <option value="EUR">Euro (€)</option>
+          <option value="USD">Dólar ($)</option>
+          <option value="GBP">Libra Esterlina (£)</option>
+        </select>
       </div>
+    </div>
 
-      <div class="balance-value" id="balanceValue">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Totais anual</span>
-            <div class="card-balance-content">
-              <div class="card-content">
-                <span class="card-title">Débito</span>
-                <p id="debitTotal">0.00</p>
-              </div>
-              <div class="card-content">
-                <span class="card-title">Crédito</span>
-                <p id="creditTotal">0.00</p>
-              </div>
-              <div class="card-content">
-                <span class="card-title">Cartão de Crédito</span>
-                <p id="creditCardBalance">0.00</p>
-              </div>
-              <div class="card-content">
-                <span class="card-title">Balanço</span>
-                <p id="balance">0.00</p>
-                <p id="balancePercentage">0.00%</p>
-              </div>
+    <div class="balance-value" id="balanceValue">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Totais anual</span>
+          <div class="card-balance-content">
+            <div class="card-content">
+              <span class="card-title">Débito</span>
+              <p id="debitTotal">0.00</p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Crédito</span>
+              <p id="creditTotal">0.00</p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Cartão de Crédito</span>
+              <p id="creditCardBalance">0.00</p>
+            </div>
+            <div class="card-content">
+              <span class="card-title">Balanço</span>
+              <p id="balance">0.00</p>
+              <p id="balancePercentage">0.00%</p>
             </div>
           </div>
-          <button
-            id="pdfButton"
-            onclick="window.print()"
-            class="btn btn-default"
-          >
-            Exportar para PDF
-          </button>
         </div>
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Lançamentos anuais</span>
-            <div id="launchDataContainer"></div>
-          </div>
+        <button id="pdfButton" onclick="window.print()" class="btn btn-default">
+          Exportar para PDF
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Lançamentos anuais</span>
+          <div id="launchDataContainer"></div>
         </div>
       </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-      // Definindo a matriz de meses
-      var months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-      document.addEventListener("DOMContentLoaded", function () {
-        var creditTotal = 0;
-        var debitTotal = 0;
-        var launchData = {};
-        var elems = document.querySelectorAll("select");
-        M.FormSelect.init(elems);
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiencia.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
+      projectId: "web-app-autossuficiencia",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
 
-        function formatCurrency(amount, currency) {
-          switch (currency) {
-            case "EUR":
-              return "€" + amount.toFixed(2);
-            case "USD":
-              return "$" + amount.toFixed(2);
-            case "GBP":
-              return "£" + amount.toFixed(2);
-            default:
-              return "R$" + amount.toFixed(2);
-          }
-        }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const months = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
 
-        function convertCurrency() {
-          console.log("Converting currency...");
+    let launchData = {};
 
-          // Obter a moeda selecionada
-          var selectedCurrency =
-            document.getElementById("currencySelect").value;
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Usuário autenticado:", user.uid);
+        loadDataFromFirebase(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
+    });
 
-          // Converter o saldo total do cartão de crédito para a moeda selecionada
-          fetch("https://open.er-api.com/v6/latest/BRL")
-            .then((response) => response.json())
-            .then((data) => {
-              var exchangeRates = data.rates;
+    document.addEventListener("DOMContentLoaded", function () {
+      var elems = document.querySelectorAll("select");
+      M.FormSelect.init(elems);
 
-              if (exchangeRates.hasOwnProperty(selectedCurrency)) {
-                var exchangeRate = exchangeRates[selectedCurrency];
-                var creditCardBalanceTotalBRL = calculateCreditCardBalanceBRL();
-                var creditCardBalanceTotal =
-                  creditCardBalanceTotalBRL * exchangeRate;
+      document
+        .getElementById("currencySelect")
+        .addEventListener("change", convertCurrency);
 
-                // Atualizar todos os valores com a nova moeda convertida
-                updateAllValues(
-                  selectedCurrency,
-                  exchangeRate,
-                  debitTotal,
-                  creditTotal,
-                  creditCardBalanceTotal,
-                  launchData
-                );
-              } else {
-                console.error(
-                  "A taxa de câmbio para a moeda selecionada não está disponível."
-                );
-              }
-            })
-            .catch((error) =>
-              console.error("Erro ao obter taxas de câmbio:", error)
-            );
-        }
+      document.getElementById('backButton').addEventListener('click', function () {
+        window.history.back();
+      });
+      document.getElementById('nextButton').addEventListener('click', function () {
+        window.history.back();
+      });
+    });
 
-        // Adicionar um ouvinte de evento para mudanças na seleção de moeda
-        document
-          .getElementById("currencySelect")
-          .addEventListener("change", function () {
-            convertCurrency();
+    function formatCurrency(amount, currency) {
+      switch (currency) {
+        case "EUR":
+          return "€" + amount.toFixed(2);
+        case "USD":
+          return "$" + amount.toFixed(2);
+        case "GBP":
+          return "£" + amount.toFixed(2);
+        default:
+          return "R$" + amount.toFixed(2);
+      }
+    }
+
+    function loadDataFromFirebase(userId) {
+      const yearData = {};
+
+      return new Promise((resolve, reject) => {
+        Promise.all(months.map(month => {
+          return new Promise((resolve, reject) => {
+            const monthRef = ref(database, `users/${userId}/${month}`);
+            onValue(monthRef, (snapshot) => {
+              const monthData = snapshot.val();
+              yearData[month] = monthData;
+              resolve();
+            }, (error) => {
+              console.error(`Erro ao obter dados de ${month}:`, error);
+              reject(error);
+            });
           });
+        }))
+        // Promessa para carregar dados do cartão de crédito
+        .then(() => {
+          const creditCardRef = ref(database, `creditCardBalances/${userId}`);
+          onValue(creditCardRef, (snapshot) => {
+            const creditCardData = snapshot.val();
+            yearData['creditCard'] = creditCardData;
+            resolve();
+          }, (error) => {
+            console.error(`Erro ao obter dados do cartão de crédito:`, error);
+            reject(error);
+          });
+        })
+        .then(() => {
+          console.log("Dados do ano:", yearData);
+          calculateAnnualTotals(yearData);
+          displayAnnualLaunches(yearData);
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar dados do Firebase:", error);
+        });
+      });
+    }
 
-        // Função para atualizar todos os valores após a conversão de moeda
-        function updateAllValues(
-          currency,
-          exchangeRate,
-          debitTotal,
-          creditTotal,
-          creditCardBalanceTotal,
-          launchData
-        ) {
-          // Atualizar os valores no card "Totais anuais"
+    function calculateAnnualTotals(yearData) {
+      let creditTotal = 0;
+      let debitTotal = 0;
+      let creditCardBalanceTotal = 0;
+
+      for (const month in yearData) {
+        const monthData = yearData[month];
+        if (monthData) {
+          creditTotal += parseFloat(monthData.totalCredit) || 0;
+          debitTotal += parseFloat(monthData.totalDebit) || 0;
+          creditCardBalanceTotal +=
+            parseFloat(monthData.creditCardBalance) || 0;
+        }
+      }
+
+      // Acumule os valores do cartão de crédito de cada mês
+      if (yearData.creditCard) {
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.januaryCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.februaryCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.marchCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.aprilCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.mayCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.juneCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.julyCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.augustCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.septemberCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.octoberCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.novemberCreditCardBalance) || 0;
+        creditCardBalanceTotal += parseFloat(yearData.creditCard.decemberCreditCardBalance) || 0;
+      }
+
+      const balance = creditTotal - debitTotal - creditCardBalanceTotal;
+      const percentage =
+        creditTotal > 0
+          ? ((debitTotal + creditCardBalanceTotal) /
+            (creditTotal + creditCardBalanceTotal)) *
+          100
+          : 0;
+
+      updateBalanceValues("BRL", 1, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage);
+    }
+
+    function updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage) {
+      const selectedCurrency = currency || document.getElementById("currencySelect").value;
+
+      document.getElementById("debitTotal").textContent = formatCurrency(debitTotal * exchangeRate, selectedCurrency);
+      document.getElementById("creditTotal").textContent = formatCurrency(creditTotal * exchangeRate, selectedCurrency);
+      document.getElementById("creditCardBalance").textContent = formatCurrency(creditCardBalanceTotal * exchangeRate, selectedCurrency);
+      document.getElementById("balance").textContent = formatCurrency(balance * exchangeRate, selectedCurrency);
+      document.getElementById("balancePercentage").textContent = percentage.toFixed(2) + "%";
+    }
+
+    function displayAnnualLaunches(yearData) {
+      const launchDataContainer = document.getElementById("launchDataContainer");
+      launchDataContainer.innerHTML = ""; // Limpar o container antes de adicionar novos elementos
+
+      const annualLaunches = {};
+
+      for (const month in yearData) {
+        const monthData = yearData[month];
+        if (monthData && monthData.transactions) {
+          monthData.transactions.forEach(transaction => {
+            const description = transaction.description;
+            const credit = parseFloat(transaction.credit) || 0;
+            const debit = parseFloat(transaction.debit) || 0;
+
+            if (annualLaunches.hasOwnProperty(description)) {
+              annualLaunches[description] += credit - debit;
+            } else {
+              annualLaunches[description] = credit - debit;
+            }
+          });
+        }
+      }
+
+      for (const description in annualLaunches) {
+        const total = annualLaunches[description];
+        const launchGroupDiv = document.createElement("div");
+        launchGroupDiv.classList.add("launch-group");
+
+        const descriptionSpan = document.createElement("span");
+        descriptionSpan.classList.add("description");
+        descriptionSpan.textContent = "Descrição: " + description;
+        launchGroupDiv.appendChild(descriptionSpan);
+
+        const totalSpan = document.createElement("span");
+        totalSpan.classList.add("total");
+        totalSpan.textContent = "Total: R$" + total.toFixed(2); // Você pode formatar a moeda como desejar
+        launchGroupDiv.appendChild(totalSpan);
+
+        launchDataContainer.appendChild(launchGroupDiv);
+      }
+    }
+
+
+    function convertCurrency() {
+      const selectedCurrency = document.getElementById("currencySelect").value;
+
+      // Obter taxas de câmbio
+      fetch(`https://open.er-api.com/v6/latest/BRL`)
+        .then(response => response.json())
+        .then(data => {
+          const exchangeRate = data.rates[selectedCurrency];
+
+          // Atualizar os valores com a nova moeda
           updateBalanceValues(
-            currency,
+            selectedCurrency,
             exchangeRate,
             debitTotal,
             creditTotal,
-            creditCardBalanceTotal
+            creditCardBalanceTotal,
+            balance, // Passar o saldo calculado
+            percentage // Passar a porcentagem calculada
           );
+        })
+        .catch(error => console.error("Erro ao obter taxas de câmbio:", error));
+    }
+  </script>
+</body>
 
-          // Atualizar os valores no card "Lançamentos anuais"
-          updateLaunchData(currency, exchangeRate, launchData);
-        }
-
-        // Função para calcular o saldo total do cartão de crédito em BRL
-        function calculateCreditCardBalanceBRL() {
-          var creditCardBalanceTotalBRL = 0;
-          if (months && months.length === 12) {
-            for (var i = 0; i < 12; i++) {
-              var monthKey = months[i].toLowerCase() + "CreditCardBalance";
-              var monthBalance =
-                parseFloat(localStorage.getItem(monthKey)) || 0;
-              creditCardBalanceTotalBRL += monthBalance;
-            }
-          } else {
-            console.error(
-              "Erro: A matriz de meses não está definida corretamente."
-            );
-          }
-          return creditCardBalanceTotalBRL;
-        }
-
-        // Função para atualizar os valores no card "Lançamentos anuais"
-        function updateLaunchData(currency, exchangeRate, launchData) {
-          var launchDataContainer = document.getElementById(
-            "launchDataContainer"
-          );
-
-          // Limpar o conteúdo atual do container
-          launchDataContainer.innerHTML = "";
-
-          // Atualizar os valores para cada lançamento
-          for (var description in launchData) {
-            var total = launchData[description];
-            var convertedAmount = total * exchangeRate;
-
-            // Criar o grupo de descrição e total
-            var launchGroupDiv = document.createElement("div");
-            launchGroupDiv.classList.add("launch-group");
-
-            // Criar o elemento de descrição
-            var descriptionSpan = document.createElement("span");
-            descriptionSpan.classList.add("description");
-            descriptionSpan.textContent = "Descrição: " + description;
-            launchGroupDiv.appendChild(descriptionSpan);
-
-            // Criar o elemento de total
-            var totalSpan = document.createElement("span");
-            totalSpan.classList.add("total");
-            totalSpan.textContent =
-              "Total: " + formatCurrency(convertedAmount, currency);
-            launchGroupDiv.appendChild(totalSpan);
-
-            // Adicionar o grupo ao container
-            launchDataContainer.appendChild(launchGroupDiv);
-          }
-        }
-
-        // Função para atualizar os valores de balanço após a conversão de moeda
-        function updateBalanceValues(
-          currency,
-          exchangeRate,
-          debitTotal,
-          creditTotal,
-          creditCardBalanceTotal
-        ) {
-          var selectedCurrency =
-            currency || document.getElementById("currencySelect").value;
-          var creditCardBalance = calculateCreditCardBalanceBRL();
-
-          // Calculando os valores convertidos
-          var convertedDebitTotal = debitTotal * exchangeRate;
-          var convertedCreditTotal = creditTotal * exchangeRate;
-          var convertedCreditCardBalance = creditCardBalance * exchangeRate;
-
-          // Exibindo os valores convertidos na página
-          document.getElementById("debitTotal").textContent = formatCurrency(
-            convertedDebitTotal,
-            selectedCurrency
-          );
-          document.getElementById("creditTotal").textContent = formatCurrency(
-            convertedCreditTotal,
-            selectedCurrency
-          );
-          document.getElementById("creditCardBalance").textContent =
-            formatCurrency(convertedCreditCardBalance, selectedCurrency);
-
-          // Atualizando o elemento "Balanço" com o valor convertido
-          var balance =
-            convertedCreditTotal -
-            convertedDebitTotal -
-            convertedCreditCardBalance;
-          document.getElementById("balance").textContent = formatCurrency(
-            balance,
-            selectedCurrency
-          );
-
-          // Calculando e exibindo a porcentagem de saldo
-          var balancePercentage =
-            ((debitTotal + creditCardBalance) / creditTotal) * 100;
-          document.getElementById("balancePercentage").textContent =
-            balancePercentage.toFixed(2) + "%";
-        }
-
-        // Chamada inicial para converter a moeda
-        convertCurrency();
-
-        // Loop através do localStorage para calcular totais
-        for (var key in localStorage) {
-          if (localStorage.hasOwnProperty(key) && key.startsWith("total")) {
-            var item = JSON.parse(localStorage.getItem(key));
-            if (item.rows) {
-              var rows = item.rows;
-              for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var description = row.description;
-                var credit = parseFloat(row.credit) || 0;
-                var debit = parseFloat(row.debit) || 0;
-                creditTotal += credit;
-                debitTotal += debit;
-                if (launchData.hasOwnProperty(description)) {
-                  launchData[description] += credit - debit;
-                } else {
-                  launchData[description] = credit - debit;
-                }
-              }
-            } else {
-              console.error("Erro: 'rows' não está definido em " + key);
-            }
-          }
-        }
-
-        // Exibir os lançamentos anuais
-        if (Object.keys(launchData).length > 0) {
-          updateLaunchData("BRL", 1, launchData);
-        }
-
-        // Atualizar todos os valores
-        updateAllValues(
-          "BRL",
-          1,
-          debitTotal,
-          creditTotal,
-          calculateCreditCardBalanceBRL(),
-          launchData
-        );
-
-        // Exibir os valores iniciais
-        document.getElementById("creditTotal").textContent = formatCurrency(
-          creditTotal,
-          "BRL"
-        );
-        document.getElementById("creditCardBalance").textContent =
-          formatCurrency(calculateCreditCardBalanceBRL(), "BRL");
-        document.getElementById("debitTotal").textContent = formatCurrency(
-          debitTotal,
-          "BRL"
-        );
-        var balance =
-          creditTotal - debitTotal - calculateCreditCardBalanceBRL();
-        document.getElementById("balance").textContent = formatCurrency(
-          balance,
-          "BRL"
-        );
-        var percentage = 0;
-        if (creditTotal > 0) {
-          percentage =
-            ((debitTotal + calculateCreditCardBalanceBRL()) /
-              (creditTotal + calculateCreditCardBalanceBRL())) *
-            100;
-        }
-        if (isNaN(percentage)) {
-          percentage = 0;
-        }
-        document.getElementById("balancePercentage").textContent =
-          percentage.toFixed(2) + "%";
-      });
-
-      function redirectToIndex() {
-        window.location.href = "index.html";
-      }
-    </script>
-  </body>
 </html>

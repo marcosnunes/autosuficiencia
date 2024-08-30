@@ -34,6 +34,7 @@
   #card-lancamento,
   #chart,
   #tutorial,
+  #currencyConverter,
   .navigation,
   .iframe-container {
     display: none !important;
@@ -154,8 +155,10 @@
 /* Estilo para o botão PDF */
 #pdfButton,
 #addButton,
-#backButton {
-  background-color: #007bff;
+#backButton,
+#nextButton,
+#homeButton {
+  background-color: #258fff;
   /* Cor de fundo azul */
   color: white;
   /* Cor do texto branca */
@@ -181,50 +184,19 @@
   /* Remove a borda padrão */
   transition: background-color 0.3s;
   /* Transição suave para a cor de fundo */
+  margin: 5px;
 }
 
 #pdfButton:hover,
-#backButton:hover {
-  background-color: #0056b3;
-  /* Cor de fundo azul mais escuro ao passar o mouse */
-}
-
-.btn {
-  background-color: #007bff;
-  /* Cor de fundo azul */
-  color: white;
-  /* Cor do texto branca */
-  border-radius: 5px;
-  /* Bordas arredondadas */
-  padding: 5px 10px;
-  /* Espaçamento interno */
-  font-size: 14px;
-  /* Tamanho da fonte */
-  cursor: pointer;
-  /* Cursor em forma de mão */
-  text-align: center;
-  /* Centraliza o texto horizontalmente */
-  line-height: 1.5;
-  /* Alinha verticalmente o texto */
-  display: inline-flex;
-  /* Faz com que o botão seja tratado como um contêiner flexível */
-  align-items: center;
-  /* Alinha o texto verticalmente no centro */
-  justify-content: center;
-  /* Alinha o texto horizontalmente no centro */
-  border: none;
-  /* Remove a borda padrão */
-  transition: background-color 0.3s;
-  /* Transição suave para a cor de fundo */
-}
-
-.btn:hover {
+#backButton:hover,
+#nextButton:hover,
+#homeButton:hover {
   background-color: #0056b3;
   /* Cor de fundo azul mais escuro ao passar o mouse */
 }
 
 .btn-edit {
-  background-color: #007bff;
+  background-color: #258fff;
   /* Cor de fundo azul */
   color: white;
   /* Cor do texto branca */
@@ -232,7 +204,7 @@
   /* Bordas arredondadas */
   padding: 5px 10px;
   /* Espaçamento interno */
-  font-size: 14px;
+  font-size: 16px;
   /* Tamanho da fonte */
   cursor: pointer;
   /* Cursor em forma de mão */
@@ -250,6 +222,7 @@
   /* Remove a borda padrão */
   transition: background-color 0.3s;
   /* Transição suave para a cor de fundo */
+  margin: 5px;
 }
 
 .btn-edit:hover {
@@ -258,7 +231,7 @@
 }
 
 .btn-delete {
-  background-color: #ff0000;
+  background-color: #ff1b1b;
   /* Cor de fundo vermelha */
   color: white;
   /* Cor do texto branca */
@@ -266,7 +239,7 @@
   /* Bordas arredondadas */
   padding: 5px 10px;
   /* Espaçamento interno */
-  font-size: 14px;
+  font-size: 16px;
   /* Tamanho da fonte */
   cursor: pointer;
   /* Cursor em forma de mão */
@@ -284,10 +257,11 @@
   /* Remove a borda padrão */
   transition: background-color 0.3s;
   /* Transição suave para a cor de fundo */
+  margin: 5px;
 }
 
 .btn-delete:hover {
-  background-color: #0056b3;
+  background-color: #9e1010;
   /* Cor de fundo azul mais escuro ao passar o mouse */
 }
 
@@ -390,7 +364,8 @@
 #launchDataContainer {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espaço entre grupos de itens */
+  gap: 15px;
+  /* Espaço entre grupos de itens */
   padding: 10px;
 }
 
@@ -398,18 +373,64 @@
 .launch-group {
   display: flex;
   flex-direction: column;
-  gap: 5px; /* Espaço menor entre descrição e total */
+  gap: 5px;
+  /* Espaço menor entre descrição e total */
 }
 
 /* Estilo para a descrição */
 .launch-group .description {
   font-size: 1em;
   /*font-weight: bold;*/
-  color: #333; /* Cor do texto escura para contraste */
+  color: #333;
+  /* Cor do texto escura para contraste */
 }
 
 /* Estilo para o total */
 .launch-group .total {
   font-size: 0.9em;
-  color: #007bff; /* Cor azul para destaque */
+  color: #007bff;
+  /* Cor azul para destaque */
+}
+
+.auth-form {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo adicional para o campo de senha, se necessário */
+#password {
+  padding: 5px 0;
+  /* Ajusta o padding para o campo de senha */
+  margin-top: 20px;
+}
+
+/* Corrige o comportamento do placeholder para campos de senha */
+.input-field input[type="password"]::placeholder {
+  color: transparent;
+  /* Faz com que o placeholder fique invisível para campos de senha, para usar a label */
+}
+
+.container-auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.auth-form {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+.auth-form h5 {
+  margin-bottom: 1rem;
+}
+.auth-form .btn {
+  margin-top: 1rem;
+}
+.auth-form .center {
+  text-align: center;
 }

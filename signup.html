@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Cadastro</title>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiencia.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com/",
+      projectId: "web-app-autossuficiencia",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signup = function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          let errorMessage = "Erro desconhecido.";
+          if (error.code === 'auth/email-already-in-use') {
+            errorMessage = "Este e-mail já está em uso. Tente outro.";
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "E-mail inválido. Verifique o e-mail e tente novamente.";
+          } else if (error.code === 'auth/weak-password') {
+            errorMessage = "A senha deve ter pelo menos 6 caracteres.";
+          }
+          document.getElementById('error-message').textContent = errorMessage;
+        });
+    };
+  </script>
+</head>
+<body>
+  <div class="container-auth">
+    <div class="auth-form">
+      <h5 class="center">Cadastro</h5>
+      <div class="input-field">
+        <input type="email" id="email" placeholder=" " required>
+        <label for="email">Email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" placeholder=" " required>
+        <label for="password">Senha</label>
+      </div>
+      <button onclick="signup()" class="btn">Cadastrar</button>
+      <p class="center">Já tem uma conta? <a href="login.html">Login</a></p>
+      <p id="error-message" class="red-text center"></p>
+    </div>
+  </div>
+</body>
+</html>

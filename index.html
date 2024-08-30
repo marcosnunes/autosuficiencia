@@ -22,105 +22,74 @@
       </div>
     </nav>
   </div>
+  <div class="user-container">
+    <div id="user-name" class="user-name"></div> <!-- Adicionando a exibição do nome do usuário -->
+    <button onclick="logout()" class="btn red btn-logout">Logout</button>
+    <button onclick="deleteAccount()" class="btn red btn-logout">Excluir Conta</button>
+    <!-- <a href="delete_account.html">Excluir Conta</a> </p>  -->
+  </div>
   <div class="main-content">
     <div class="container">
       <div class="row">
         <div class="col s12">
           <div class="card-columns">
+            <!-- Cards de navegação -->
             <div class="card" id="card1">
-              <div class="card-content">
-                <span class="card-title">Janeiro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Janeiro</span></div>
             </div>
             <div class="card" id="card2">
-              <div class="card-content">
-                <span class="card-title">Fevereiro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Fevereiro</span></div>
             </div>
             <div class="card" id="card3">
-              <div class="card-content">
-                <span class="card-title">Março</span>
-              </div>
+              <div class="card-content"><span class="card-title">Março</span></div>
             </div>
             <div class="card" id="card4">
-              <div class="card-content">
-                <span class="card-title">Abril</span>
-              </div>
+              <div class="card-content"><span class="card-title">Abril</span></div>
             </div>
             <div class="card" id="card5">
-              <div class="card-content">
-                <span class="card-title">Maio</span>
-              </div>
+              <div class="card-content"><span class="card-title">Maio</span></div>
             </div>
             <div class="card" id="card6">
-              <div class="card-content">
-                <span class="card-title">Junho</span>
-              </div>
+              <div class="card-content"><span class="card-title">Junho</span></div>
             </div>
             <div class="card" id="card7">
-              <div class="card-content">
-                <span class="card-title">Julho</span>
-              </div>
+              <div class="card-content"><span class="card-title">Julho</span></div>
             </div>
             <div class="card" id="card8">
-              <div class="card-content">
-                <span class="card-title">Agosto</span>
-              </div>
+              <div class="card-content"><span class="card-title">Agosto</span></div>
             </div>
             <div class="card" id="card9">
-              <div class="card-content">
-                <span class="card-title">Setembro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Setembro</span></div>
             </div>
             <div class="card" id="card10">
-              <div class="card-content">
-                <span class="card-title">Outubro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Outubro</span></div>
             </div>
             <div class="card" id="card11">
-              <div class="card-content">
-                <span class="card-title">Novembro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Novembro</span></div>
             </div>
             <div class="card" id="card12">
-              <div class="card-content">
-                <span class="card-title">Dezembro</span>
-              </div>
+              <div class="card-content"><span class="card-title">Dezembro</span></div>
             </div>
             <div class="card" id="card13">
-              <div class="card-content">
-                <span class="card-title">Cartão de crédito</span>
-              </div>
+              <div class="card-content"><span class="card-title">Cartão de crédito</span></div>
             </div>
             <div class="card" id="card14">
-              <div class="card-content">
-                <span class="card-title">Perguntas Frequêntes</span>
-              </div>
+              <div class="card-content"><span class="card-title">Perguntas Frequêntes</span></div>
             </div>
             <div class="card" id="card15">
-              <div class="card-content">
-                <span class="card-title">Privacidade</span>
-              </div>
+              <div class="card-content"><span class="card-title">Privacidade</span></div>
             </div>
             <div class="card" id="card16">
-              <div class="card-content">
-                <span class="card-title">Ferramentas</span>
-              </div>
+              <div class="card-content"><span class="card-title">Ferramentas</span></div>
             </div>
             <div class="card" id="card17">
-              <div class="card-content">
-                <span class="card-title">Dízimos</span>
-              </div>
+              <div class="card-content"><span class="card-title">Dízimos</span></div>
             </div>
             <div class="card" id="card18">
-              <div class="card-content">
-                <span class="card-title">Relatório</span>
-              </div>
+              <div class="card-content"><span class="card-title">Relatório</span></div>
             </div>
             <div class="card" id="limparDadosCard">
-              <div class="card-content">
-                <span class="card-title" style="color: #d50000">Recomeçar</span>
-              </div>
+              <div class="card-content"><span class="card-title" style="color: #d50000">Recomeçar</span></div>
             </div>
           </div>
         </div>
@@ -146,75 +115,144 @@
     <div class="container">
       <div class="row">
         <div class="col s12 center-align">
-          <p class="grey-text text-lighten-4">Ferramenta livre de cálculo de capital de giro © 2024 Autossuficiência. Todos os direitos reservados.</p>
+          <p class="grey-text text-lighten-4">Ferramenta livre de cálculo de capital de giro © 2024 Autossuficiência.
+            Todos os direitos reservados.</p>
         </div>
       </div>
     </div>
   </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    // Função para limpar o localStorage e mostrar uma mensagem
-    function limparLocalStorage() {
-      localStorage.clear(); // Limpar todos os dados no localStorage
-      alert("Os dados foram apagados."); // Exibir uma mensagem de confirmação
+  <script type="module">
+    // Importa os módulos necessários do Firebase
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+    import { getDatabase, ref, remove } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiencia.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
+      projectId: "web-app-autossuficiencia",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // Verificação do estado de autenticação e exibição do nome do usuário
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const displayName = user.displayName || user.email;
+        document.getElementById('user-name').textContent = `Bem-vindo, ${displayName}!`;
+      } else {
+        window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
+      }
+    });
+
+    // Função de logout
+    window.logout = function () {
+      signOut(auth).then(() => {
+        window.location.href = "login.html"; // Redireciona para a página de login após logout
+      }).catch((error) => {
+        console.error("Erro ao fazer logout: ", error);
+      });
+    };
+
+    // Função de excluir conta
+    window.deleteAccount = function () {
+      signOut(auth).then(() => {
+        window.location.href = "delete_account.html"; // Redireciona para a página de exclusão de conta
+      });
+    };
+
+    
+    // Função para limpar os dados do Firebase Realtime Database e localStorage
+    function limparDados() {
+      // Limpar localStorage
+      localStorage.clear();
+
+      // Obter o userId do localStorage ou da autenticação
+      const userId = localStorage.getItem('userId') || (auth.currentUser ? auth.currentUser.uid : null);
+
+      // Verificar se o userId está disponível
+      if (userId) {
+        // Referência para os dados do cartão de crédito
+        const creditCardDataRef = ref(database, 'creditCardData/' + userId);
+
+        // Referência para os dados de cada mês
+        const januaryRef = ref(database, 'users/' + userId + '/january');
+        const februaryRef = ref(database, 'users/' + userId + '/february');
+        const marchRef = ref(database, 'users/' + userId + '/march');
+        const aprilRef = ref(database, 'users/' + userId + '/april');
+        const mayRef = ref(database, 'users/' + userId + '/may');
+        const juneRef = ref(database, 'users/' + userId + '/june');
+        const julyRef = ref(database, 'users/' + userId + '/july');
+        const augustRef = ref(database, 'users/' + userId + '/august');
+        const septemberRef = ref(database, 'users/' + userId + '/september');
+        const octoberRef = ref(database, 'users/' + userId + '/october');
+        const novemberRef = ref(database, 'users/' + userId + '/november');
+        const decemberRef = ref(database, 'users/' + userId + '/december');
+
+        // Referência para o nó raiz de creditCardBalances
+        const creditCardBalancesRef = ref(database, 'creditCardBalances/' + userId);
+
+        // Referência para os dados do usuário
+        const userRef = ref(database, 'users/' + userId);
+
+        // Remover os dados do Firebase Realtime Database
+        Promise.all([
+          remove(creditCardDataRef),
+          remove(januaryRef),
+          remove(februaryRef),
+          remove(marchRef),
+          remove(aprilRef),
+          remove(mayRef),
+          remove(juneRef),
+          remove(julyRef),
+          remove(augustRef),
+          remove(septemberRef),
+          remove(octoberRef),
+          remove(novemberRef),
+          remove(decemberRef),
+          remove(creditCardBalancesRef), // Remove todos os dados dentro de creditCardBalances
+          remove(userRef)
+        ])
+          .then(() => {
+            console.log("Todos os dados do usuário apagados do Firebase.");
+            alert("Os dados foram apagados do Firebase e localStorage."); // Mensagem de confirmação
+          })
+          .catch((error) => {
+            console.error("Erro ao apagar dados do Firebase: ", error);
+          });
+      } else {
+        alert("Usuário não autenticado. Não é possível limpar dados do Firebase.");
+      }
     }
 
-    // Adicione um evento de clique ao card
-    document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
+    // Adiciona eventos de clique aos cards após o DOM ser carregado
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("limparDadosCard").addEventListener("click", limparDados);
 
-    document.getElementById("card1").addEventListener("click", function () {
-      window.location.href = "1Jan.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card2").addEventListener("click", function () {
-      window.location.href = "2Fev.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card3").addEventListener("click", function () {
-      window.location.href = "3Mar.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card4").addEventListener("click", function () {
-      window.location.href = "4Abr.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card5").addEventListener("click", function () {
-      window.location.href = "5Mai.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card6").addEventListener("click", function () {
-      window.location.href = "6Jun.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card7").addEventListener("click", function () {
-      window.location.href = "7Jul.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card8").addEventListener("click", function () {
-      window.location.href = "8Ago.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card9").addEventListener("click", function () {
-      window.location.href = "9Set.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card10").addEventListener("click", function () {
-      window.location.href = "10Out.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card11").addEventListener("click", function () {
-      window.location.href = "11Nov.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card12").addEventListener("click", function () {
-      window.location.href = "12Dez.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card13").addEventListener("click", function () {
-      window.location.href = "cartao_de_credito.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card14").addEventListener("click", function () {
-      window.location.href = "perguntas_frequentes.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card15").addEventListener("click", function () {
-      window.location.href = "privacy.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card16").addEventListener("click", function () {
-      window.location.href = "ferramentas.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card17").addEventListener("click", function () {
-      window.location.href = "dizimo.html"; // Redireciona para o URL desejado
-    });
-    document.getElementById("card18").addEventListener("click", function () {
-      window.location.href = "relatorio.html"; // Redireciona para o URL desejado
+      document.getElementById("card1").addEventListener("click", () => window.location.href = "1Jan.html");
+      document.getElementById("card2").addEventListener("click", () => window.location.href = "2Fev.html");
+      document.getElementById("card3").addEventListener("click", () => window.location.href = "3Mar.html");
+      document.getElementById("card4").addEventListener("click", () => window.location.href = "4Abr.html");
+      document.getElementById("card5").addEventListener("click", () => window.location.href = "5Mai.html");
+      document.getElementById("card6").addEventListener("click", () => window.location.href = "6Jun.html");
+      document.getElementById("card7").addEventListener("click", () => window.location.href = "7Jul.html");
+      document.getElementById("card8").addEventListener("click", () => window.location.href = "8Ago.html");
+      document.getElementById("card9").addEventListener("click", () => window.location.href = "9Set.html");
+      document.getElementById("card10").addEventListener("click", () => window.location.href = "10Out.html");
+      document.getElementById("card11").addEventListener("click", () => window.location.href = "11Nov.html");
+      document.getElementById("card12").addEventListener("click", () => window.location.href = "12Dez.html");
+      document.getElementById("card13").addEventListener("click", () => window.location.href = "cartao_de_credito.html");
+      document.getElementById("card14").addEventListener("click", () => window.location.href = "perguntas_frequentes.html");
+      document.getElementById("card15").addEventListener("click", () => window.location.href = "privacy.html");
+      document.getElementById("card16").addEventListener("click", () => window.location.href = "ferramentas.html");
+      document.getElementById("card17").addEventListener("click", () => window.location.href = "dizimo.html");
+      document.getElementById("card18").addEventListener("click", () => window.location.href = "relatorio.html");
     });
   </script>
 </body>

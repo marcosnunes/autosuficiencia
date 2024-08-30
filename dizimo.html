@@ -15,19 +15,19 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
+        <button id="backButton" class="btn btn-default">Voltar</button>
         <span class="brand-logo center">Dízimo</span>
-        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
       </div>
     </nav>
   </div>
   <div class="container">
     <div class="card">
       <div class="card-content">
-        <p>Nesta página você tem os valores dos seus dízimos calculados para cada mês. 
-          Eles não são lançados no cálculo dos resultados de cada mês, apenas são exibidos 
-          aqui e na página de cada mês. Você precisa fazer um lançamento como débito na página do 
-          mês correspondente com o valor que aparece aqui para que o dízimo seja computado e 
+        <p>Nesta página você tem os valores dos seus dízimos calculados para cada mês.
+          Eles não são lançados no cálculo dos resultados de cada mês, apenas são exibidos
+          aqui e na página de cada mês. Você precisa fazer um lançamento como débito na página do
+          mês correspondente com o valor que aparece aqui para que o dízimo seja computado e
           calculado no movimento mensal.</p>
       </div>
     </div>
@@ -88,44 +88,74 @@
         </div>
       </div>
     </div>
-    
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Recupere o valor do dízimo do localStorage para cada mês
-      var januaryTithe = localStorage.getItem("januaryTithe");
-      var februaryTithe = localStorage.getItem("februaryTithe");
-      var marchTithe = localStorage.getItem("marchTithe");
-      var aprilTithe = localStorage.getItem("aprilTithe");
-      var mayTithe = localStorage.getItem("mayTithe");
-      var juneTithe = localStorage.getItem("juneTithe");
-      var julyTithe = localStorage.getItem("julyTithe");
-      var augustTithe = localStorage.getItem("augustTithe");
-      var septemberTithe = localStorage.getItem("septemberTithe");
-      var octoberTithe = localStorage.getItem("octoberTithe");
-      var novemberTithe = localStorage.getItem("novemberTithe");
-      var decemberTithe = localStorage.getItem("decemberTithe");
 
-      // Atualize os elementos HTML com os valores recuperados
-      document.getElementById("januaryTithe").textContent = januaryTithe || "0.00";
-      document.getElementById("februaryTithe").textContent = februaryTithe || "0.00";
-      document.getElementById("marchTithe").textContent = marchTithe || "0.00";
-      document.getElementById("aprilTithe").textContent = aprilTithe || "0.00";
-      document.getElementById("mayTithe").textContent = mayTithe || "0.00";
-      document.getElementById("juneTithe").textContent = juneTithe || "0.00";
-      document.getElementById("julyTithe").textContent = julyTithe || "0.00";
-      document.getElementById("augustTithe").textContent = augustTithe || "0.00";
-      document.getElementById("septemberTithe").textContent = septemberTithe || "0.00";
-      document.getElementById("octoberTithe").textContent = octoberTithe || "0.00";
-      document.getElementById("novemberTithe").textContent = novemberTithe || "0.00";
-      document.getElementById("decemberTithe").textContent = decemberTithe || "0.00";
-    });
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="module">
+      // Importa os módulos necessários do Firebase
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+      import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+      import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
-    function redirectToIndex() {
-      window.location.href = 'index.html';
-    }
+      // Configuração do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+        authDomain: "web-app-autossuficiencia.firebaseapp.com",
+        databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
+        projectId: "web-app-autossuficiencia",
+        appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+      };
 
-  </script>
+      // Inicializa o Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const database = getDatabase(app);
+
+      // Verificação do estado de autenticação
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // Usuário autenticado, carregar os dados
+          loadDataFromDatabase(user.uid);
+        } else {
+          // Usuário não autenticado, redirecionar para a página de login
+          window.location.href = "login.html";
+        }
+      });
+
+      function loadDataFromDatabase(userId) {
+        // Referência aos dados do usuário no Firebase
+        const userRef = ref(database, 'users/' + userId);
+
+        // Listener para carregar os dados do dízimo de cada mês
+        onValue(userRef, (snapshot) => {
+          const userData = snapshot.val();
+
+          // Atualiza os elementos HTML com os valores do dízimo
+          document.getElementById("januaryTithe").textContent = (userData.january && userData.january.tithe) ? userData.january.tithe : "0.00";
+          document.getElementById("februaryTithe").textContent = (userData.february && userData.february.tithe) ? userData.february.tithe : "0.00";
+          document.getElementById("marchTithe").textContent = (userData.march && userData.march.tithe) ? userData.march.tithe : "0.00";
+          document.getElementById("aprilTithe").textContent = (userData.april && userData.april.tithe) ? userData.april.tithe : "0.00";
+          document.getElementById("mayTithe").textContent = (userData.may && userData.may.tithe) ? userData.may.tithe : "0.00";
+          document.getElementById("juneTithe").textContent = (userData.june && userData.june.tithe) ? userData.june.tithe : "0.00";
+          document.getElementById("julyTithe").textContent = (userData.july && userData.july.tithe) ? userData.july.tithe : "0.00";
+          document.getElementById("augustTithe").textContent = (userData.august && userData.august.tithe) ? userData.august.tithe : "0.00";
+          document.getElementById("septemberTithe").textContent = (userData.september && userData.september.tithe) ? userData.september.tithe : "0.00";
+          document.getElementById("octoberTithe").textContent = (userData.october && userData.october.tithe) ? userData.october.tithe : "0.00";
+          document.getElementById("novemberTithe").textContent = (userData.november && userData.november.tithe) ? userData.november.tithe : "0.00";
+          document.getElementById("decemberTithe").textContent = (userData.december && userData.december.tithe) ? userData.december.tithe : "0.00";
+
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('backButton').addEventListener('click', function () {
+          window.history.back();
+        });
+        document.getElementById('nextButton').addEventListener('click', function () {
+          window.history.back();
+        });
+      });
+
+    </script>
 </body>
 
 </html>

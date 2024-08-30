@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -8,6 +9,7 @@
   <style>
   </style>
 </head>
+
 <body>
   <canvas id="chart"></canvas>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -30,23 +32,31 @@
       ];
 
       monthlyData.forEach(function (month) {
-        var monthData = JSON.parse(localStorage.getItem(month.key));
-        month.value = monthData && monthData.total ? parseFloat(monthData.total) : 0;
-        var debitTotal = 0;
-        var creditTotal = 0;
-        if (monthData && monthData.rows) {
-          monthData.rows.forEach(function (row) {
-            if (!isNaN(parseFloat(row.debit))) {
-              debitTotal += parseFloat(row.debit);
-            }
-            if (!isNaN(parseFloat(row.credit))) {
-              creditTotal += parseFloat(row.credit);
-            }
-          });
+        var monthData = localStorage.getItem(month.key);
+        if (monthData) {
+          monthData = JSON.parse(monthData);
+          month.value = monthData.total ? parseFloat(monthData.total) : 0;
+          var debitTotal = 0;
+          var creditTotal = 0;
+          if (monthData.rows) {
+            monthData.rows.forEach(function (row) {
+              if (!isNaN(parseFloat(row.debit))) {
+                debitTotal += parseFloat(row.debit);
+              }
+              if (!isNaN(parseFloat(row.credit))) {
+                creditTotal += parseFloat(row.credit);
+              }
+            });
+          }
+          month.debit = debitTotal;
+          month.credit = creditTotal;
+        } else {
+          month.value = 0;
+          month.debit = 0;
+          month.credit = 0;
         }
-        month.debit = debitTotal;
-        month.credit = creditTotal;
       });
+
 
       var labels = monthlyData.map(function (month) {
         return month.month;
@@ -103,4 +113,5 @@
     });
   </script>
 </body>
+
 </html>

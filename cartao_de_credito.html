@@ -15,21 +15,13 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
+        <button id="backButton" class="btn btn-default">Voltar</button>
         <span class="brand-logo center">Cartão</span>
-        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
       </div>
     </nav>
   </div>
   <div class="container">
-    <div class="card">
-      <div class="card-content">
-        <p>O valor da fatura também é exibido na página do mês referente. Você precisará 
-          fazer um lançamento de débito com o dia do vencimento da sua fatura e com o valor 
-          da fatura que é exibido para que seja computado no saldo do dia e no saldo final.
-        </p>
-      </div>
-    </div>
     <div class="balance-value" id="balanceValue">
       <div class="card">
         <div class="card-content">
@@ -90,7 +82,6 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">Registrar compra</span>
-        <p>Se a compra foi realizada em dezembro e a 1ª parcela for em Janeiro, não selecione o <b>Mês da compra</b> para fazer o lançamento.</p>
         <div class="input-field">
           <select class="month-select form-control" id="month">
             <option value="" disabled selected>Mês da compra</option>
@@ -120,211 +111,293 @@
           <input type="number" class="value form-control" id="billingValue" placeholder="Valor da Compra">
           <label for="billingValue">Valor da Compra</label>
         </div>
-        <button onclick="addData()" id="addButton" class="btn btn-default">Adicionar</button>
+        <button id="addButton" class="btn btn-default">Adicionar</button>
       </div>
     </div>
     <div id="groupedCardContainer"></div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script>
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var monthsPT = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-    var ano = new Date().getFullYear();
-    var data = [];
-    document.addEventListener('DOMContentLoaded', function () {
-      M.AutoInit();
-      loaddata();
-      updateGroupedCardContainer();
-      createLocalStorageKeys();
-      console.log(localStorage); // Exibir o conteúdo do localStorage no console
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getDatabase, ref, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiencia.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
+      projectId: "web-app-autossuficiencia",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    let data = [];
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loadDataFromDatabase(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
     });
+
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthsPT = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    function loadDataFromDatabase(userId) {
+      const dataRef = ref(database, `creditCardData/${userId}`);
+      onValue(dataRef, (snapshot) => {
+        const fetchedData = snapshot.val();
+        if (fetchedData) {
+          // Assumindo que fetchedData é um objeto com IDs como chaves
+          data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
+          console.log("Dados carregados:", data); // Depuração
+          updateGroupedCardContainer();
+          updateCardBalances();
+        }
+      });
+    }
+
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-          v = c == 'x' ? r : (r & 0x3 | 0x8);
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
     }
-    function redirectToIndex() {
-      window.location.href = 'index.html';
+
+    function addItemToDatabase(userId, item) {
+      const itemId = uuidv4();
+      const itemRef = ref(database, `creditCardData/${userId}/${itemId}`);
+      set(itemRef, { ...item, id: itemId }) // Incluindo o ID no item
+        .then(() => {
+          console.log("Item adicionado com sucesso.");
+          loadDataFromDatabase(userId);
+        })
+        .catch((error) => {
+          console.error("Erro ao adicionar item:", error);
+        });
     }
-    function savedata() {
-      localStorage.setItem('creditCardData', JSON.stringify(data));
-    }
-    function loaddata() {
-      var storedData = localStorage.getItem('creditCardData');
-      if (storedData) {
-        data = JSON.parse(storedData);
-        updateGroupedCardContainer();
-      }
-    }
-    function updateGroupedCardContainer() {
-      var groupedCardContainer = document.getElementById("groupedCardContainer");
-      groupedCardContainer.innerHTML = "";
-      var monthSums = {};
-      var currentYear = new Date().getFullYear();
-      for (var i = 0; i < data.length; i++) {
-        var groupedCard = createGroupedCard(data[i].id, data[i].month, data[i].description, data[i].purchases);
-        groupedCardContainer.appendChild(groupedCard);
-        for (var j = 0; j < data[i].purchases.length; j++) {
-          var purchase = data[i].purchases[j];
-          if (parseInt(purchase.description.split("(")[1]) !== currentYear) {
-            continue;
-          }
-          var monthKey = purchase.month.toLowerCase();
-          if (!monthSums[monthKey]) {
-            monthSums[monthKey] = 0;
-          }
-          monthSums[monthKey] += parseFloat(purchase.value);
-        }
-      }
-      for (var monthKey in monthSums) {
-        if (monthSums.hasOwnProperty(monthKey)) {
-          var monthBalanceElement = document.getElementById(monthKey + "CreditCardBalance");
-          if (monthBalanceElement) {
-            monthBalanceElement.textContent = monthSums[monthKey].toFixed(2);
-          }
-        }
-      }
-    }
-    function addData() {
-      var selectedMonthIndex = document.getElementById("month").selectedIndex;
-      var description = document.getElementById("description").value;
-      var value = parseFloat(document.getElementById("billingValue").value);
-      var multiplicator = parseInt(document.getElementById("multiplicator").value);
-      if (description.trim() !== '' && !isNaN(value) && value > 0 && multiplicator > 0) {
-        var id = uuidv4();
-        var monthIndex = selectedMonthIndex;
-        var month = months[monthIndex];
-        var groupedCardIndex = -1;
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].month === month && data[i].description === description) {
-            groupedCardIndex = i;
-            break;
-          }
-        }
-        if (groupedCardIndex === -1) {
-          var newGroupedCard = {
-            id: id,
-            month: month,
-            description: description,
-            purchases: []
-          };
-          data.push(newGroupedCard);
-          groupedCardIndex = data.length - 1;
-        }
-        var dividedValue = (value / multiplicator).toFixed(2);
-        var currentMonthIndex = monthIndex;
-        for (var i = 0; i < multiplicator; i++) {
-          var purchase = {
-            id: uuidv4(),
-            month: months[currentMonthIndex],
-            description: monthsPT[currentMonthIndex] + " - Parc. " + (i + 1) + " (" + ano + ")",
-            value: dividedValue
-          };
-          data[groupedCardIndex].purchases.push(purchase);
-          currentMonthIndex = (currentMonthIndex + 1) % 12;
-          if (currentMonthIndex === 0) {
-            ano++;
-          }
-        }
-        savedata();
-        updateGroupedCardContainer();
-        clearForm();
-        location.reload();
-      } else {
+
+    function addItem() {
+      const userId = auth.currentUser.uid;
+      const month = document.getElementById('month').value;
+      const description = document.getElementById('description').value;
+      const multiplicator = parseInt(document.getElementById('multiplicator').value);
+      const billingValue = parseFloat(document.getElementById('billingValue').value);
+
+      if (!month || !description || isNaN(multiplicator) || isNaN(billingValue)) {
         alert("Por favor, preencha todos os campos corretamente.");
+        return;
       }
+
+      const valuePerMonth = billingValue / multiplicator;
+      const items = [];
+      let currentMonthIndex = months.indexOf(month);
+      let currentYear = new Date().getFullYear();
+
+      for (let i = 0; i < multiplicator; i++) {
+        const monthName = monthsPT[currentMonthIndex];
+        const yearMonth = `${monthName} ${currentYear}`;
+        items.push({
+          month: yearMonth,
+          description: description,
+          value: valuePerMonth
+        });
+
+        currentMonthIndex = (currentMonthIndex + 1) % 12;
+        if (currentMonthIndex === 0) {
+          currentYear++;
+        }
+      }
+
+      items.forEach(item => addItemToDatabase(userId, item));
+
+      // Limpar os campos de entrada e a caixa de seleção
+      document.getElementById('month').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('multiplicator').value = '';
+      document.getElementById('billingValue').value = '';
+      M.FormSelect.init(document.querySelectorAll('select'), {}); // Re-inicializar caixa de seleção
     }
-    function createGroupedCard(id, month, description, purchases) {
-      var groupedCard = document.createElement("div");
-      groupedCard.classList.add("card");
-      var cardContent = document.createElement("div");
-      cardContent.classList.add("card-content");
-      var cardTitle = document.createElement("span");
-      cardTitle.classList.add("card-title");
-      var monthIndex = months.indexOf(month);
-      var monthPT = monthsPT[monthIndex];
-      cardTitle.textContent = description + " (" + monthPT + " " + ano + ")";
-      var ul = document.createElement("ul");
-      var total = 0;
-      for (var i = 0; i < purchases.length; i++) {
-        var li = document.createElement("li");
-        li.textContent = purchases[i].description + ": R$ " + purchases[i].value;
-        total += parseFloat(purchases[i].value);
-        ul.appendChild(li);
-      }
-      var totalLi = document.createElement("li");
-      totalLi.textContent = "Total: R$ " + total.toFixed(2);
-      ul.appendChild(totalLi);
-      var deleteGroupButton = document.createElement("button");
-      deleteGroupButton.textContent = "Excluir compra";
-      deleteGroupButton.classList.add("btn", "btn-small", "btn-delete-group");
-      deleteGroupButton.addEventListener("click", function () {
-        deleteGroup(id);
+
+    function updateCardBalances() {
+      const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+      const monthsAbbreviation = [
+        { id: 'januaryCreditCardBalance', month: 'Janeiro' },
+        { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
+        { id: 'marchCreditCardBalance', month: 'Março' },
+        { id: 'aprilCreditCardBalance', month: 'Abril' },
+        { id: 'mayCreditCardBalance', month: 'Maio' },
+        { id: 'juneCreditCardBalance', month: 'Junho' },
+        { id: 'julyCreditCardBalance', month: 'Julho' },
+        { id: 'augustCreditCardBalance', month: 'Agosto' },
+        { id: 'septemberCreditCardBalance', month: 'Setembro' },
+        { id: 'octoberCreditCardBalance', month: 'Outubro' },
+        { id: 'novemberCreditCardBalance', month: 'Novembro' },
+        { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+      ];
+
+      monthsAbbreviation.forEach(({ id, month }) => {
+        const element = document.getElementById(id);
+        if (element) {
+          const filteredData = data.filter(item => {
+            // Filtra as faturas para incluir apenas as do ano corrente e do mês específico
+            const [itemMonth, itemYear] = item.month.split(' ');
+            return itemMonth === month && parseInt(itemYear) === currentYear;
+          });
+          const totalValue = filteredData.reduce((acc, item) => acc + item.value, 0);
+          element.textContent = totalValue.toFixed(2);
+        }
       });
-      ul.appendChild(deleteGroupButton);
-      cardContent.appendChild(cardTitle);
-      cardContent.appendChild(ul);
-      groupedCard.appendChild(cardContent);
-      return groupedCard;
+
+      // Atualiza os valores no banco de dados
+      const userId = auth.currentUser.uid;
+      updateBalancesInDatabase(userId);
     }
-    function deleteGroup(groupedCardId) {
-      var groupedCardIndex = data.findIndex(function (item) {
-        return item.id === groupedCardId;
+
+    function updateBalancesInDatabase(userId) {
+      const balanceElements = [
+        { id: 'januaryCreditCardBalance', month: 'Janeiro' },
+        { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
+        { id: 'marchCreditCardBalance', month: 'Março' },
+        { id: 'aprilCreditCardBalance', month: 'Abril' },
+        { id: 'mayCreditCardBalance', month: 'Maio' },
+        { id: 'juneCreditCardBalance', month: 'Junho' },
+        { id: 'julyCreditCardBalance', month: 'Julho' },
+        { id: 'augustCreditCardBalance', month: 'Agosto' },
+        { id: 'septemberCreditCardBalance', month: 'Setembro' },
+        { id: 'octoberCreditCardBalance', month: 'Outubro' },
+        { id: 'novemberCreditCardBalance', month: 'Novembro' },
+        { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+      ];
+
+      balanceElements.forEach(({ id, month }) => {
+        const element = document.getElementById(id);
+        if (element) {
+          const value = parseFloat(element.textContent) || 0;
+          const monthRef = ref(database, `creditCardBalances/${userId}/${id}`);
+          set(monthRef, value)
+            .then(() => {
+              console.log(`${id} atualizado no banco de dados com valor ${value}.`);
+            })
+            .catch((error) => {
+              console.error(`Erro ao atualizar ${id} no banco de dados:`, error);
+            });
+        }
       });
-      if (groupedCardIndex !== -1) {
-        var groupToDelete = data[groupedCardIndex];
-        var monthSums = {};
-        for (var i = 0; i < data.length; i++) {
-          if (i !== groupedCardIndex) {
-            for (var j = 0; j < data[i].purchases.length; j++) {
-              var purchase = data[i].purchases[j];
-              var monthKey = purchase.month.toLowerCase();
-              if (!monthSums[monthKey]) {
-                monthSums[monthKey] = 0;
-              }
-              monthSums[monthKey] += parseFloat(purchase.value);
-            }
-          }
-        }
-        for (var k = 0; k < groupToDelete.purchases.length; k++) {
-          var deletedPurchase = groupToDelete.purchases[k];
-          var monthKey = deletedPurchase.month.toLowerCase();
-          if (!monthSums[monthKey]) {
-            monthSums[monthKey] = 0;
-          }
-          monthSums[monthKey] += parseFloat(deletedPurchase.value);
-        }
-        localStorage.removeItem('creditCardData');
-        for (var monthKey in monthSums) {
-          if (monthSums.hasOwnProperty(monthKey)) {
-            var monthBalanceElement = document.getElementById(monthKey + "CreditCardBalance");
-            if (monthBalanceElement) {
-              monthBalanceElement.textContent = monthSums[monthKey].toFixed(2);
-            }
-          }
-        }
-        data.splice(groupedCardIndex, 1);
-        savedata();
-        location.reload();
-      }
     }
-    function clearForm() {
-      document.getElementById("month").value = "";
-      document.getElementById("description").value = "";
-      document.getElementById("multiplicator").value = "";
-      document.getElementById("billingValue").value = "";
+
+    function updateGroupedCardContainer() {
+      const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+      const container = document.getElementById('groupedCardContainer');
+      container.innerHTML = '';
+
+      const groupedData = data.reduce((acc, item) => {
+        const [itemMonth, itemYear] = item.month.split(' ');
+        if (parseInt(itemYear) === currentYear) {
+          if (!acc[item.description]) {
+            acc[item.description] = [];
+          }
+          acc[item.description].push(item);
+        }
+        return acc;
+      }, {});
+
+      Object.keys(groupedData).forEach(description => {
+        const items = groupedData[description];
+        items.sort((a, b) => {
+          const [monthA, yearA] = a.month.split(' ');
+          const [monthB, yearB] = b.month.split(' ');
+
+          const monthIndexA = monthsPT.indexOf(monthA);
+          const monthIndexB = monthsPT.indexOf(monthB);
+
+          if (yearA !== yearB) {
+            return parseInt(yearA) - parseInt(yearB);
+          }
+
+          return monthIndexA - monthIndexB;
+        });
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        const cardContent = document.createElement('div');
+        cardContent.className = 'card-content';
+
+        const title = document.createElement('span');
+        title.className = 'card-title';
+        title.textContent = description;
+        cardContent.appendChild(title);
+
+        items.forEach(item => {
+          const paragraph = document.createElement('p');
+          paragraph.textContent = `${item.month}: R$ ${item.value.toFixed(2)}`;
+          cardContent.appendChild(paragraph);
+        });
+
+        // Botão de exclusão do card
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'btn-delete';
+        deleteButton.textContent = 'Excluir';
+        deleteButton.addEventListener('click', () => deleteCard(description));
+        cardContent.appendChild(deleteButton);
+
+        card.appendChild(cardContent);
+        container.appendChild(card);
+      });
     }
-    function createLocalStorageKeys() {
-      var months = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
-      for (var i = 0; i < months.length; i++) {
-        var monthKey = months[i] + "CreditCardBalance";
-        var monthBalanceElement = document.getElementById(monthKey);
-        var monthBalance = monthBalanceElement.textContent;
-        localStorage.setItem(monthKey, monthBalance);
-      }
+
+    function deleteCard(description) {
+      const userId = auth.currentUser.uid;
+
+      // Filtra os IDs dos itens que precisam ser excluídos
+      const itemsToDelete = data.filter(item => item.description === description);
+
+      // Remover todos os itens associados a essa descrição
+      const deletePromises = itemsToDelete.map(item => {
+        const itemRef = ref(database, `creditCardData/${userId}/${item.id}`);
+        return remove(itemRef)
+          .then(() => {
+            console.log(`Item ${item.id} excluído com sucesso.`);
+          })
+          .catch((error) => {
+            console.error("Erro ao excluir item:", error);
+          });
+      });
+
+      // Após excluir todos os itens, recarregue a página
+      Promise.all(deletePromises).then(() => {
+        // Recarregar a página para atualizar a interface
+        window.location.reload();
+      });
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems, {});
+      document.getElementById('addButton').addEventListener('click', function () {
+        addItem();
+        updateGroupedCardContainer();
+        updateCardBalances();
+      });
+      document.getElementById('backButton').addEventListener('click', function () {
+        window.history.back();
+      });
+      document.getElementById('nextButton').addEventListener('click', function () {
+        window.history.back();
+      });
+    });
   </script>
 </body>
 

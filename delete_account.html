@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Excluir Conta</title>
+</head>
+
+<body>
+  <div class="container-auth">
+    <div class="auth-form">
+      <h5 class="center">Excluir Conta</h5>
+      <p>Para excluir sua conta, digite seu endereço de email abaixo e clique no botão "Excluir Conta".
+        Esta ação é irreversível e apagará todos os seus dados do sistema.</p>
+      <div class="input-field">
+        <input type="email" id="deleteEmail" placeholder=" " required>
+        <label for="deleteEmail">Email</label>
+      </div>
+      <button onclick="deleteAccount()" class="btn red">Excluir Conta</button>
+      <p id="delete-error-message" class="red-text center"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getAuth, deleteUser } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiência.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiência-default-rtdb.firebaseio.com/",
+      projectId: "web-app-autossuficiência",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.deleteAccount = function () {
+      const email = document.getElementById('deleteEmail').value;
+
+      // Verifica se o email fornecido é válido e se o usuário está autenticado
+      if (email) {
+        // Obtem o usuário atual
+        const user = auth.currentUser;
+
+        // Verifica se o usuário está autenticado
+        if (user) {
+          // Tenta excluir a conta, mas primeiro verifica se o email do usuário é o mesmo que o fornecido
+          if (user.email.toLowerCase() === email.toLowerCase()) {
+            deleteUser(user)
+              .then(() => {
+                console.log("Conta do usuário deletada com sucesso!");
+                alert("Conta deletada com sucesso. Você será redirecionado para a página de login.");
+                window.location.href = "login.html"; // Redireciona para a página de login após excluir
+              })
+              .catch((error) => {
+                console.error("Erro ao deletar conta do usuário: ", error);
+                document.getElementById('delete-error-message').textContent = "Erro ao deletar conta. Tente novamente.";
+              });
+          } else {
+            document.getElementById('delete-error-message').textContent = "O email informado não é válido. Verifique e tente novamente.";
+          }
+        } else {
+          // Se o usuário não estiver autenticado, exibe uma mensagem de erro
+          document.getElementById('delete-error-message').textContent = "Você precisa estar logado para excluir sua conta.";
+        }
+      } else {
+        // Se o email não foi fornecido, exibe uma mensagem de erro
+        document.getElementById('delete-error-message').textContent = "Por favor, insira seu email.";
+      }
+    };
+
+  </script>
+</body>
+
+</html>

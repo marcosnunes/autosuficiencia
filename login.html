@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Login</title>
+</head>
+
+<body>
+  <div class="container-auth">
+    <div class="auth-form">
+      <h5 class="center">Login</h5>
+      <div class="input-field">
+        <input type="email" id="loginEmail" placeholder=" " required>
+        <label for="loginEmail">Email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" placeholder=" " required>
+        <label for="password">Senha</label>
+      </div>
+      <button onclick="login()" class="btn">Login</button>
+      <p class="center">
+        <a href="signup.html">Cadastrar-se</a> |
+        <a href="#" onclick="forgotPassword()">Esqueci minha senha</a>
+      <p id="error-message" class="red-text center"></p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+      authDomain: "web-app-autossuficiência.firebaseapp.com",
+      databaseURL: "https://web-app-autossuficiência-default-rtdb.firebaseio.com/",
+      projectId: "web-app-autossuficiência",
+      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.login = function () {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          let errorMessage = "Erro desconhecido.";
+          if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado. Verifique o e-mail e tente novamente.";
+          } else if (error.code === 'auth/wrong-password') {
+            errorMessage = "Senha incorreta. Verifique a senha e tente novamente.";
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "E-mail inválido. Verifique o e-mail e tente novamente.";
+          }
+          document.getElementById('error-message').textContent = errorMessage;
+        });
+    };
+
+    window.forgotPassword = function () {
+      const email = document.getElementById('loginEmail').value;
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          alert('Um email para redefinir sua senha foi enviado!');
+        })
+        .catch((error) => {
+          let errorMessage = "Digite seu email";
+          if (error.code === 'auth/user-not-found') {
+            errorMessage = "Usuário não encontrado. Verifique o e-mail e tente novamente.";
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = "E-mail inválido. Verifique o e-mail e tente novamente.";
+          }
+          document.getElementById('error-message').textContent = errorMessage;
+        });
+    };
+
+  </script>
+</body>
+
+</html>

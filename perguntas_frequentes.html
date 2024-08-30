@@ -13,9 +13,9 @@
   <div class="navigation">
     <nav>
       <div class="nav-wrapper">
-        <button onclick="redirectToIndex()" class="btn btn-default">&lt;</button>
-        <span class="brand-logo center">FAQ</span>
-        <button onclick="redirectToIndex()" class="btn btn-default">&gt;</button>
+        <button id="backButton" class="btn btn-default">Voltar</button>
+        <span class="brand-logo center">Janeiro</span>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
       </div>
     </nav>
   </div>
@@ -88,10 +88,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   <script>
-    // Redirecionar para outras páginas
-    function redirectToIndex() {
-      window.location.href = 'index.html';
-    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('backButton').addEventListener('click', function () {
+        window.history.back();
+      });
+      document.getElementById('nextButton').addEventListener('click', function () {
+        window.history.back();
+      });
+    });
+    
   </script>
 </body>
 

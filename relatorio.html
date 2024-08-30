@@ -112,6 +112,11 @@
     ];
 
     let launchData = {};
+    let debitTotal = 0;
+    let creditTotal = 0;
+    let creditCardBalanceTotal = 0;
+    let balance = 0;
+    let percentage = 0;
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -192,9 +197,9 @@
     }
 
     function calculateAnnualTotals(yearData) {
-      let creditTotal = 0;
-      let debitTotal = 0;
-      let creditCardBalanceTotal = 0;
+      creditTotal = 0;
+      debitTotal = 0;
+      creditCardBalanceTotal = 0;
 
       for (const month in yearData) {
         const monthData = yearData[month];
@@ -222,8 +227,8 @@
         creditCardBalanceTotal += parseFloat(yearData.creditCard.decemberCreditCardBalance) || 0;
       }
 
-      const balance = creditTotal - debitTotal - creditCardBalanceTotal;
-      const percentage =
+      balance = creditTotal - debitTotal - creditCardBalanceTotal;
+      percentage =
         creditTotal > 0
           ? ((debitTotal + creditCardBalanceTotal) /
             (creditTotal + creditCardBalanceTotal)) *

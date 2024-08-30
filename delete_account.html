@@ -20,6 +20,7 @@
         <label for="deleteEmail">Email</label>
       </div>
       <button onclick="deleteAccount()" class="btn red">Excluir Conta</button>
+      <button onclick="goback()" class="btn btn-default">Desistir</button>
       <p id="delete-error-message" class="red-text center"></p>
     </div>
   </div>
@@ -38,6 +39,11 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+
+    // Função para voltar
+    window.goback = function () {
+      window.location.href = "index.html"; // Redireciona para a página inicial
+    };
 
     window.deleteAccount = function () {
       const email = document.getElementById('deleteEmail').value;

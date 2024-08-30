@@ -162,12 +162,11 @@
 
     // Função de excluir conta
     window.deleteAccount = function () {
-      signOut(auth).then(() => {
-        window.location.href = "delete_account.html"; // Redireciona para a página de exclusão de conta
-      });
+      window.location.href = "delete_account.html"; // Redireciona para a página de exclusão de conta
     };
 
-    
+
+
     // Função para limpar os dados do Firebase Realtime Database e localStorage
     function limparDados() {
       // Limpar localStorage

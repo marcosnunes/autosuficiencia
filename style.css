@@ -8,6 +8,9 @@
   #pdfButton {
     display: none !important;
   }
+  .brand-logo {
+    font-size: 10px;
+  }
 }
 
 /* Redefine as margens e outros estilos para a impressão */

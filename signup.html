@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="style.css">
   <title>Cadastro</title>
+</head>
+
+<body>
+  <div class="container-auth">
+    <div class="auth-form">
+      <h5 class="center">Cadastro</h5>
+      <div class="input-field">
+        <input type="email" id="email" placeholder=" " required>
+        <label for="email">Email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" id="password" placeholder=" " required>
+        <label for="password">Senha</label>
+      </div>
+      <button onclick="signup()" class="btn">Cadastrar</button>
+      <p class="center">Já tem uma conta? <a href="login.html">Login</a></p>
+      <p id="error-message" class="red-text center"></p>
+    </div>
+  </div>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
     import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
@@ -21,7 +41,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.signup = function() {
+    window.signup = function () {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
@@ -42,23 +62,6 @@
         });
     };
   </script>
-</head>
-<body>
-  <div class="container-auth">
-    <div class="auth-form">
-      <h5 class="center">Cadastro</h5>
-      <div class="input-field">
-        <input type="email" id="email" placeholder=" " required>
-        <label for="email">Email</label>
-      </div>
-      <div class="input-field">
-        <input type="password" id="password" placeholder=" " required>
-        <label for="password">Senha</label>
-      </div>
-      <button onclick="signup()" class="btn">Cadastrar</button>
-      <p class="center">Já tem uma conta? <a href="login.html">Login</a></p>
-      <p id="error-message" class="red-text center"></p>
-    </div>
-  </div>
 </body>
+
 </html>

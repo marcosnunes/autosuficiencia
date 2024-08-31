@@ -427,6 +427,17 @@
   max-width: 400px;
   width: 100%;
 }
+
+/* Estilo para o campo de email, igualando ao campo de senha */
+#email {
+  padding: 5px 0; /* Ajusta o padding para o campo de email */
+  margin-top: 20px; /* Espaçamento superior para o campo de email */
+}
+
+/* Corrige o comportamento do placeholder para campos de email */
+.input-field input[type="email"]::placeholder {
+  color: transparent; /* Faz com que o placeholder fique invisível para campos de email, para usar a label */
+}
 .auth-form h5 {
   margin-bottom: 1rem;
 }

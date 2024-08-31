@@ -26,7 +26,10 @@
       <div class="card-content">
         <p>
           Selecione a moeda desejada para aplicar o câmbio e visualizar o seu
-          relatório anual em Euros, Dólares ou Libras Esterlinas
+          relatório anual em Euros, Dólares ou Libras Esterlinas. Para que o saldo 
+          do cartão de crédito seja exibido corretamente, é importante percorrer todos 
+          os meses do ano para atualização dos saldos finais devido à dependencia destes 
+          valores entre si.
         </p>
       </div>
     </div>
@@ -112,6 +115,11 @@
     ];
 
     let launchData = {};
+    let debitTotal = 0;
+    let creditTotal = 0;
+    let creditCardBalanceTotal = 0;
+    let balance = 0;
+    let percentage = 0;
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -192,9 +200,9 @@
     }
 
     function calculateAnnualTotals(yearData) {
-      let creditTotal = 0;
-      let debitTotal = 0;
-      let creditCardBalanceTotal = 0;
+      creditTotal = 0;
+      debitTotal = 0;
+      creditCardBalanceTotal = 0;
 
       for (const month in yearData) {
         const monthData = yearData[month];
@@ -222,8 +230,8 @@
         creditCardBalanceTotal += parseFloat(yearData.creditCard.decemberCreditCardBalance) || 0;
       }
 
-      const balance = creditTotal - debitTotal - creditCardBalanceTotal;
-      const percentage =
+      balance = creditTotal - debitTotal - creditCardBalanceTotal;
+      percentage =
         creditTotal > 0
           ? ((debitTotal + creditCardBalanceTotal) /
             (creditTotal + creditCardBalanceTotal)) *

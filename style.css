@@ -4,9 +4,12 @@
 }
 
 /* Oculta o botão PDF em telas menores */
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 1100px) {
   #pdfButton {
     display: none !important;
+  }
+  .nav-wrapper .brand-logo {
+    font-size: 18px !important;
   }
 }
 
@@ -60,7 +63,6 @@
     text-align: center;
   }
 }
-
 
 #home {
   cursor: pointer;

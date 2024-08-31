@@ -66,7 +66,7 @@
     };
 
     window.forgotPassword = function () {
-      const email = document.getElementById('loginEmail').value;
+      const email = document.getElementById('email').value;
 
       sendPasswordResetEmail(auth, email)
         .then(() => {

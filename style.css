@@ -8,9 +8,6 @@
   #pdfButton {
     display: none !important;
   }
-  .nav-wrapper .brand-logo {
-    font-size: 10px !important;
-  }
 }
 
 /* Redefine as margens e outros estilos para a impressão */
@@ -63,7 +60,6 @@
     text-align: center;
   }
 }
-
 
 #home {
   cursor: pointer;
@@ -361,6 +357,11 @@
 .nav-wrapper .btn {
   margin: 0 5px;
   /* Margem horizontal entre os botões */
+}
+
+
+.nav-wrapper .brand-logo {
+  font-size: 10px;
 }
 
 /* Estilo para o container de lançamentos anuais */

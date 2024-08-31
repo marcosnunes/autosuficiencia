@@ -347,7 +347,7 @@
         const deleteButton = document.createElement('button');
         deleteButton.className = 'btn-delete';
         deleteButton.textContent = 'Excluir';
-        deleteButton.addEventListener('click', () => deleteCard(description, items[0].month));
+        deleteButton.addEventListener('click', () => deleteCard(description, items));
         cardContent.appendChild(deleteButton);
 
         card.appendChild(cardContent);
@@ -355,11 +355,32 @@
       });
     }
 
-    function deleteCard(description, initialMonth) {
+    function loadDataFromDatabase(userId) {
+      const dataRef = ref(database, `creditCardData/${userId}`);
+      onValue(dataRef, (snapshot) => {
+        const fetchedData = snapshot.val();
+        if (fetchedData) {
+          data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
+          console.log("Dados carregados:", data); // Depuração
+          // Atualiza a interface
+          updateGroupedCardContainer();
+          updateCardBalances();
+        }
+      });
+    }
+
+    function deleteCard(description, items) {
       const userId = auth.currentUser.uid;
+
+      // Pegar o primeiro mês e ano do lançamento
+      const initialMonth = items[0].month.split(' ')[0];
+      const initialYear = parseInt(items[0].month.split(' ')[1]);
+
       const itemsToDelete = data.filter(item => {
-        // Verifica se a descrição é a mesma e se o mês é igual ou posterior ao mês inicial da parcela
-        return item.description === description && monthsPT.indexOf(item.month.split(' ')[0]) >= monthsPT.indexOf(initialMonth.split(' ')[0]);
+        const [itemMonth, itemYear] = item.month.split(' ');
+        // Comparar o mês e ano atual com o mês e ano do lançamento
+        return item.description === description &&
+          (parseInt(itemMonth) >= parseInt(initialMonth) && parseInt(itemYear) >= initialYear);
       });
 
       const deletePromises = itemsToDelete.map(item => {
@@ -374,7 +395,8 @@
       });
 
       Promise.all(deletePromises).then(() => {
-        window.location.reload(); // Recarregar para atualizar a interface
+        // Atualiza a interface manualmente
+        loadDataFromDatabase(userId); // Carrega os dados novamente para atualizar a interface
       });
     }
 

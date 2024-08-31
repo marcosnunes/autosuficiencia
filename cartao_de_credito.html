@@ -159,7 +159,6 @@
       onValue(dataRef, (snapshot) => {
         const fetchedData = snapshot.val();
         if (fetchedData) {
-          // Assumindo que fetchedData é um objeto com IDs como chaves
           data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
           console.log("Dados carregados:", data); // Depuração
           updateGroupedCardContainer();
@@ -179,7 +178,7 @@
     function addItemToDatabase(userId, item) {
       const itemId = uuidv4();
       const itemRef = ref(database, `creditCardData/${userId}/${itemId}`);
-      set(itemRef, { ...item, id: itemId }) // Incluindo o ID no item
+      set(itemRef, { ...item, id: itemId })
         .then(() => {
           console.log("Item adicionado com sucesso.");
           loadDataFromDatabase(userId);
@@ -232,7 +231,7 @@
     }
 
     function updateCardBalances() {
-      const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+      const currentYear = new Date().getFullYear();
       const monthsAbbreviation = [
         { id: 'januaryCreditCardBalance', month: 'Janeiro' },
         { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
@@ -252,7 +251,6 @@
         const element = document.getElementById(id);
         if (element) {
           const filteredData = data.filter(item => {
-            // Filtra as faturas para incluir apenas as do ano corrente e do mês específico
             const [itemMonth, itemYear] = item.month.split(' ');
             return itemMonth === month && parseInt(itemYear) === currentYear;
           });
@@ -261,7 +259,6 @@
         }
       });
 
-      // Atualiza os valores no banco de dados
       const userId = auth.currentUser.uid;
       updateBalancesInDatabase(userId);
     }
@@ -299,7 +296,7 @@
     }
 
     function updateGroupedCardContainer() {
-      const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+      const currentYear = new Date().getFullYear();
       const container = document.getElementById('groupedCardContainer');
       container.innerHTML = '';
 
@@ -350,7 +347,7 @@
         const deleteButton = document.createElement('button');
         deleteButton.className = 'btn-delete';
         deleteButton.textContent = 'Excluir';
-        deleteButton.addEventListener('click', () => deleteCard(description));
+        deleteButton.addEventListener('click', () => deleteCard(description, items[0].month));
         cardContent.appendChild(deleteButton);
 
         card.appendChild(cardContent);
@@ -358,13 +355,13 @@
       });
     }
 
-    function deleteCard(description) {
+    function deleteCard(description, initialMonth) {
       const userId = auth.currentUser.uid;
+      const itemsToDelete = data.filter(item => {
+        // Verifica se a descrição é a mesma e se o mês é igual ou posterior ao mês inicial da parcela
+        return item.description === description && monthsPT.indexOf(item.month.split(' ')[0]) >= monthsPT.indexOf(initialMonth.split(' ')[0]);
+      });
 
-      // Filtra os IDs dos itens que precisam ser excluídos
-      const itemsToDelete = data.filter(item => item.description === description);
-
-      // Remover todos os itens associados a essa descrição
       const deletePromises = itemsToDelete.map(item => {
         const itemRef = ref(database, `creditCardData/${userId}/${item.id}`);
         return remove(itemRef)
@@ -376,10 +373,8 @@
           });
       });
 
-      // Após excluir todos os itens, recarregue a página
       Promise.all(deletePromises).then(() => {
-        // Recarregar a página para atualizar a interface
-        window.location.reload();
+        window.location.reload(); // Recarregar para atualizar a interface
       });
     }
 

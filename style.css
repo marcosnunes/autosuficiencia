@@ -9,7 +9,7 @@
     display: none !important;
   }
   .nav-wrapper .brand-logo {
-  font-size: 14px;
+  font-size: 14px !important;
   }
 }
 

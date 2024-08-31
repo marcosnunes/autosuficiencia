@@ -4,9 +4,12 @@
 }
 
 /* Oculta o botão PDF em telas menores */
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 1100px) {
   #pdfButton {
     display: none !important;
+  }
+  .nav-wrapper .brand-logo {
+  font-size: 14px;
   }
 }
 
@@ -357,11 +360,6 @@
 .nav-wrapper .btn {
   margin: 0 5px;
   /* Margem horizontal entre os botões */
-}
-
-
-.nav-wrapper .brand-logo {
-  font-size: 14px;
 }
 
 /* Estilo para o container de lançamentos anuais */

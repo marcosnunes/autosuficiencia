@@ -8,7 +8,7 @@
   #pdfButton {
     display: none !important;
   }
-  .brand-logo {
+  .nav-wrapper .brand-logo {
     font-size: 10px;
   }
 }

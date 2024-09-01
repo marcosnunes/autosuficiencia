@@ -12,10 +12,6 @@
   .nav-wrapper .brand-logo {
     font-size: 16px !important;
   }
-
-  .card-content .input-field .col.s10 input[type="number"].credit {
-    width: 25px !important; 
-  }
 }
 
 /* Redefine as margens e outros estilos para a impressão */
@@ -352,10 +348,6 @@
   font-size: 1.2em;
   /* Tamanho maior do texto para destacar */
   margin: 10px 0;
-}
-
-.card-content .input-field .col.s10 input[type="number"].credit {
-  width: 25px !important; 
 }
 
 .card-content span.card-title {

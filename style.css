@@ -13,15 +13,6 @@
     font-size: 16px !important;
   }
 
-  .card-content .input-field .row {
-    display: flex !important; 
-    flex-wrap: wrap !important; 
-  }
-
-  .card-content .input-field .col {
-    width: 100% !important; 
-  }
-}
 
 /* Redefine as margens e outros estilos para a impressão */
 @media print {

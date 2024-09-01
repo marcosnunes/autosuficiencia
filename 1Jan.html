@@ -114,19 +114,83 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Usuário autenticado:", user.uid);
-        loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+
+
+        var inputData = []; // Dados digitados
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+          loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
+          loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+        });
+
+        function saveDataToDatabase(userId) {
+          const januaryData = {
+            creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // 
+            initialBalance: document.getElementById("JanInitialBalance").value,
+            transactions: inputData,
+            tithe: document.getElementById("januaryTithe").textContent,
+            creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // Incluindo o saldo do cartão de crédito
+            totalCredit: document.getElementById("totalCredit").textContent,
+            totalDebit: document.getElementById("totalDebit").textContent,
+            finalBalance: document.getElementById("totalJaneiro").textContent,
+            balance: document.getElementById("balance").textContent,
+            percentage: document.getElementById("totalPorcentagem").textContent
+          };
+          set(ref(database, 'users/' + userId + '/january'), januaryData)
+            .then(() => {
+              console.log("Dados salvos com sucesso!");
+            })
+            .catch((error) => {
+              console.error("Erro ao salvar dados:", error);
+            });
+        }
+
+        function calculateTotal() {
+          var creditCardBalance = Number(document.getElementById("januaryCreditCardBalance").textContent);
+          var initialBalance = Number(document.getElementById("JanInitialBalance").value);
+          var debitTotal = 0;
+          var creditTotal = 0;
+          var titheTotal = 0; // Variável para o total do dízimo
+
+          // Calcular totais usando os dados digitados
+          for (var j = 0; j < inputData.length; j++) {
+            debitTotal += Number(inputData[j].debit);
+            creditTotal += Number(inputData[j].credit);
+
+            // Calcular o dízimo somente para entradas de crédito com o checkbox marcado
+            if (inputData[j].credit && inputData[j].tithe) {
+              titheTotal += Number(inputData[j].credit) * 0.1; // Dízimo é 10% do valor do crédito
+            }
+          }
+
+          // Formatar o valor do dízimo
+          var formattedTithe = !isNaN(titheTotal) ? titheTotal.toFixed(2) : '0.00';
+          document.getElementById("januaryTithe").textContent = formattedTithe;
+
+          var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
+          var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
+          var balance = creditTotal - debitTotal - creditCardBalance;
+          var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
+          document.getElementById("balance").textContent = formattedBalance;
+          document.getElementById("totalJaneiro").textContent = formattedTotal;
+          document.getElementById("totalCredit").textContent = !isNaN(creditTotal) ? creditTotal.toFixed(2) : '0.00';
+          document.getElementById("totalDebit").textContent = !isNaN(debitTotal) ? debitTotal.toFixed(2) : '0.00';
+
+          var percentage = 0;
+          if (creditTotal !== 0) {
+            percentage = (debitTotal / creditTotal) * 100;
+          }
+          var formattedPercentage = !isNaN(percentage) ? percentage.toFixed(2) + "%" : '0.00%';
+          document.getElementById("totalPorcentagem").textContent = formattedPercentage;
+
+          // Salvar dados no banco de dados após calcular totais
+          const userId = auth.currentUser.uid;
+          saveDataToDatabase(userId);
+        }
       } else {
         window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
       }
-    });
-
-    var inputData = []; // Dados digitados
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-      loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-      loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
     });
 
     function loadDataFromDatabase(userId) {
@@ -158,70 +222,7 @@
       });
     }
 
-    function saveDataToDatabase(userId) {
-      const januaryData = {
-        creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // 
-        initialBalance: document.getElementById("JanInitialBalance").value,
-        transactions: inputData,
-        tithe: document.getElementById("januaryTithe").textContent,
-        creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // Incluindo o saldo do cartão de crédito
-        totalCredit: document.getElementById("totalCredit").textContent,
-        totalDebit: document.getElementById("totalDebit").textContent,
-        finalBalance: document.getElementById("totalJaneiro").textContent,
-        balance: document.getElementById("balance").textContent,
-        percentage: document.getElementById("totalPorcentagem").textContent
-      };
-      set(ref(database, 'users/' + userId + '/january'), januaryData)
-        .then(() => {
-          console.log("Dados salvos com sucesso!");
-        })
-        .catch((error) => {
-          console.error("Erro ao salvar dados:", error);
-        });
-    }
 
-    function calculateTotal() {
-      var creditCardBalance = Number(document.getElementById("januaryCreditCardBalance").textContent);
-      var initialBalance = Number(document.getElementById("JanInitialBalance").value);
-      var debitTotal = 0;
-      var creditTotal = 0;
-      var titheTotal = 0; // Variável para o total do dízimo
-
-      // Calcular totais usando os dados digitados
-      for (var j = 0; j < inputData.length; j++) {
-        debitTotal += Number(inputData[j].debit);
-        creditTotal += Number(inputData[j].credit);
-
-        // Calcular o dízimo somente para entradas de crédito com o checkbox marcado
-        if (inputData[j].credit && inputData[j].tithe) {
-          titheTotal += Number(inputData[j].credit) * 0.1; // Dízimo é 10% do valor do crédito
-        }
-      }
-
-      // Formatar o valor do dízimo
-      var formattedTithe = !isNaN(titheTotal) ? titheTotal.toFixed(2) : '0.00';
-      document.getElementById("januaryTithe").textContent = formattedTithe;
-
-      var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
-      var formattedTotal = !isNaN(total) ? total.toFixed(2) : '0.00';
-      var balance = creditTotal - debitTotal - creditCardBalance;
-      var formattedBalance = !isNaN(balance) ? balance.toFixed(2) : '0.00';
-      document.getElementById("balance").textContent = formattedBalance;
-      document.getElementById("totalJaneiro").textContent = formattedTotal;
-      document.getElementById("totalCredit").textContent = !isNaN(creditTotal) ? creditTotal.toFixed(2) : '0.00';
-      document.getElementById("totalDebit").textContent = !isNaN(debitTotal) ? debitTotal.toFixed(2) : '0.00';
-
-      var percentage = 0;
-      if (creditTotal !== 0) {
-        percentage = (debitTotal / creditTotal) * 100;
-      }
-      var formattedPercentage = !isNaN(percentage) ? percentage.toFixed(2) + "%" : '0.00%';
-      document.getElementById("totalPorcentagem").textContent = formattedPercentage;
-
-      // Salvar dados no banco de dados após calcular totais
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId);
-    }
 
     // Função para salvar o saldo final de janeiro no Firebase
     function saveFinalBalance() {

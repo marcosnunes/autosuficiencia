@@ -24,8 +24,11 @@
   <div class="container">
     <div class="card">
       <div class="card-content">
-        <p>Nesta página você tem um relatório 
-          dos seus dízimos.</p>
+        <p>Nesta página você tem um relatório
+          dos seus dízimos. O total deste ano para os seus dízimos foi de <span id="yearTithe">0.00</span>.
+          Lembre-se de efetuar um lançamento de débito nas páginas dos meses para que o seu pagamento seja
+          computado no seu orçamento anual. Aqui os valores dos dízimos são apenas exibidos, não entram nos
+          lançamentos mensais.</p>
       </div>
     </div>
     <div class="balance-value" id="balanceValue">
@@ -140,6 +143,22 @@
           document.getElementById("novemberTithe").textContent = (userData.november && userData.november.tithe) ? userData.november.tithe : "0.00";
           document.getElementById("decemberTithe").textContent = (userData.december && userData.december.tithe) ? userData.december.tithe : "0.00";
 
+          // Calcula a soma dos dízimos do ano
+          const yearTithe = parseFloat(document.getElementById("januaryTithe").textContent) +
+            parseFloat(document.getElementById("februaryTithe").textContent) +
+            parseFloat(document.getElementById("marchTithe").textContent) +
+            parseFloat(document.getElementById("aprilTithe").textContent) +
+            parseFloat(document.getElementById("mayTithe").textContent) +
+            parseFloat(document.getElementById("juneTithe").textContent) +
+            parseFloat(document.getElementById("julyTithe").textContent) +
+            parseFloat(document.getElementById("augustTithe").textContent) +
+            parseFloat(document.getElementById("septemberTithe").textContent) +
+            parseFloat(document.getElementById("octoberTithe").textContent) +
+            parseFloat(document.getElementById("novemberTithe").textContent) +
+            parseFloat(document.getElementById("decemberTithe").textContent);
+
+          // Atualiza o elemento HTML com a soma dos dízimos do ano
+          document.getElementById("yearTithe").textContent = yearTithe.toFixed(2);
         });
       }
 

@@ -49,8 +49,18 @@
           <label for="janDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="janCredit" placeholder="Crédito">
-          <label for="janCredit">Crédito</label>
+          <div class="row" style="display: flex; align-items: center;">
+            <div class="col s10">
+              <label for="janCredit">Crédito</label>
+              <input type="number" class="credit form-control" id="janCredit" placeholder="Crédito">
+            </div>
+            <div class="col s2">
+              <label>
+                <input type="checkbox" id="titheCheckbox">
+                <span>Dízimo</span>
+              </label>
+            </div>
+          </div>
         </div>
         <div class="input-field">
           <input type="number" class="day form-control" id="janDay" placeholder="Dia">
@@ -62,6 +72,7 @@
         </div>
       </div>
     </div>
+
     <div id="dataCards">
       <!-- Os cards de dados adicionados aparecerão aqui -->
     </div>
@@ -174,17 +185,21 @@
       var initialBalance = Number(document.getElementById("JanInitialBalance").value);
       var debitTotal = 0;
       var creditTotal = 0;
+      var titheTotal = 0; // Variável para o total do dízimo
 
       // Calcular totais usando os dados digitados
       for (var j = 0; j < inputData.length; j++) {
         debitTotal += Number(inputData[j].debit);
         creditTotal += Number(inputData[j].credit);
+
+        // Calcular o dízimo somente para entradas de crédito com o checkbox marcado
+        if (inputData[j].credit && inputData[j].tithe) {
+          titheTotal += Number(inputData[j].credit) * 0.1; // Dízimo é 10% do valor do crédito
+        }
       }
 
-      // Calcular o dízimo (10% do Total Crédito)
-      var totalCredit = Number(document.getElementById("totalCredit").textContent);
-      var tithe = totalCredit * 0.1; // Dízimo é 10% do Total Crédito
-      var formattedTithe = !isNaN(tithe) ? tithe.toFixed(2) : '0.00';
+      // Formatar o valor do dízimo
+      var formattedTithe = !isNaN(titheTotal) ? titheTotal.toFixed(2) : '0.00';
       document.getElementById("januaryTithe").textContent = formattedTithe;
 
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
@@ -233,6 +248,7 @@
       var debit = document.getElementById("janDebit").value;
       var credit = document.getElementById("janCredit").value;
       var day = document.getElementById("janDay").value;
+      var tithe = document.getElementById("titheCheckbox").checked; // Obter o estado do checkbox
 
       // Verificar se a descrição, o dia e pelo menos um dos campos débito ou crédito estão preenchidos
       if (description.trim() !== "" && day.trim() !== "" && (debit.trim() !== "" || credit.trim() !== "")) {
@@ -247,6 +263,7 @@
           debit: debit,
           credit: credit,
           day: day,
+          tithe: tithe, // Adicionar o atributo "tithe" ao objeto
           dayBalance: 0 // Valor inicial do saldo do dia
         };
 
@@ -258,6 +275,7 @@
         document.getElementById("janDebit").value = "";
         document.getElementById("janCredit").value = "";
         document.getElementById("janDay").value = "";
+        document.getElementById("titheCheckbox").checked = false; // Desmarcar o checkbox
 
         // Ordenar o array inputData com base no campo "dia"
         inputData.sort(function (a, b) {
@@ -313,8 +331,18 @@
       <label for="editDebit">Débito</label>
     </div>
     <div class="input-field">
-      <input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
-      <label for="editCredit">Crédito</label>
+      <div class="row" style="display: flex; align-items: center;">
+        <div class="col s10">
+          <label for="editCredit">Crédito</label>
+          <input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
+        </div>
+        <div class="col s2">
+          <label>
+            <input type="checkbox" id="editTitheCheckbox" ${dataItem.tithe ? 'checked' : ''}>
+            <span>Dízimo</span>
+          </label>
+        </div>
+      </div>
     </div>
     <div class="input-field">
       <input type="number" class="day form-control" id="editDay" value="${dataItem.day}">
@@ -337,6 +365,7 @@
       var debit = card.querySelector("#editDebit").value;
       var credit = card.querySelector("#editCredit").value;
       var day = card.querySelector("#editDay").value;
+      var tithe = card.querySelector("#editTitheCheckbox").checked; // Obter o estado do checkbox
 
       // Atualizar os dados no array inputData
       var dataItem = inputData.find(item => item.id === cardId);
@@ -345,6 +374,7 @@
         dataItem.debit = debit;
         dataItem.credit = credit;
         dataItem.day = day;
+        dataItem.tithe = tithe; // Atualizar o atributo "tithe"
       }
 
       // Recalcular os dados e atualizar os cards
@@ -364,6 +394,7 @@
       var debit = card.querySelector("#editDebit").value;
       var credit = card.querySelector("#editCredit").value;
       var day = card.querySelector("#editDay").value;
+      var tithe = card.querySelector("#editTitheCheckbox").checked; // Obter o estado do checkbox
 
       var dataItem = inputData.find(item => item.id === cardId);
       if (dataItem) {
@@ -372,6 +403,7 @@
         dataItem.debit = debit;
         dataItem.credit = credit;
         dataItem.day = day;
+        dataItem.tithe = tithe; // Atualizar o atributo "tithe"
 
         // Reordenar e atualizar os cards
         updateDataCards();

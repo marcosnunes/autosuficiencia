@@ -41,8 +41,18 @@
           <label for="octDebit">Débito</label>
         </div>
         <div class="input-field">
-          <input type="number" class="credit form-control" id="octCredit" placeholder="Crédito">
-          <label for="octCredit">Crédito</label>
+          <div class="row" style="display: flex; align-items: center;">
+            <div class="col s10">
+              <label for="octCredit">Crédito</label>
+              <input type="number" class="credit form-control" id="octCredit" placeholder="Crédito">
+            </div>
+            <div class="col s2">
+              <label>
+                <input type="checkbox" id="titheCheckbox">
+                <span>Dízimo</span>
+              </label>
+            </div>
+          </div>
         </div>
         <div class="input-field">
           <input type="number" class="day form-control" id="octDay" placeholder="Dia">
@@ -83,7 +93,6 @@
       projectId: "web-app-autossuficiencia",
       appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
@@ -172,15 +181,18 @@
       var initialBalance = Number(document.getElementById("OctInitialBalance").innerText);
       var debitTotal = 0;
       var creditTotal = 0;
+      var titheTotal = 0;
 
       for (var j = 0; j < inputData.length; j++) {
         debitTotal += Number(inputData[j].debit || 0);
         creditTotal += Number(inputData[j].credit || 0);
+        if (inputData[j].credit && inputData[j].tithe) {
+          titheTotal += Number(inputData[j].credit) * 0.1;
+        }
       }
 
       var totalCredit = creditTotal;
-      var tithe = totalCredit * 0.1;
-      var formattedTithe = !isNaN(tithe) ? tithe.toFixed(2) : '0.00';
+      var formattedTithe = !isNaN(titheTotal) ? titheTotal.toFixed(2) : '0.00';
       document.getElementById("octTithe").textContent = formattedTithe;
 
       var total = initialBalance + creditTotal - creditCardBalance - debitTotal;
@@ -296,6 +308,7 @@
       var debit = document.getElementById("octDebit").value;
       var credit = document.getElementById("octCredit").value;
       var day = document.getElementById("octDay").value;
+      var tithe = document.getElementById("titheCheckbox").checked;
 
       if (description.trim() !== "" && day.trim() !== "" && (debit.trim() !== "" || credit.trim() !== "")) {
         var id = uuidv4();
@@ -306,7 +319,8 @@
           description: description,
           debit: debit,
           credit: credit,
-          day: day
+          day: day,
+          tithe: tithe
         };
 
         inputData.push(newData);
@@ -314,6 +328,7 @@
         document.getElementById("octDebit").value = "";
         document.getElementById("octCredit").value = "";
         document.getElementById("octDay").value = "";
+        document.getElementById("titheCheckbox").checked = false;
 
         inputData.sort(function (a, b) {
           return parseInt(a.day) - parseInt(b.day);
@@ -331,8 +346,8 @@
 
     function getNextMonth(currentMonth) {
       var months = [
-        "Outubro", "Novembro", "Dezembro", "Janeiro", "Fevereiro",
-        "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro"
+        "Março", "Abril", "Maio", "Junho", "Julho",
+        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro", "Janeiro", "Fevereiro"
       ];
       var currentIndex = months.indexOf(currentMonth);
       var nextIndex = (currentIndex + 1) % 12;
@@ -367,31 +382,41 @@
       if (dataItem) {
         var card = document.querySelector(`div[data-id='${cardId}']`);
         card.innerHTML = `
-  <div class="card-content">
-    <span class="card-title">Editar Lançamento</span>
-    <div class="input-field">
-      <input type="text" class="description form-control" id="editDescription" value="${dataItem.description}">
-      <label for="editDescription">Descrição</label>
-    </div>
-    <div class="input-field">
-      <input type="number" class="debit form-control" id="editDebit" value="${dataItem.debit}">
-      <label for="editDebit">Débito</label>
-    </div>
-    <div class="input-field">
-      <input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
-      <label for="editCredit">Crédito</label>
-    </div>
-    <div class="input-field">
-      <input type="number" class="day form-control" id="editDay" value="${dataItem.day}">
-      <label for="editDay">Dia</label>
-    </div>
-    <button class="btn-edit" onclick="saveEdit('${cardId}')">Salvar</button>
-    <button class="btn-delete" onclick="cancelEdit('${cardId}')">Cancelar</button>
-  </div>
-`;
 
+<div class="card-content">
+<span class="card-title">Editar Lançamento</span>
+<div class="input-field">
+<input type="text" class="description form-control" id="editDescription" value="${dataItem.description}">
+<label for="editDescription">Descrição</label>
+</div>
+<div class="input-field">
+<input type="number" class="debit form-control" id="editDebit" value="${dataItem.debit}">
+<label for="editDebit">Débito</label>
+</div>
+<div class="input-field">
+<div class="row" style="display: flex; align-items: center;">
+<div class="col s10">
+<label for="editCredit">Crédito</label>
+<input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
+</div>
+<div class="col s2">
+<label>
+<input type="checkbox" id="editTitheCheckbox" ${dataItem.tithe ? 'checked' : ''}>
+<span>Dízimo</span>
+</label>
+</div>
+</div>
+</div>
+<div class="input-field">
+<input type="number" class="day form-control" id="editDay" value="${dataItem.day}">
+<label for="editDay">Dia</label>
+</div>
+<button class="btn-edit" onclick="saveEdit('${cardId}')">Salvar</button>
+<button class="btn-delete" onclick="cancelEdit('${cardId}')">Cancelar</button>
+</div>
+`;
         // Atualizar o Materialize após a edição
-        M.updateTextFields(); 
+        M.updateTextFields();
       }
     }
 
@@ -401,6 +426,7 @@
       var debit = card.querySelector("#editDebit").value;
       var credit = card.querySelector("#editCredit").value;
       var day = card.querySelector("#editDay").value;
+      var tithe = card.querySelector("#editTitheCheckbox").checked;
 
       var dataItem = inputData.find(item => item.id === cardId);
       if (dataItem) {
@@ -408,6 +434,7 @@
         dataItem.debit = debit;
         dataItem.credit = credit;
         dataItem.day = day;
+        dataItem.tithe = tithe;
       }
 
       updateDataCards();
@@ -424,6 +451,7 @@
       var debit = card.querySelector("#editDebit").value;
       var credit = card.querySelector("#editCredit").value;
       var day = card.querySelector("#editDay").value;
+      var tithe = card.querySelector("#editTitheCheckbox").checked;
 
       var dataItem = inputData.find(item => item.id === cardId);
       if (dataItem) {
@@ -431,6 +459,7 @@
         dataItem.debit = debit;
         dataItem.credit = credit;
         dataItem.day = day;
+        dataItem.tithe = tithe;
 
         updateDataCards();
 

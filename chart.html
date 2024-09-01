@@ -21,14 +21,14 @@
         <button id="nextButton" class="btn btn-default">Próximo</button>
       </div>
     </nav>
-  </div>
-  <div class="card" id="aviso-tela">
-    <div class="card-content">
-      <p>Gire a tela do seu celular para ter uma melhor visualização.
-      </p>
-    </div>
-  </div>
+  </div> 
   <div class="container">
+    <div class="card" id="aviso-tela">
+      <div class="card-content">
+        <p>Gire a tela do seu celular para uma melhor visualização.
+        </p>
+      </div>
+    </div>
     <div class="card">
       <div class="card-content-chart">
         <canvas id="creditDebitChart"></canvas>
@@ -224,9 +224,9 @@
         // Ajuste a altura do container para telas portrait
         creditDebitContainer.style.height = "auto";
         monthlyBalanceContainer.style.height = "auto";
-      } else { 
+      } else {
         // Restaura o layout para telas maiores
-        creditDebitContainer.style.height = ""; 
+        creditDebitContainer.style.height = "";
         monthlyBalanceContainer.style.height = "";
       }
     }

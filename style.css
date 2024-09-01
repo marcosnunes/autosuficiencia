@@ -332,7 +332,7 @@
     grid-template-rows: repeat(3, auto);
   }
 
-  #aviso-tela {
+  .container #aviso-tela {
     display: none !important;
   }
 }

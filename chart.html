@@ -195,7 +195,7 @@
       createMonthlyBalanceChart(yearData);
 
       // Chama rotateCharts() após os gráficos serem criados
-      rotateCharts();
+      resizeCharts();
     }
 
     async function loadAndDisplayCharts(userId) {
@@ -209,24 +209,29 @@
     const creditDebitChart = document.getElementById("creditDebitChart").getContext("2d");
     const monthlyBalanceChart = document.getElementById("monthlyBalanceChart").getContext("2d");
 
-    function rotateCharts() {
+    function resizeCharts() {
+      const creditDebitContainer = document.getElementById("creditDebitChart").parentElement;
+      const monthlyBalanceContainer = document.getElementById("monthlyBalanceChart").parentElement;
+
+      // Verifica se a tela está na orientação portrait
       if (window.innerWidth < 1100) {
         creditDebitChart.canvas.style.transform = "rotate(90deg)";
         monthlyBalanceChart.canvas.style.transform = "rotate(90deg)";
 
-        // Ajusta a altura do container 
-        creditDebitChart.canvas.parentElement.style.height = "auto"; // Ajuste a altura conforme necessário
-        monthlyBalanceChart.canvas.parentElement.style.height = "4auto"; // Ajuste a altura conforme necessário
-      } else {
+        // Ajuste a altura do container para telas portrait
+        creditDebitContainer.style.height = "auto";
+        monthlyBalanceContainer.style.height = "auto";
+      } else { 
+        // Restaura o layout para telas maiores
         creditDebitChart.canvas.style.transform = "rotate(0deg)";
         monthlyBalanceChart.canvas.style.transform = "rotate(0deg)";
 
-        // Restaura a altura padrão do container
-        creditDebitChart.canvas.parentElement.style.height = "";
-        monthlyBalanceChart.canvas.parentElement.style.height = "";
+        creditDebitContainer.style.height = ""; 
+        monthlyBalanceContainer.style.height = "";
       }
     }
 
+    window.addEventListener("resize", resizeCharts); // Chama a função sempre que a tela é redimensionada
   </script>
 </body>
 

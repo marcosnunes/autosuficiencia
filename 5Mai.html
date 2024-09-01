@@ -93,25 +93,33 @@
       projectId: "web-app-autossuficiencia",
       appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Usuário autenticado:", user.uid);
-        loadDataFromDatabase(user.uid);
-        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+    // Variável para armazenar o usuário autenticado
+    let user = null; // Declare user aqui
+
+    // Verificação do estado de autenticação
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("Usuário autenticado:", currentUser.uid);
+        user = currentUser; // Atribuir o usuário à variável user
+        loadDataFromDatabase(currentUser.uid); // Carregar dados do banco de dados
+        loadCreditCardBalance(currentUser.uid); // Carregar o saldo do cartão de crédito
       } else {
-        window.location.href = "login.html";
+        window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
       }
     });
 
     var inputData = [];
 
     document.addEventListener('DOMContentLoaded', function () {
-      loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-      loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+      if (user) {
+        loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
+        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+      }
     });
 
     function loadDataFromDatabase(userId) {
@@ -211,8 +219,10 @@
       var formattedPercentage = !isNaN(percentage) ? percentage.toFixed(2) + "%" : '0.00%';
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
 
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId);
+      if (user) { // Verificar se o usuário está logado
+        const userId = user.uid;
+        saveDataToDatabase(userId);
+      }
     }
 
     function updateBalances(userId, currentMonth) {
@@ -299,8 +309,10 @@
       localStorage.setItem("currentBalance", initialBalance);
       calculateTotal();
       updateDataCards();
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId);
+      if (user) { // Verificar se o usuário está logado
+        const userId = user.uid;
+        saveDataToDatabase(userId);
+      }
     }
 
     function addData(month) {
@@ -337,8 +349,10 @@
         updateDataCards();
         calculateTotal();
 
-        const userId = auth.currentUser.uid;
-        saveDataToDatabase(userId);
+        if (user) { // Verificar se o usuário está logado
+          const userId = user.uid;
+          saveDataToDatabase(userId);
+        }
       } else {
         alert("Por favor, preencha a descrição, o dia e pelo menos um dos campos débito ou crédito.");
       }
@@ -346,8 +360,8 @@
 
     function getNextMonth(currentMonth) {
       var months = [
-        "Março", "Abril", "Maio", "Junho", "Julho",
-        "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro", "Janeiro", "Fevereiro"
+        "Maio", "Junho", "Julho", "Agosto", "Setembro",
+        "Outubro", "Novembro", "Dezembro", "Janeiro", "Fevereiro", "Março"
       ];
       var currentIndex = months.indexOf(currentMonth);
       var nextIndex = (currentIndex + 1) % 12;
@@ -382,39 +396,39 @@
       if (dataItem) {
         var card = document.querySelector(`div[data-id='${cardId}']`);
         card.innerHTML = `
-
-<div class="card-content">
-<span class="card-title">Editar Lançamento</span>
-<div class="input-field">
-<input type="text" class="description form-control" id="editDescription" value="${dataItem.description}">
-<label for="editDescription">Descrição</label>
-</div>
-<div class="input-field">
-<input type="number" class="debit form-control" id="editDebit" value="${dataItem.debit}">
-<label for="editDebit">Débito</label>
-</div>
-<div class="input-field">
-<div class="row" style="display: flex; align-items: center;">
-<div class="col s10">
-<label for="editCredit">Crédito</label>
-<input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
-</div>
-<div class="col s2">
-<label>
-<input type="checkbox" id="editTitheCheckbox" ${dataItem.tithe ? 'checked' : ''}>
-<span>Dízimo</span>
-</label>
-</div>
-</div>
-</div>
-<div class="input-field">
-<input type="number" class="day form-control" id="editDay" value="${dataItem.day}">
-<label for="editDay">Dia</label>
-</div>
-<button class="btn-edit" onclick="saveEdit('${cardId}')">Salvar</button>
-<button class="btn-delete" onclick="cancelEdit('${cardId}')">Cancelar</button>
-</div>
+  <div class="card-content">
+    <span class="card-title">Editar Lançamento</span>
+    <div class="input-field">
+      <input type="text" class="description form-control" id="editDescription" value="${dataItem.description}">
+      <label for="editDescription">Descrição</label>
+    </div>
+    <div class="input-field">
+      <input type="number" class="debit form-control" id="editDebit" value="${dataItem.debit}">
+      <label for="editDebit">Débito</label>
+    </div>
+    <div class="input-field">
+      <div class="row" style="display: flex; align-items: center;">
+        <div class="col s10">
+          <label for="editCredit">Crédito</label>
+          <input type="number" class="credit form-control" id="editCredit" value="${dataItem.credit}">
+        </div>
+        <div class="col s2">
+          <label>
+            <input type="checkbox" id="editTitheCheckbox" ${dataItem.tithe ? 'checked' : ''}>
+            <span>Dízimo</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="input-field">
+      <input type="number" class="day form-control" id="editDay" value="${dataItem.day}">
+      <label for="editDay">Dia</label>
+    </div>
+    <button class="btn-edit" onclick="saveEdit('${cardId}')">Salvar</button>
+    <button class="btn-delete" onclick="cancelEdit('${cardId}')">Cancelar</button>
+  </div>
 `;
+
         // Atualizar o Materialize após a edição
         M.updateTextFields();
       }
@@ -463,8 +477,10 @@
 
         updateDataCards();
 
-        const userId = auth.currentUser.uid;
-        saveDataToDatabase(userId);
+        if (user) { // Verificar se o usuário está logado
+          const userId = user.uid;
+          saveDataToDatabase(userId);
+        }
 
         calculateTotal();
       }

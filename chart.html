@@ -210,12 +210,20 @@
     const monthlyBalanceChart = document.getElementById("monthlyBalanceChart").getContext("2d");
 
     function rotateCharts() {
-      if (window.innerWidth < 768) { // Ajuste a largura da tela conforme necessário
+      if (window.innerWidth < 1100) {
         creditDebitChart.canvas.style.transform = "rotate(90deg)";
         monthlyBalanceChart.canvas.style.transform = "rotate(90deg)";
+
+        // Ajusta a altura do container 
+        creditDebitChart.canvas.parentElement.style.height = "auto"; // Ajuste a altura conforme necessário
+        monthlyBalanceChart.canvas.parentElement.style.height = "4auto"; // Ajuste a altura conforme necessário
       } else {
         creditDebitChart.canvas.style.transform = "rotate(0deg)";
         monthlyBalanceChart.canvas.style.transform = "rotate(0deg)";
+
+        // Restaura a altura padrão do container
+        creditDebitChart.canvas.parentElement.style.height = "";
+        monthlyBalanceChart.canvas.parentElement.style.height = "";
       }
     }
 

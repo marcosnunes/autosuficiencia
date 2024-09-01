@@ -16,6 +16,11 @@
   #creditDebitChart, #monthlyBalanceChart {
     transform: rotate(90deg); /* Rotaciona o gráfico 90 graus */
   }
+
+  /* Ajusta a altura do container */
+  .card-content canvas { /* Seleciona o canvas dentro do container */
+    height: auto; /* Ajuste a altura conforme necessário */
+  }
 }
 
 /* Redefine as margens e outros estilos para a impressão */

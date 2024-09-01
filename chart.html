@@ -2,115 +2,200 @@
 <html lang="pt-BR">
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <title>Grafico Anual</title>
-  <style>
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Sua Calculadora Financeira Prática" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Gráficos</title>
 </head>
 
 <body>
-  <canvas id="chart"></canvas>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var ctx = document.getElementById('chart').getContext('2d');
-      var monthlyData = [
-        { month: "Janeiro", key: "totalJaneiro", value: 0, debit: 0, credit: 0 },
-        { month: "Fevereiro", key: "totalFevereiro", value: 0, debit: 0, credit: 0 },
-        { month: "Março", key: "totalMarco", value: 0, debit: 0, credit: 0 },
-        { month: "Abril", key: "totalAbril", value: 0, debit: 0, credit: 0 },
-        { month: "Maio", key: "totalMaio", value: 0, debit: 0, credit: 0 },
-        { month: "Junho", key: "totalJunho", value: 0, debit: 0, credit: 0 },
-        { month: "Julho", key: "totalJulho", value: 0, debit: 0, credit: 0 },
-        { month: "Agosto", key: "totalAgosto", value: 0, debit: 0, credit: 0 },
-        { month: "Setembro", key: "totalSetembro", value: 0, debit: 0, credit: 0 },
-        { month: "Outubro", key: "totalOutubro", value: 0, debit: 0, credit: 0 },
-        { month: "Novembro", key: "totalNovembro", value: 0, debit: 0, credit: 0 },
-        { month: "Dezembro", key: "totalDezembro", value: 0, debit: 0, credit: 0 },
-      ];
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button id="backButton" class="btn btn-default">Voltar</button>
+        <span class="brand-logo center">Gráficos</span>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <canvas id="creditDebitChart"></canvas>
+      </div>
+    </div>
 
-      monthlyData.forEach(function (month) {
-        var monthData = localStorage.getItem(month.key);
-        if (monthData) {
-          monthData = JSON.parse(monthData);
-          month.value = monthData.total ? parseFloat(monthData.total) : 0;
-          var debitTotal = 0;
-          var creditTotal = 0;
-          if (monthData.rows) {
-            monthData.rows.forEach(function (row) {
-              if (!isNaN(parseFloat(row.debit))) {
-                debitTotal += parseFloat(row.debit);
-              }
-              if (!isNaN(parseFloat(row.credit))) {
-                creditTotal += parseFloat(row.credit);
-              }
+    <div class="card">
+      <div class="card-content">
+        <canvas id="monthlyBalanceChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+    import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      // ... Sua configuração do Firebase
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const months = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
+
+    let yearData = {};
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Usuário autenticado:", user.uid);
+        loadDataFromFirebase(user.uid);
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById('backButton').addEventListener('click', function () {
+        window.history.back();
+      });
+      document.getElementById('nextButton').addEventListener('click', function () {
+        window.history.back();
+      });
+    });
+
+    function loadDataFromFirebase(userId) {
+      const yearData = {};
+
+      return new Promise((resolve, reject) => {
+        Promise.all(months.map(month => {
+          return new Promise((resolve, reject) => {
+            const monthRef = ref(database, `users/${userId}/${month}`);
+            onValue(monthRef, (snapshot) => {
+              const monthData = snapshot.val();
+              yearData[month] = monthData;
+              resolve();
+            }, (error) => {
+              console.error(`Erro ao obter dados de ${month}:`, error);
+              reject(error);
             });
-          }
-          month.debit = debitTotal;
-          month.credit = creditTotal;
-        } else {
-          month.value = 0;
-          month.debit = 0;
-          month.credit = 0;
+          });
+        }))
+        .then(() => {
+          resolve(yearData);
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar dados do Firebase:", error);
+        });
+      });
+    }
+
+    function createCreditDebitChart(yearData) {
+      const creditDebitChart = document.getElementById("creditDebitChart").getContext("2d");
+
+      const creditData = [];
+      const debitData = [];
+
+      for (const month in yearData) {
+        const monthData = yearData[month];
+        if (monthData) {
+          creditData.push(parseFloat(monthData.totalCredit) || 0);
+          debitData.push(parseFloat(monthData.totalDebit) || 0);
         }
-      });
+      }
 
-
-      var labels = monthlyData.map(function (month) {
-        return month.month;
-      });
-
-      var data = monthlyData.map(function (month) {
-        return month.value;
-      });
-
-      var dataDebit = monthlyData.map(function (month) {
-        return month.debit;
-      });
-
-      var dataCredit = monthlyData.map(function (month) {
-        return month.credit;
-      });
-
-      var chart = new Chart(ctx, {
-        type: 'line',
+      new Chart(creditDebitChart, {
+        type: "bar",
         data: {
-          labels: labels,
+          labels: months,
           datasets: [
             {
-              label: 'Fechamento Mensal',
-              data: data,
-              backgroundColor: 'rgba(0, 123, 255, 0.5)',
-              borderColor: 'rgba(0, 123, 255, 1)',
-              borderWidth: 1
+              label: "Crédito",
+              data: creditData,
+              backgroundColor: "green",
             },
             {
-              label: 'Total Débito',
-              data: dataDebit,
-              backgroundColor: 'rgba(255, 0, 0, 0.5)',
-              borderColor: 'rgba(255, 0, 0, 1)',
-              borderWidth: 1
+              label: "Débito",
+              data: debitData,
+              backgroundColor: "red",
             },
-            {
-              label: 'Total Crédito',
-              data: dataCredit,
-              backgroundColor: 'rgba(0, 255, 0, 0.5)',
-              borderColor: 'rgba(0, 255, 0, 1)',
-              borderWidth: 1
-            }
-          ]
+          ],
         },
         options: {
           scales: {
             y: {
-              beginAtZero: true
-            }
-          }
-        }
+              beginAtZero: true,
+            },
+          },
+        },
       });
-    });
+    }
+
+    function createMonthlyBalanceChart(yearData) {
+      const monthlyBalanceChart = document.getElementById("monthlyBalanceChart").getContext("2d");
+      const monthlyBalanceData = [];
+
+      for (const month in yearData) {
+        const monthData = yearData[month];
+        if (monthData) {
+          monthlyBalanceData.push(parseFloat(monthData.finalBalance) || 0);
+        }
+      }
+
+      new Chart(monthlyBalanceChart, {
+        type: "line",
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: "Saldo Mensal",
+              data: monthlyBalanceData,
+              borderColor: "blue",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    function displayCharts(yearData) {
+      createCreditDebitChart(yearData);
+      createMonthlyBalanceChart(yearData);
+    }
+
+    async function loadAndDisplayCharts(userId) {
+      yearData = await loadDataFromFirebase(userId);
+      displayCharts(yearData);
+    }
+
+    if (auth.currentUser) {
+      loadAndDisplayCharts(auth.currentUser.uid);
+    }
   </script>
 </body>
 

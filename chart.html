@@ -104,15 +104,15 @@
             });
           });
         }))
-        .then(() => {
-          // Agora que todos os dados do Firebase foram carregados
-          // chame a função para criar os gráficos
-          displayCharts(yearData);
-          resolve(yearData); 
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar dados do Firebase:", error);
-        });
+          .then(() => {
+            // Agora que todos os dados do Firebase foram carregados
+            // chame a função para criar os gráficos
+            displayCharts(yearData);
+            resolve(yearData);
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar dados do Firebase:", error);
+          });
       });
     }
 
@@ -193,6 +193,9 @@
     function displayCharts(yearData) {
       createCreditDebitChart(yearData);
       createMonthlyBalanceChart(yearData);
+
+      // Chama rotateCharts() após os gráficos serem criados
+      rotateCharts();
     }
 
     async function loadAndDisplayCharts(userId) {
@@ -202,6 +205,20 @@
     if (auth.currentUser) {
       loadAndDisplayCharts(auth.currentUser.uid);
     }
+
+    const creditDebitChart = document.getElementById("creditDebitChart").getContext("2d");
+    const monthlyBalanceChart = document.getElementById("monthlyBalanceChart").getContext("2d");
+
+    function rotateCharts() {
+      if (window.innerWidth < 768) { // Ajuste a largura da tela conforme necessário
+        creditDebitChart.canvas.style.transform = "rotate(90deg)";
+        monthlyBalanceChart.canvas.style.transform = "rotate(90deg)";
+      } else {
+        creditDebitChart.canvas.style.transform = "rotate(0deg)";
+        monthlyBalanceChart.canvas.style.transform = "rotate(0deg)";
+      }
+    }
+
   </script>
 </body>
 

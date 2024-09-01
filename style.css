@@ -14,18 +14,24 @@
   }
 
   .card-content canvas {
-    width: 100%; /* O gráfico ocupará toda a largura do container */
-    height: auto; /* A altura será ajustada automaticamente */
+    width: 100%;
+    /* O gráfico ocupará toda a largura do container */
+    height: auto;
+    /* A altura será ajustada automaticamente */
   }
 
   /* Ajusta o container do cartão */
   .card {
-    height: auto; /* Permite que o container se expanda verticalmente */
+    height: auto;
+    /* Permite que o container se expanda verticalmente */
+    min-height: 400px;
+    /* Define a altura mínima do container */
   }
 }
 
-.card-content canvas { 
-  height: 300px; /* Define uma altura inicial para o gráfico */
+.card-content canvas {
+  height: 300px;
+  /* Define uma altura inicial para o gráfico */
 }
 
 /* Redefine as margens e outros estilos para a impressão */
@@ -436,6 +442,7 @@
   align-items: center;
   min-height: 100vh;
 }
+
 .auth-form {
   background-color: #fff;
   padding: 2rem;
@@ -447,21 +454,26 @@
 
 /* Estilo para o campo de email, igualando ao campo de senha */
 #email {
-  padding: 5px 0; /* Ajusta o padding para o campo de email */
-  margin-top: 20px; /* Espaçamento superior para o campo de email */
+  padding: 5px 0;
+  /* Ajusta o padding para o campo de email */
+  margin-top: 20px;
+  /* Espaçamento superior para o campo de email */
 }
 
 /* Corrige o comportamento do placeholder para campos de email */
 .input-field input[type="email"]::placeholder {
-  color: transparent; /* Faz com que o placeholder fique invisível para campos de email, para usar a label */
+  color: transparent;
+  /* Faz com que o placeholder fique invisível para campos de email, para usar a label */
 }
+
 .auth-form h5 {
   margin-bottom: 1rem;
 }
+
 .auth-form .btn {
   margin-top: 1rem;
 }
+
 .auth-form .center {
   text-align: center;
 }
-

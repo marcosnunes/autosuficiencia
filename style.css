@@ -12,6 +12,10 @@
   .nav-wrapper .brand-logo {
     font-size: 16px !important;
   }
+
+  #creditDebitChart, #monthlyBalanceChart {
+    transform: rotate(90deg); /* Rotaciona o gráfico 90 graus */
+  }
 }
 
 /* Redefine as margens e outros estilos para a impressão */

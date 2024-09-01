@@ -39,7 +39,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
     import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
@@ -69,19 +69,12 @@
 
     let yearData = {};
 
-    // Autenticação com Firebase (sem cookies)
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("Usuário autenticado:", user);
-        // Obter o token JWT
-        user.getIdToken().then((token) => {
-          // Use o token JWT para acessar recursos protegidos
-          console.log("Token JWT:", token);
-          loadDataFromFirebase(user.uid); // Carregar dados do Firebase após autenticação
-        });
+        console.log("Usuário autenticado:", user.uid);
+        loadDataFromFirebase(user.uid);
       } else {
-        // Usuário não está autenticado
-        console.log("Usuário não autenticado");
+        window.location.href = "login.html";
       }
     });
 
@@ -91,31 +84,6 @@
       });
       document.getElementById('nextButton').addEventListener('click', function () {
         window.history.back();
-      });
-
-      // Botões de Login e Logout (Exemplo)
-      const signInButton = document.getElementById("signInButton");
-      signInButton.addEventListener("click", () => {
-        signInWithEmailAndPassword(auth, "email@example.com", "password")
-          .then((userCredential) => {
-            // Usuário logado com sucesso
-            console.log("Usuário logado:", userCredential.user);
-          })
-          .catch((error) => {
-            console.error("Erro ao fazer login:", error);
-          });
-      });
-
-      const signOutButton = document.getElementById("signOutButton");
-      signOutButton.addEventListener("click", () => {
-        signOut(auth)
-          .then(() => {
-            // Usuário desconectado com sucesso
-            console.log("Usuário desconectado");
-          })
-          .catch((error) => {
-            console.error("Erro ao desconectar:", error);
-          });
       });
     });
 

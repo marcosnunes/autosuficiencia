@@ -1,421 +1,416 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Sua Calculadora Financeira Prática">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" href="style.css">
-  <title>Cartão de Crédito</title>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Sua Calculadora Financeira Prática">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Cartão de Crédito</title>
+  </head>
 
-<body>
-  <div class="navigation">
-    <nav>
-      <div class="nav-wrapper">
-        <button id="backButton" class="btn btn-default">Voltar</button>
-        <span class="brand-logo center">Cartão</span>
-        <button id="nextButton" class="btn btn-default">Próximo</button>
-      </div>
-    </nav>
-  </div>
-  <div class="container">
-    <div class="balance-value" id="balanceValue">
-      <div class="card">
-        <div class="card-content">
-          <span class="card-title">Valores das faturas</span>
-          <div class="card-balance-content">
-            <div class="card-content">
-              <span class="card-title">Jan</span>
-              <p><span id="januaryCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Fev</span>
-              <p><span id="februaryCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Mar</span>
-              <p><span id="marchCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Abr</span>
-              <p><span id="aprilCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Mai</span>
-              <p><span id="mayCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Jun</span>
-              <p><span id="juneCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Jul</span>
-              <p><span id="julyCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Ago</span>
-              <p><span id="augustCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Set</span>
-              <p><span id="septemberCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Out</span>
-              <p><span id="octoberCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Nov</span>
-              <p><span id="novemberCreditCardBalance">0.00</span></p>
-            </div>
-            <div class="card-content">
-              <span class="card-title">Dez</span>
-              <p><span id="decemberCreditCardBalance">0.00</span></p>
+  <body>
+    <div class="navigation">
+      <nav>
+        <div class="nav-wrapper">
+          <button id="backButton" class="btn btn-default">Voltar</button>
+          <span class="brand-logo center">Cartão</span>
+          <button id="nextButton" class="btn btn-default">Próximo</button>
+        </div>
+      </nav>
+    </div>
+    <div class="container">
+      <div class="balance-value" id="balanceValue">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Valores das faturas</span>
+            <div class="card-balance-content">
+              <div class="card-content">
+                <span class="card-title">Jan</span>
+                <p><span id="januaryCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Fev</span>
+                <p><span id="februaryCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Mar</span>
+                <p><span id="marchCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Abr</span>
+                <p><span id="aprilCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Mai</span>
+                <p><span id="mayCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Jun</span>
+                <p><span id="juneCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Jul</span>
+                <p><span id="julyCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Ago</span>
+                <p><span id="augustCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Set</span>
+                <p><span id="septemberCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Out</span>
+                <p><span id="octoberCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Nov</span>
+                <p><span id="novemberCreditCardBalance">0.00</span></p>
+              </div>
+              <div class="card-content">
+                <span class="card-title">Dez</span>
+                <p><span id="decemberCreditCardBalance">0.00</span></p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">Registrar compra</span>
-        <div class="input-field">
-          <select class="month-select form-control" id="month">
-            <option value="" disabled selected>Mês da compra</option>
-            <option value="January">Janeiro</option>
-            <option value="February">Fevereiro</option>
-            <option value="March">Março</option>
-            <option value="April">Abril</option>
-            <option value="May">Maio</option>
-            <option value="June">Junho</option>
-            <option value="July">Julho</option>
-            <option value="August">Agosto</option>
-            <option value="September">Setembro</option>
-            <option value="October">Outubro</option>
-            <option value="November">Novembro</option>
-            <option value="December">Dezembro</option>
-          </select>
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Registrar compra</span>
+          <div class="input-field">
+            <select class="month-select form-control" id="month">
+              <option value="" disabled selected>Mês da compra</option>
+              <option value="January">Janeiro</option>
+              <option value="February">Fevereiro</option>
+              <option value="March">Março</option>
+              <option value="April">Abril</option>
+              <option value="May">Maio</option>
+              <option value="June">Junho</option>
+              <option value="July">Julho</option>
+              <option value="August">Agosto</option>
+              <option value="September">Setembro</option>
+              <option value="October">Outubro</option>
+              <option value="November">Novembro</option>
+              <option value="December">Dezembro</option>
+            </select>
+          </div>
+          <div class="input-field">
+            <input type="text" class="description form-control" id="description" placeholder="Descrição">
+            <label for="description">Descrição</label>
+          </div>
+          <div class="input-field">
+            <input type="number" class="multiplicator form-control" id="multiplicator" placeholder="Qtd de parcelas">
+            <label for="multiplicator">Qtd de parcelas</label>
+          </div>
+          <div class="input-field">
+            <input type="number" class="value form-control" id="billingValue" placeholder="Valor da Compra">
+            <label for="billingValue">Valor da Compra</label>
+          </div>
+          <button id="addButton" class="btn btn-default">Adicionar</button>
         </div>
-        <div class="input-field">
-          <input type="text" class="description form-control" id="description" placeholder="Descrição">
-          <label for="description">Descrição</label>
-        </div>
-        <div class="input-field">
-          <input type="number" class="multiplicator form-control" id="multiplicator" placeholder="Qtd de parcelas">
-          <label for="multiplicator">Qtd de parcelas</label>
-        </div>
-        <div class="input-field">
-          <input type="number" class="value form-control" id="billingValue" placeholder="Valor da Compra">
-          <label for="billingValue">Valor da Compra</label>
-        </div>
-        <button id="addButton" class="btn btn-default">Adicionar</button>
       </div>
+      <div id="groupedCardContainer"></div>
     </div>
-    <div id="groupedCardContainer"></div>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-    import { getDatabase, ref, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
+      import { getDatabase, ref, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
+      import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+      const firebaseConfig = {
+        apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
+        authDomain: "web-app-autossuficiencia.firebaseapp.com",
+        databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
+        projectId: "web-app-autossuficiencia",
+        appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
+      };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
-      authDomain: "web-app-autossuficiencia.firebaseapp.com",
-      databaseURL: "https://web-app-autossuficiencia-default-rtdb.firebaseio.com",
-      projectId: "web-app-autossuficiencia",
-      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
-    };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const database = getDatabase(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const database = getDatabase(app);
+      let data = [];
 
-    let data = [];
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loadDataFromDatabase(user.uid);
-      } else {
-        window.location.href = "login.html";
-      }
-    });
-
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-
-    const monthsPT = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-
-    function loadDataFromDatabase(userId) {
-      const dataRef = ref(database, `creditCardData/${userId}`);
-      onValue(dataRef, (snapshot) => {
-        const fetchedData = snapshot.val();
-        if (fetchedData) {
-          data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
-          console.log("Dados carregados:", data); // Depuração
-          updateGroupedCardContainer();
-          updateCardBalances();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          loadDataFromDatabase(user.uid);
+        } else {
+          window.location.href = "login.html";
         }
       });
-    }
 
-    function uuidv4() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
-    }
-
-    function addItemToDatabase(userId, item) {
-      const itemId = uuidv4();
-      const itemRef = ref(database, `creditCardData/${userId}/${itemId}`);
-      set(itemRef, { ...item, id: itemId })
-        .then(() => {
-          console.log("Item adicionado com sucesso.");
-          loadDataFromDatabase(userId);
-        })
-        .catch((error) => {
-          console.error("Erro ao adicionar item:", error);
-        });
-    }
-
-    function addItem() {
-      const userId = auth.currentUser.uid;
-      const month = document.getElementById('month').value;
-      const description = document.getElementById('description').value;
-      const multiplicator = parseInt(document.getElementById('multiplicator').value);
-      const billingValue = parseFloat(document.getElementById('billingValue').value);
-
-      if (!month || !description || isNaN(multiplicator) || isNaN(billingValue)) {
-        alert("Por favor, preencha todos os campos corretamente.");
-        return;
-      }
-
-      const valuePerMonth = billingValue / multiplicator;
-      const items = [];
-      let currentMonthIndex = months.indexOf(month);
-      let currentYear = new Date().getFullYear();
-
-      for (let i = 0; i < multiplicator; i++) {
-        const monthName = monthsPT[currentMonthIndex];
-        const yearMonth = `${monthName} ${currentYear}`;
-        items.push({
-          month: yearMonth,
-          description: description,
-          value: valuePerMonth
-        });
-
-        currentMonthIndex = (currentMonthIndex + 1) % 12;
-        if (currentMonthIndex === 0) {
-          currentYear++;
-        }
-      }
-
-      items.forEach(item => addItemToDatabase(userId, item));
-
-      // Limpar os campos de entrada e a caixa de seleção
-      document.getElementById('month').value = '';
-      document.getElementById('description').value = '';
-      document.getElementById('multiplicator').value = '';
-      document.getElementById('billingValue').value = '';
-      M.FormSelect.init(document.querySelectorAll('select'), {}); // Re-inicializar caixa de seleção
-    }
-
-    function updateCardBalances() {
-      const currentYear = new Date().getFullYear();
-      const monthsAbbreviation = [
-        { id: 'januaryCreditCardBalance', month: 'Janeiro' },
-        { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
-        { id: 'marchCreditCardBalance', month: 'Março' },
-        { id: 'aprilCreditCardBalance', month: 'Abril' },
-        { id: 'mayCreditCardBalance', month: 'Maio' },
-        { id: 'juneCreditCardBalance', month: 'Junho' },
-        { id: 'julyCreditCardBalance', month: 'Julho' },
-        { id: 'augustCreditCardBalance', month: 'Agosto' },
-        { id: 'septemberCreditCardBalance', month: 'Setembro' },
-        { id: 'octoberCreditCardBalance', month: 'Outubro' },
-        { id: 'novemberCreditCardBalance', month: 'Novembro' },
-        { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
       ];
 
-      monthsAbbreviation.forEach(({ id, month }) => {
-        const element = document.getElementById(id);
-        if (element) {
-          const filteredData = data.filter(item => {
-            const [itemMonth, itemYear] = item.month.split(' ');
-            return itemMonth === month && parseInt(itemYear) === currentYear;
-          });
-          const totalValue = filteredData.reduce((acc, item) => acc + item.value, 0);
-          element.textContent = totalValue.toFixed(2);
-        }
-      });
-
-      const userId = auth.currentUser.uid;
-      updateBalancesInDatabase(userId);
-    }
-
-    function updateBalancesInDatabase(userId) {
-      const balanceElements = [
-        { id: 'januaryCreditCardBalance', month: 'Janeiro' },
-        { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
-        { id: 'marchCreditCardBalance', month: 'Março' },
-        { id: 'aprilCreditCardBalance', month: 'Abril' },
-        { id: 'mayCreditCardBalance', month: 'Maio' },
-        { id: 'juneCreditCardBalance', month: 'Junho' },
-        { id: 'julyCreditCardBalance', month: 'Julho' },
-        { id: 'augustCreditCardBalance', month: 'Agosto' },
-        { id: 'septemberCreditCardBalance', month: 'Setembro' },
-        { id: 'octoberCreditCardBalance', month: 'Outubro' },
-        { id: 'novemberCreditCardBalance', month: 'Novembro' },
-        { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+      const monthsPT = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
       ];
 
-      balanceElements.forEach(({ id, month }) => {
-        const element = document.getElementById(id);
-        if (element) {
-          const value = parseFloat(element.textContent) || 0;
-          const monthRef = ref(database, `creditCardBalances/${userId}/${id}`);
-          set(monthRef, value)
-            .then(() => {
-              console.log(`${id} atualizado no banco de dados com valor ${value}.`);
-            })
-            .catch((error) => {
-              console.error(`Erro ao atualizar ${id} no banco de dados:`, error);
-            });
-        }
-      });
-    }
+      function loadDataFromDatabase(userId) {
+        const dataRef = ref(database, `creditCardData/${userId}`);
+        onValue(dataRef, (snapshot) => {
+          const fetchedData = snapshot.val();
+          if (fetchedData) {
+            // Assumindo que fetchedData é um objeto com IDs como chaves
+            data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
+            console.log("Dados carregados:", data); // Depuração
+            updateGroupedCardContainer();
+            updateCardBalances();
 
-    function updateGroupedCardContainer() {
-      const currentYear = new Date().getFullYear();
-      const container = document.getElementById('groupedCardContainer');
-      container.innerHTML = '';
-
-      const groupedData = data.reduce((acc, item) => {
-        const [itemMonth, itemYear] = item.month.split(' ');
-        if (parseInt(itemYear) === currentYear) {
-          if (!acc[item.description]) {
-            acc[item.description] = [];
+            // Inicializa a caixa de seleção de meses após carregar os dados
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems, {});
           }
-          acc[item.description].push(item);
-        }
-        return acc;
-      }, {});
-
-      Object.keys(groupedData).forEach(description => {
-        const items = groupedData[description];
-        items.sort((a, b) => {
-          const [monthA, yearA] = a.month.split(' ');
-          const [monthB, yearB] = b.month.split(' ');
-
-          const monthIndexA = monthsPT.indexOf(monthA);
-          const monthIndexB = monthsPT.indexOf(monthB);
-
-          if (yearA !== yearB) {
-            return parseInt(yearA) - parseInt(yearB);
-          }
-
-          return monthIndexA - monthIndexB;
         });
+      }
 
-        const card = document.createElement('div');
-        card.className = 'card';
-        const cardContent = document.createElement('div');
-        cardContent.className = 'card-content';
-
-        const title = document.createElement('span');
-        title.className = 'card-title';
-        title.textContent = description;
-        cardContent.appendChild(title);
-
-        items.forEach(item => {
-          const paragraph = document.createElement('p');
-          paragraph.textContent = `${item.month}: R$ ${item.value.toFixed(2)}`;
-          cardContent.appendChild(paragraph);
+      function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
         });
+      }
 
-        // Botão de exclusão do card
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'btn-delete';
-        deleteButton.textContent = 'Excluir';
-        deleteButton.addEventListener('click', () => deleteCard(description, items));
-        cardContent.appendChild(deleteButton);
-
-        card.appendChild(cardContent);
-        container.appendChild(card);
-      });
-    }
-
-    function loadDataFromDatabase(userId) {
-      const dataRef = ref(database, `creditCardData/${userId}`);
-      onValue(dataRef, (snapshot) => {
-        const fetchedData = snapshot.val();
-        if (fetchedData) {
-          data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
-          console.log("Dados carregados:", data); // Depuração
-          // Atualiza a interface
-          updateGroupedCardContainer();
-          updateCardBalances();
-        }
-      });
-    }
-
-    function deleteCard(description, items) {
-      const userId = auth.currentUser.uid;
-
-      // Pegar o primeiro mês e ano do lançamento
-      const initialMonth = items[0].month.split(' ')[0];
-      const initialYear = parseInt(items[0].month.split(' ')[1]);
-
-      const itemsToDelete = data.filter(item => {
-        const [itemMonth, itemYear] = item.month.split(' ');
-        // Comparar o mês e ano atual com o mês e ano do lançamento
-        return item.description === description &&
-          (parseInt(itemMonth) >= parseInt(initialMonth) && parseInt(itemYear) >= initialYear);
-      });
-
-      const deletePromises = itemsToDelete.map(item => {
-        const itemRef = ref(database, `creditCardData/${userId}/${item.id}`);
-        return remove(itemRef)
+      function addItemToDatabase(userId, item) {
+        const itemId = uuidv4();
+        const itemRef = ref(database, `creditCardData/${userId}/${itemId}`);
+        set(itemRef, { ...item, id: itemId }) // Incluindo o ID no item
           .then(() => {
-            console.log(`Item ${item.id} excluído com sucesso.`);
+            console.log("Item adicionado com sucesso.");
+            loadDataFromDatabase(userId);
           })
           .catch((error) => {
-            console.error("Erro ao excluir item:", error);
+            console.error("Erro ao adicionar item:", error);
           });
-      });
+      }
 
-      Promise.all(deletePromises).then(() => {
-        // Atualiza a interface manualmente
-        loadDataFromDatabase(userId); // Carrega os dados novamente para atualizar a interface
-      });
-    }
+      function addItem() {
+        const userId = auth.currentUser.uid;
+        const month = document.getElementById('month').value;
+        const description = document.getElementById('description').value;
+        const multiplicator = parseInt(document.getElementById('multiplicator').value);
+        const billingValue = parseFloat(document.getElementById('billingValue').value);
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var elems = document.querySelectorAll('select');
-      M.FormSelect.init(elems, {});
-      document.getElementById('addButton').addEventListener('click', function () {
-        addItem();
+        if (!month || !description || isNaN(multiplicator) || isNaN(billingValue)) {
+          alert("Por favor, preencha todos os campos corretamente.");
+          return;
+        }
+
+        const valuePerMonth = billingValue / multiplicator;
+        const items = [];
+        let currentMonthIndex = months.indexOf(month);
+        let currentYear = new Date().getFullYear();
+
+        for (let i = 0; i < multiplicator; i++) {
+          const monthName = monthsPT[currentMonthIndex];
+          const yearMonth = `${monthName} ${currentYear}`;
+          items.push({
+            month: yearMonth,
+            description: description,
+            value: valuePerMonth
+          });
+
+          currentMonthIndex = (currentMonthIndex + 1) % 12;
+          if (currentMonthIndex === 0) {
+            currentYear++;
+          }
+        }
+
+        items.forEach(item => addItemToDatabase(userId, item));
+
+        // Limpar os campos de entrada e a caixa de seleção
+        document.getElementById('month').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('multiplicator').value = '';
+        document.getElementById('billingValue').value = '';
+        M.FormSelect.init(document.querySelectorAll('select'), {}); // Re-inicializar caixa de seleção
+      }
+
+      function updateCardBalances() {
+        const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+        const monthsAbbreviation = [
+          { id: 'januaryCreditCardBalance', month: 'Janeiro' },
+          { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
+          { id: 'marchCreditCardBalance', month: 'Março' },
+          { id: 'aprilCreditCardBalance', month: 'Abril' },
+          { id: 'mayCreditCardBalance', month: 'Maio' },
+          { id: 'juneCreditCardBalance', month: 'Junho' },
+          { id: 'julyCreditCardBalance', month: 'Julho' },
+          { id: 'augustCreditCardBalance', month: 'Agosto' },
+          { id: 'septemberCreditCardBalance', month: 'Setembro' },
+          { id: 'octoberCreditCardBalance', month: 'Outubro' },
+          { id: 'novemberCreditCardBalance', month: 'Novembro' },
+          { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+        ];
+
+        monthsAbbreviation.forEach(({ id, month }) => {
+          const element = document.getElementById(id);
+          if (element) {
+            const filteredData = data.filter(item => {
+              // Filtra as faturas para incluir apenas as do ano corrente e do mês específico
+              const [itemMonth, itemYear] = item.month.split(' ');
+              return itemMonth === month && parseInt(itemYear) === currentYear;
+            });
+            const totalValue = filteredData.reduce((acc, item) => acc + item.value, 0);
+            element.textContent = totalValue.toFixed(2);
+          }
+        });
+
+        // Atualiza os valores no banco de dados
+        const userId = auth.currentUser.uid;
+        updateBalancesInDatabase(userId);
+      }
+
+      function updateBalancesInDatabase(userId) {
+        const balanceElements = [
+          { id: 'januaryCreditCardBalance', month: 'Janeiro' },
+          { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
+          { id: 'marchCreditCardBalance', month: 'Março' },
+          { id: 'aprilCreditCardBalance', month: 'Abril' },
+          { id: 'mayCreditCardBalance', month: 'Maio' },
+          { id: 'juneCreditCardBalance', month: 'Junho' },
+          { id: 'julyCreditCardBalance', month: 'Julho' },
+          { id: 'augustCreditCardBalance', month: 'Agosto' },
+          { id: 'septemberCreditCardBalance', month: 'Setembro' },
+          { id: 'octoberCreditCardBalance', month: 'Outubro' },
+          { id: 'novemberCreditCardBalance', month: 'Novembro' },
+          { id: 'decemberCreditCardBalance', month: 'Dezembro' }
+        ];
+
+        balanceElements.forEach(({ id, month }) => {
+          const element = document.getElementById(id);
+          if (element) {
+            const value = parseFloat(element.textContent) || 0;
+            const monthRef = ref(database, `creditCardBalances/${userId}/${id}`);
+            set(monthRef, value)
+              .then(() => {
+                console.log(`${id} atualizado no banco de dados com valor ${value}.`);
+              })
+              .catch((error) => {
+                console.error(`Erro ao atualizar ${id} no banco de dados:`, error);
+              });
+          }
+        });
+      }
+
+      function updateGroupedCardContainer() {
+        const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+        const container = document.getElementById('groupedCardContainer');
+        container.innerHTML = '';
+
+        const groupedData = data.reduce((acc, item) => {
+          const [itemMonth, itemYear] = item.month.split(' ');
+          if (parseInt(itemYear) === currentYear) {
+            if (!acc[item.description]) {
+              acc[item.description] = [];
+            }
+            acc[item.description].push(item);
+          }
+          return acc;
+        }, {});
+
+        Object.keys(groupedData).forEach(description => {
+          const items = groupedData[description];
+          items.sort((a, b) => {
+            const [monthA, yearA] = a.month.split(' ');
+            const [monthB, yearB] = b.month.split(' ');
+
+            const monthIndexA = monthsPT.indexOf(monthA);
+            const monthIndexB = monthsPT.indexOf(monthB);
+
+            if (yearA !== yearB) {
+              return parseInt(yearA) - parseInt(yearB);
+            }
+
+            return monthIndexA - monthIndexB;
+          });
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          const cardContent = document.createElement('div');
+          cardContent.className = 'card-content';
+
+          const title = document.createElement('span');
+          title.className = 'card-title';
+          title.textContent = description;
+          cardContent.appendChild(title);
+
+          items.forEach(item => {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = `${item.month}: R$ ${item.value.toFixed(2)}`;
+            cardContent.appendChild(paragraph);
+          });
+
+          // Botão de exclusão do card
+          const deleteButton = document.createElement('button');
+          deleteButton.className = 'btn-delete';
+          deleteButton.textContent = 'Excluir';
+          deleteButton.addEventListener('click', () => deleteCard(description));
+          cardContent.appendChild(deleteButton);
+
+          card.appendChild(cardContent);
+          container.appendChild(card);
+        });
+      }
+
+      function deleteCard(description) {
+        const userId = auth.currentUser.uid;
+
+        // 1. Remover os itens do array `data` localmente
+        data = data.filter(item => item.description !== description);
+
+        // 2. Atualizar a interface localmente
         updateGroupedCardContainer();
         updateCardBalances();
+
+        // 3. Excluir os itens do Firebase
+        const itemsToDelete = data.filter(item => item.description === description); // Pega os IDs novamente para garantir que tenha apenas os itens relacionados ao card
+
+        // Remover todos os itens associados a essa descrição
+        const deletePromises = itemsToDelete.map(item => {
+          const itemRef = ref(database, `creditCardData/${userId}/${item.id}`);
+          return remove(itemRef)
+            .then(() => {
+              console.log(`Item ${item.id} excluído com sucesso.`);
+            })
+            .catch((error) => {
+              console.error("Erro ao excluir item:", error);
+            });
+        });
+
+        Promise.all(deletePromises)
+          .then(() => {
+            console.log("Todos os itens do card foram excluídos do Firebase");
+          })
+          .catch((error) => {
+            console.error("Erro ao excluir itens do Firebase:", error);
+          });
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems, {});
+        document.getElementById('addButton').addEventListener('click', function() {
+          addItem();
+          updateGroupedCardContainer();
+          updateCardBalances();
+        });
+        document.getElementById('backButton').addEventListener('click', function() {
+          window.history.back();
+        });
+        document.getElementById('nextButton').addEventListener('click', function() {
+          window.history.back();
+        });
       });
-      document.getElementById('backButton').addEventListener('click', function () {
-        window.history.back();
-      });
-      document.getElementById('nextButton').addEventListener('click', function () {
-        window.history.back();
-      });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 
 </html>

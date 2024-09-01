@@ -97,13 +97,9 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-// Variável para armazenar o usuário autenticado
-let user = null; // Declare user aqui
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Usuário autenticado:", user.uid);
-        user = currentUser; // Atribuir o usuário à variável user
         loadDataFromDatabase(user.uid);
         loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
       } else {

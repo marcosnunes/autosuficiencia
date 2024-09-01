@@ -354,6 +354,10 @@
   margin: 10px 0;
 }
 
+.card-content .input-field .col.s10 input[type="number"].credit {
+  width: 25px !important; 
+}
+
 .card-content span.card-title {
   display: block;
   font-weight: bold;

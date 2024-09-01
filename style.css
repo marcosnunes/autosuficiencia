@@ -459,3 +459,7 @@
 .auth-form .center {
   text-align: center;
 }
+
+.card-content-chart {
+  padding: 0%;
+}

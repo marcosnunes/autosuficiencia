@@ -114,41 +114,71 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Usuário autenticado:", user.uid);
-
-
-        var inputData = []; // Dados digitados
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-          loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-          loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
-        });
-
-        function saveDataToDatabase(userId) {
-          const januaryData = {
-            creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // 
-            initialBalance: document.getElementById("JanInitialBalance").value,
-            transactions: inputData,
-            tithe: document.getElementById("januaryTithe").textContent,
-            creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // Incluindo o saldo do cartão de crédito
-            totalCredit: document.getElementById("totalCredit").textContent,
-            totalDebit: document.getElementById("totalDebit").textContent,
-            finalBalance: document.getElementById("totalJaneiro").textContent,
-            balance: document.getElementById("balance").textContent,
-            percentage: document.getElementById("totalPorcentagem").textContent
-          };
-          set(ref(database, 'users/' + userId + '/january'), januaryData)
-            .then(() => {
-              console.log("Dados salvos com sucesso!");
-            })
-            .catch((error) => {
-              console.error("Erro ao salvar dados:", error);
-            });
-        }
+        loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
+        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
       } else {
         window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
       }
     });
+
+    var inputData = []; // Dados digitados
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
+      loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+    });
+
+    function loadDataFromDatabase(userId) {
+      const januaryRef = ref(database, 'users/' + userId + '/january');
+      onValue(januaryRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          document.getElementById("JanInitialBalance").value = data.initialBalance || '';
+          inputData = data.transactions || [];
+          document.getElementById("januaryTithe").textContent = data.tithe || '0.00';
+          document.getElementById("januaryCreditCardBalance").textContent = data.creditCardBalance || '0.00'; // Carregar do Firebase
+          document.getElementById("totalCredit").textContent = data.totalCredit || '0.00';
+          document.getElementById("totalDebit").textContent = data.totalDebit || '0.00';
+          document.getElementById("totalJaneiro").textContent = data.finalBalance || '0.00';
+          document.getElementById("balance").textContent = data.balance || '0.00';
+          document.getElementById("totalPorcentagem").textContent = data.percentage || '0.00%';
+          updateDataCards(); // Atualizar os cards de dados
+          calculateTotal(); // Calcular totais
+        }
+      });
+    }
+
+    // Função para carregar o saldo do cartão de crédito do Firebase
+    function loadCreditCardBalance(userId) {
+      const balanceRef = ref(database, `creditCardBalances/${userId}/januaryCreditCardBalance`);
+      onValue(balanceRef, (snapshot) => {
+        const balance = snapshot.val() || '0.00';
+        document.getElementById('januaryCreditCardBalance').textContent = balance;
+      });
+    }
+
+    function saveDataToDatabase(userId) {
+      const januaryData = {
+        creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // 
+        initialBalance: document.getElementById("JanInitialBalance").value,
+        transactions: inputData,
+        tithe: document.getElementById("januaryTithe").textContent,
+        creditCardBalance: document.getElementById("januaryCreditCardBalance").textContent, // Incluindo o saldo do cartão de crédito
+        totalCredit: document.getElementById("totalCredit").textContent,
+        totalDebit: document.getElementById("totalDebit").textContent,
+        finalBalance: document.getElementById("totalJaneiro").textContent,
+        balance: document.getElementById("balance").textContent,
+        percentage: document.getElementById("totalPorcentagem").textContent
+      };
+      set(ref(database, 'users/' + userId + '/january'), januaryData)
+        .then(() => {
+          console.log("Dados salvos com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao salvar dados:", error);
+        });
+    }
 
     function calculateTotal() {
       var creditCardBalance = Number(document.getElementById("januaryCreditCardBalance").textContent);
@@ -192,37 +222,6 @@
       const userId = auth.currentUser.uid;
       saveDataToDatabase(userId);
     }
-
-    function loadDataFromDatabase(userId) {
-      const januaryRef = ref(database, 'users/' + userId + '/january');
-      onValue(januaryRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          document.getElementById("JanInitialBalance").value = data.initialBalance || '';
-          inputData = data.transactions || [];
-          document.getElementById("januaryTithe").textContent = data.tithe || '0.00';
-          document.getElementById("januaryCreditCardBalance").textContent = data.creditCardBalance || '0.00'; // Carregar do Firebase
-          document.getElementById("totalCredit").textContent = data.totalCredit || '0.00';
-          document.getElementById("totalDebit").textContent = data.totalDebit || '0.00';
-          document.getElementById("totalJaneiro").textContent = data.finalBalance || '0.00';
-          document.getElementById("balance").textContent = data.balance || '0.00';
-          document.getElementById("totalPorcentagem").textContent = data.percentage || '0.00%';
-          updateDataCards(); // Atualizar os cards de dados
-          calculateTotal(); // Calcular totais
-        }
-      });
-    }
-
-    // Função para carregar o saldo do cartão de crédito do Firebase
-    function loadCreditCardBalance(userId) {
-      const balanceRef = ref(database, `creditCardBalances/${userId}/januaryCreditCardBalance`);
-      onValue(balanceRef, (snapshot) => {
-        const balance = snapshot.val() || '0.00';
-        document.getElementById('januaryCreditCardBalance').textContent = balance;
-      });
-    }
-
-
 
     // Função para salvar o saldo final de janeiro no Firebase
     function saveFinalBalance() {

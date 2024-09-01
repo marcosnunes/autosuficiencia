@@ -19,6 +19,10 @@
   }
 }
 
+.card-content canvas { 
+  height: 300px; /* Define uma altura inicial para o gráfico */
+}
+
 /* Redefine as margens e outros estilos para a impressão */
 @media print {
   * {

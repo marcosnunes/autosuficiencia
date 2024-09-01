@@ -14,7 +14,7 @@
   }
 
   .card-content .input-field .col.s10 input[type="number"].credit {
-    width: 15px; 
+    width: 25px !important; 
   }
 
 /* Redefine as margens e outros estilos para a impressão */

@@ -17,6 +17,11 @@
     width: 100%; /* O gráfico ocupará toda a largura do container */
     height: auto; /* A altura será ajustada automaticamente */
   }
+
+  /* Ajusta o container do cartão */
+  .card {
+    height: auto; /* Permite que o container se expanda verticalmente */
+  }
 }
 
 .card-content canvas { 

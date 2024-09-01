@@ -27,7 +27,7 @@
 }
 
 .card-content canvas {
-  height: 300px;
+  height: auto;
   /* Define uma altura inicial para o gráfico */
 }
 

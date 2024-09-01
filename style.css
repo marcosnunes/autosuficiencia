@@ -173,12 +173,13 @@
   /* Centraliza o texto horizontalmente */
 }
 
-/* Estilo para o botão PDF */
+
 #pdfButton,
 #addButton,
 #backButton,
 #nextButton,
-#homeButton {
+#homeButton,
+#chartButton {
   background-color: #258fff;
   /* Cor de fundo azul */
   color: white;

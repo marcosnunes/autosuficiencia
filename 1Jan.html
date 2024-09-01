@@ -22,10 +22,8 @@
     </nav>
   </div>
   <div class="container">
-    <div class="row" style="display: flex; align-items: center; width: 100%">
-      <button id="homeButton" class="btn btn-default">Inicio</button>
-      <button id="chartButton" class="btn btn-default">Gráficos</button>
-    </div>
+    <button id="homeButton" class="btn btn-default">Inicio</button>
+    <button id="chartButton" class="btn btn-default">Gráficos</button>
     <div class="card" id="aviso-saldo-inicial">
       <div class="card-content">
         <p>Adicione aqui o saldo inicial, ainda que você inicie os seus
@@ -542,6 +540,11 @@
       window.location.href = "2Fev.html"; // Redireciona para a página de Fevereiro
     }
 
+    // Função para redirecionar para a página de Gráficos
+    function redirectToChart() {
+      window.location.href = "chart.html"; // Redireciona para a página de Gráficos
+    }
+
     // Função para gerar um ID único
     function uuidv4() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -554,6 +557,7 @@
     // Adicionar eventos aos botões de navegação
     document.getElementById("backButton").onclick = redirectToIndex;
     document.getElementById("nextButton").onclick = redirectToFev;
+    document.getElementById("chartButton").onclick = redirectToChart;
     document.getElementById("homeButton").onclick = redirectToIndex;
 
     // Adicionar evento ao botão de adicionar

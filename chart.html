@@ -105,7 +105,10 @@
           });
         }))
         .then(() => {
-          resolve(yearData);
+          // Agora que todos os dados do Firebase foram carregados
+          // chame a função para criar os gráficos
+          displayCharts(yearData);
+          resolve(yearData); 
         })
         .catch((error) => {
           console.error("Erro ao carregar dados do Firebase:", error);
@@ -194,7 +197,6 @@
 
     async function loadAndDisplayCharts(userId) {
       yearData = await loadDataFromFirebase(userId);
-      displayCharts(yearData);
     }
 
     if (auth.currentUser) {

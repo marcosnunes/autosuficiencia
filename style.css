@@ -14,18 +14,15 @@
   }
 
   .card-content canvas {
-    width: 100%;
-    /* O gráfico ocupará toda a largura do container */
-    height: auto;
-    /* A altura será ajustada automaticamente */
+    width: 100%;/* O gráfico ocupará toda a largura do container */
+    height: auto;/* A altura será ajustada automaticamente */
   }
 
   /* Ajusta o container do cartão */
   .card {
-    height: auto;
-    /* Permite que o container se expanda verticalmente */
-    min-height: 400px;
-    /* Define a altura mínima do container */
+    width: 100%;/* O container do cartão ocupa toda a largura disponível */
+    height: auto;/* Permite que o container se expanda verticalmente */
+    min-height: 400px;/* Define a altura mínima do container */
   }
 }
 

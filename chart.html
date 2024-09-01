@@ -194,7 +194,7 @@
       createCreditDebitChart(yearData);
       createMonthlyBalanceChart(yearData);
 
-      // Chama rotateCharts() após os gráficos serem criados
+      // Chama resizeCharts() após os gráficos serem criados
       resizeCharts();
     }
 
@@ -215,18 +215,12 @@
 
       // Verifica se a tela está na orientação portrait
       if (window.innerWidth < 1100) {
-        creditDebitChart.canvas.style.transform = "rotate(90deg)";
-        monthlyBalanceChart.canvas.style.transform = "rotate(90deg)";
-
         // Ajuste a altura do container para telas portrait
         creditDebitContainer.style.height = "auto";
         monthlyBalanceContainer.style.height = "auto";
-      } else {
+      } else { 
         // Restaura o layout para telas maiores
-        creditDebitChart.canvas.style.transform = "rotate(0deg)";
-        monthlyBalanceChart.canvas.style.transform = "rotate(0deg)";
-
-        creditDebitContainer.style.height = "";
+        creditDebitContainer.style.height = ""; 
         monthlyBalanceContainer.style.height = "";
       }
     }

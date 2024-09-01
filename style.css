@@ -332,7 +332,7 @@
 }
 
 .tithe-checkbox, .tithe-label {
-  display: inline-block;
+  margin-left: 0%;
 }
 
 .card-balance-content .card-content {

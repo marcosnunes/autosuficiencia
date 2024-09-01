@@ -110,12 +110,16 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
+    // Variável para armazenar o usuário autenticado
+    let user = null; // Declare user aqui
+
     // Verificação do estado de autenticação
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Usuário autenticado:", user.uid);
-        loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("Usuário autenticado:", currentUser.uid);
+        user = currentUser; // Atribuir o usuário à variável user
+        loadDataFromDatabase(currentUser.uid); // Carregar dados do banco de dados
+        loadCreditCardBalance(currentUser.uid); // Carregar o saldo do cartão de crédito
       } else {
         window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
       }
@@ -125,8 +129,10 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-      loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
-      loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+      if (user) {
+        loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
+        loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
+      }
     });
 
     function loadDataFromDatabase(userId) {
@@ -181,6 +187,10 @@
     }
 
     function calculateTotal() {
+      if (!user) {
+        // Se o usuário não estiver logado, não faça nada
+        return;
+      }
       var creditCardBalance = Number(document.getElementById("januaryCreditCardBalance").textContent);
       var initialBalance = Number(document.getElementById("JanInitialBalance").value);
       var debitTotal = 0;
@@ -219,13 +229,16 @@
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;
 
       // Salvar dados no banco de dados após calcular totais
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId);
+      saveDataToDatabase(user.uid);
     }
 
     // Função para salvar o saldo final de janeiro no Firebase
     function saveFinalBalance() {
-      const userId = auth.currentUser.uid;
+      if (!user) {
+        // Se o usuário não estiver logado, não faça nada
+        return;
+      }
+      const userId = user.uid;
       const finalBalance = document.getElementById("totalJaneiro").textContent;
       set(ref(database, `users/${userId}/january/finalBalance`), finalBalance).then(() => {
         console.log("Saldo final de janeiro salvo com sucesso!");
@@ -239,8 +252,9 @@
       calculateTotal(); // Recalcular totais após salvar
       // Atualizar os cards de dados
       updateDataCards();
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId); // Salvar dados no banco de dados
+      if (user) { // Verificar se o usuário está logado
+        saveDataToDatabase(user.uid); // Salvar dados no banco de dados
+      }
     }
 
     function addData(month) {
@@ -286,8 +300,9 @@
         updateDataCards();
 
         // Salvar dados no banco de dados após adicionar
-        const userId = auth.currentUser.uid;
-        saveDataToDatabase(userId);
+        if (user) { // Verificar se o usuário está logado
+          saveDataToDatabase(user.uid);
+        }
       } else {
         // Exibir mensagem de erro se a descrição, o dia e pelo menos um dos campos débito ou crédito estiverem em branco
         alert("Por favor, preencha a descrição, o dia e pelo menos um dos campos débito ou crédito.");
@@ -305,8 +320,9 @@
       }
 
       // Atualize os dados salvos no banco de dados após excluir
-      const userId = auth.currentUser.uid;
-      saveDataToDatabase(userId); // Salvar dados no banco de dados após excluir
+      if (user) { // Verificar se o usuário está logado
+        saveDataToDatabase(user.uid); // Salvar dados no banco de dados após excluir
+      }
       // Atualize os cards após a exclusão
       updateDataCards();
       calculateTotal();
@@ -409,8 +425,9 @@
         updateDataCards();
 
         // Salvar dados no banco de dados após editar
-        const userId = auth.currentUser.uid;
-        saveDataToDatabase(userId);
+        if (user) { // Verificar se o usuário está logado
+          saveDataToDatabase(user.uid);
+        }
 
         // Recalcular totais após a edição
         calculateTotal();

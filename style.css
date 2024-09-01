@@ -13,6 +13,9 @@
     font-size: 16px !important;
   }
 
+  .card-content .input-field .col.s10 input[type="number"].credit {
+    width: 15px; 
+  }
 
 /* Redefine as margens e outros estilos para a impressão */
 @media print {

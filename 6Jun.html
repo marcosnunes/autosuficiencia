@@ -215,7 +215,7 @@
 
       var percentage = 0;
       if (creditTotal !== 0) {
-        percentage = (debitTotal / creditTotal) * 100;
+        percentage = ((debitTotal + creditCardBalance) / creditTotal) * 100;
       }
       var formattedPercentage = !isNaN(percentage) ? percentage.toFixed(2) + "%" : '0.00%';
       document.getElementById("totalPorcentagem").textContent = formattedPercentage;

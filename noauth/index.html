@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="Yff2j8JlvuxGq1xMU5RiItiDzE7joDwedatYpX5hfd8">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords"
+    content="autossuficiência, orçamento doméstico, dinheiro, planejamento orçamentário, finanças pessoais" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style-index.css">
+  <title>Autossuficiência</title>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <span class="brand-logo center">Autossuficiência</span>
+      </div>
+    </nav>
+  </div>
+  <div class="main-content">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <div class="card-columns">
+            <div class="card" id="card1">
+              <div class="card-content">
+                <span class="card-title">Janeiro</span>
+              </div>
+            </div>
+            <div class="card" id="card2">
+              <div class="card-content">
+                <span class="card-title">Fevereiro</span>
+              </div>
+            </div>
+            <div class="card" id="card3">
+              <div class="card-content">
+                <span class="card-title">Março</span>
+              </div>
+            </div>
+            <div class="card" id="card4">
+              <div class="card-content">
+                <span class="card-title">Abril</span>
+              </div>
+            </div>
+            <div class="card" id="card5">
+              <div class="card-content">
+                <span class="card-title">Maio</span>
+              </div>
+            </div>
+            <div class="card" id="card6">
+              <div class="card-content">
+                <span class="card-title">Junho</span>
+              </div>
+            </div>
+            <div class="card" id="card7">
+              <div class="card-content">
+                <span class="card-title">Julho</span>
+              </div>
+            </div>
+            <div class="card" id="card8">
+              <div class="card-content">
+                <span class="card-title">Agosto</span>
+              </div>
+            </div>
+            <div class="card" id="card9">
+              <div class="card-content">
+                <span class="card-title">Setembro</span>
+              </div>
+            </div>
+            <div class="card" id="card10">
+              <div class="card-content">
+                <span class="card-title">Outubro</span>
+              </div>
+            </div>
+            <div class="card" id="card11">
+              <div class="card-content">
+                <span class="card-title">Novembro</span>
+              </div>
+            </div>
+            <div class="card" id="card12">
+              <div class="card-content">
+                <span class="card-title">Dezembro</span>
+              </div>
+            </div>
+            <div class="card" id="card13">
+              <div class="card-content">
+                <span class="card-title">Cartão de crédito</span>
+              </div>
+            </div>
+            <div class="card" id="card14">
+              <div class="card-content">
+                <span class="card-title">Perguntas Frequêntes</span>
+              </div>
+            </div>
+            <div class="card" id="card15">
+              <div class="card-content">
+                <span class="card-title">Privacidade</span>
+              </div>
+            </div>
+            <div class="card" id="card16">
+              <div class="card-content">
+                <span class="card-title">Investimentos</span>
+              </div>
+            </div>
+            <div class="card" id="card17">
+              <div class="card-content">
+                <span class="card-title">Dízimos</span>
+              </div>
+            </div>
+            <div class="card" id="card18">
+              <div class="card-content">
+                <span class="card-title">Relatório</span>
+              </div>
+            </div>
+            <div class="card" id="login">
+              <div class="card-content">
+                <span class="card-title">fazer login</span>
+              </div>
+            </div>
+            <div class="card" id="limparDadosCard">
+              <div class="card-content">
+                <span class="card-title" style="color: #d50000">Recomeçar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="row">
+          <div class="col s12">
+            <p class="custom-flow-text">
+              "Organizai-vos; preparai todas as coisas necessárias e estabelecei uma casa, sim, uma casa de
+              oração, uma casa de jejum, uma casa de fé, uma casa de aprendizado, uma casa de glória, uma casa de ordem,
+              uma
+              casa de Deus." D&C 88:119
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col s12 center-align">
+          <p class="grey-text text-lighten-4">© 2024 Autossuficiência. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    // Função para limpar o localStorage e mostrar uma mensagem
+    function limparLocalStorage() {
+      localStorage.clear(); // Limpar todos os dados no localStorage
+      alert("Os dados foram apagados."); // Exibir uma mensagem de confirmação
+    }
+
+    // Adicione um evento de clique ao card
+    document.getElementById("limparDadosCard").addEventListener("click", limparLocalStorage);
+
+    document.getElementById("login").addEventListener("click", function () {
+      window.location.href = "https://marcosnunes.github.io/autossuficiencia"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card1").addEventListener("click", function () {
+      window.location.href = "1Jan.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card2").addEventListener("click", function () {
+      window.location.href = "2Fev.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card3").addEventListener("click", function () {
+      window.location.href = "3Mar.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card4").addEventListener("click", function () {
+      window.location.href = "4Abr.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card5").addEventListener("click", function () {
+      window.location.href = "5Mai.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card6").addEventListener("click", function () {
+      window.location.href = "6Jun.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card7").addEventListener("click", function () {
+      window.location.href = "7Jul.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card8").addEventListener("click", function () {
+      window.location.href = "8Ago.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card9").addEventListener("click", function () {
+      window.location.href = "9Set.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card10").addEventListener("click", function () {
+      window.location.href = "10Out.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card11").addEventListener("click", function () {
+      window.location.href = "11Nov.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card12").addEventListener("click", function () {
+      window.location.href = "12Dez.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card13").addEventListener("click", function () {
+      window.location.href = "cartao_de_credito.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card14").addEventListener("click", function () {
+      window.location.href = "perguntas_frequentes.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card15").addEventListener("click", function () {
+      window.location.href = "privacy.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card16").addEventListener("click", function () {
+      window.location.href = "investimentos.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card17").addEventListener("click", function () {
+      window.location.href = "dizimo.html"; // Redireciona para o URL desejado
+    });
+    document.getElementById("card18").addEventListener("click", function () {
+      window.location.href = "relatorio.html"; // Redireciona para o URL desejado
+    });
+  </script>
+</body>
+
+</html>

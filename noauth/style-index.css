@@ -1,0 +1,89 @@
+    .card-columns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+
+    .card {
+      width: calc(25% - 20px);
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+ 
+    .card-content {
+      color: #1e88e5;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-content img {
+      max-width: 24px;
+      max-height: 24px;
+      margin: 0 10 5 0;     
+    }
+    
+    #limparDadosCard {
+     background-color: #fce4ec;
+    }
+    @media (max-width: 1024px) {
+      .card {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 100%;
+      }       
+    }
+
+    @media (max-width: 768px) {
+      #whatsapp-tela-grande {
+        display: none;
+      }       
+    }
+
+    @media (min-width: 1024px) {
+      #whatsapp {
+        display: none;
+      }       
+    }
+
+    .navigation {
+      position: sticky;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-wrapper {
+      position: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .card {
+      background-color: #5765ca;
+    }
+    
+    .card-title {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .page-footer {
+      width: 100%;
+    }
+    
+    .main-content {
+      margin-bottom: 40px;
+      margin-top: 40px;
+    }

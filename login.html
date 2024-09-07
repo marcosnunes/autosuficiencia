@@ -34,14 +34,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
     import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAPvYiaaGlHaJMaJzXoifWHBmp1be04F80",
-      authDomain: "web-app-autossuficiência.firebaseapp.com",
-      databaseURL: "https://web-app-autossuficiência-default-rtdb.firebaseio.com/",
-      projectId: "web-app-autossuficiência",
-      appId: "1:702286825063:web:f16256bd9bfc7de3dcb6c2"
-    };
+    import firebaseConfig from './config.js';
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);

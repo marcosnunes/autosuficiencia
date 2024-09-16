@@ -531,6 +531,11 @@
       window.location.href = "index.html"; // Redireciona para a página inicial
     }
 
+    // Função para redirecionar para a página de Dezembro
+    function redirectToDez() {
+      windowwindow.location.href = "12Dez.html"; // Redireciona para a página de Dezembro
+    }
+
     // Função para redirecionar para a página de Fevereiro
     function redirectToFev() {
       window.location.href = "2Fev.html"; // Redireciona para a página de Fevereiro
@@ -551,7 +556,7 @@
     }
 
     // Adicionar eventos aos botões de navegação
-    document.getElementById("backButton").onclick = redirectToIndex;
+    document.getElementById("backButton").onclick = redirectToDez;
     document.getElementById("nextButton").onclick = redirectToFev;
     document.getElementById("chartButton").onclick = redirectToChart;
     document.getElementById("homeButton").onclick = redirectToIndex;

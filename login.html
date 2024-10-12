@@ -49,7 +49,7 @@
           window.location.href = "index.html";
         })
         .catch((error) => {
-          let errorMessage = "Digite sua senha";
+          let errorMessage = "Senha inválida";
           if (error.code === 'auth/user-not-found') {
             errorMessage = "Usuário não encontrado. Verifique o e-mail e tente novamente.";
           } else if (error.code === 'auth/wrong-password') {

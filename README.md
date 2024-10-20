@@ -4,7 +4,7 @@ Disponível na Playstore
 https://play.google.com/store/apps/details?id=com.autossuficiencia
 
 Para computador e iPhone acesse pelo link:
-https://marcosnunes.github.io/autossuficiencia
+https://marcosnunes.github.io/autossuficiencia-web
 
 <b>O que é o app Autossuficiência?</b>
 Todos precisamos ter nossa vida financeira organizada.

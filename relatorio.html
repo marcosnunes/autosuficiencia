@@ -27,9 +27,9 @@
       <div class="card-content">
         <p>
           Selecione a moeda desejada para aplicar o câmbio e visualizar o seu
-          relatório anual em Euros, Dólares ou Libras Esterlinas. Para que o saldo 
-          do cartão de crédito seja exibido corretamente, é importante percorrer todos 
-          os meses do ano para atualização dos saldos finais devido à dependencia destes 
+          relatório anual em Euros, Dólares ou Libras Esterlinas. Para que o saldo
+          do cartão de crédito seja exibido corretamente, é importante percorrer todos
+          os meses do ano para atualização dos saldos finais devido à dependencia destes
           valores entre si.
         </p>
       </div>
@@ -170,26 +170,26 @@
             });
           });
         }))
-        // Promessa para carregar dados do cartão de crédito
-        .then(() => {
-          const creditCardRef = ref(database, `creditCardBalances/${userId}`);
-          onValue(creditCardRef, (snapshot) => {
-            const creditCardData = snapshot.val();
-            yearData['creditCard'] = creditCardData;
-            resolve();
-          }, (error) => {
-            console.error(`Erro ao obter dados do cartão de crédito:`, error);
-            reject(error);
+          // Promessa para carregar dados do cartão de crédito
+          .then(() => {
+            const creditCardRef = ref(database, `creditCardBalances/${userId}`);
+            onValue(creditCardRef, (snapshot) => {
+              const creditCardData = snapshot.val();
+              yearData['creditCard'] = creditCardData;
+              resolve();
+            }, (error) => {
+              console.error(`Erro ao obter dados do cartão de crédito:`, error);
+              reject(error);
+            });
+          })
+          .then(() => {
+            console.log("Dados do ano:", yearData);
+            calculateAnnualTotals(yearData);
+            displayAnnualLaunches(yearData);
+          })
+          .catch((error) => {
+            console.error("Erro ao carregar dados do Firebase:", error);
           });
-        })
-        .then(() => {
-          console.log("Dados do ano:", yearData);
-          calculateAnnualTotals(yearData);
-          displayAnnualLaunches(yearData);
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar dados do Firebase:", error);
-        });
       });
     }
 
@@ -309,6 +309,30 @@
           );
         })
         .catch(error => console.error("Erro ao obter taxas de câmbio:", error));
+    }
+
+    // Funções para deslizamento de tela touch:
+    var touchstartX = 0;
+    var touchendX = 0;
+    var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
+
+    document.addEventListener('touchstart', function (event) {
+      touchstartX = event.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function (event) {
+      touchendX = event.changedTouches[0].screenX;
+      handleGesture();
+    });
+
+    function handleGesture() {
+      if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        // Deslizamento para a esquerda
+        window.history.back(); // Redireciona para a página anterior
+      } else if (touchendX > touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        // Deslizamento para a direita
+        window.history.back(); // Redireciona para a página anterior
+      }
     }
   </script>
 </body>

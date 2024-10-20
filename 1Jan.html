@@ -28,8 +28,11 @@
     <div class="card" id="aviso-saldo-inicial">
       <div class="card-content">
         <p>Adicione aqui o saldo inicial, ainda que você inicie os seus
-          lançamentos no meio do ano. Clique em editar
-          para editar o card inserido.
+          lançamentos no meio do ano. Se você tiver um extrato no formato 
+          OFX, você poderá importá-lo clicando no botão Importar Extrato. 
+          Por enquanto esta funcionalidade só foi testada com extratos do 
+          banco Nubank e precisa ser no formato OFX apenas. 
+          Clique em editar para editar o card inserido.
         </p>
       </div>
     </div>
@@ -71,6 +74,8 @@
         <div class="add-container">
           <button id="addButton" class="btn btn-default">Adicionar</button>
           <span style="margin-right: 20px;"></span>
+          <input type="file" id="ofxFile" accept=".ofx" style="display: none;">
+          <button id="importButton" class="btn btn-default">Importar Extrato</button>
         </div>
       </div>
     </div>
@@ -95,9 +100,9 @@
   <!-- Importar Firebase -->
   <script type="module">
     // Importa os módulos necessários do Firebase
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js';
+    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js';
     import firebaseConfig from './config.js';
 
     // Inicializa o Firebase
@@ -121,7 +126,6 @@
     });
 
     var inputData = []; // Dados digitados
-
 
     document.addEventListener('DOMContentLoaded', function () {
       if (user) {
@@ -259,49 +263,50 @@
       var debit = document.getElementById("janDebit").value;
       var credit = document.getElementById("janCredit").value;
       var day = document.getElementById("janDay").value;
-      var tithe = document.getElementById("titheCheckbox").checked; // Obter o estado do checkbox
+      var tithe = document.getElementById("titheCheckbox").checked;
 
-      // Verificar se a descrição, o dia e pelo menos um dos campos débito ou crédito estão preenchidos
       if (description.trim() !== "" && day.trim() !== "" && (debit.trim() !== "" || credit.trim() !== "")) {
-        // Gerar um ID único para os novos dados
-        var id = uuidv4();
-        console.log("Novo ID do card:", id);
+        if (isNaN(day) || day < 1 || day > 31) {
+          alert("Por favor, insira um dia válido entre 1 e 31.");
+          return;
+        }
 
-        // Criar um objeto com os dados e o ID gerado
+        var id = uuidv4();
         var newData = {
           id: id,
           description: description,
-          debit: debit,
-          credit: credit,
+          debit: 0, // Inicializa débito como 0
+          credit: 0, // Inicializa crédito como 0
           day: day,
-          tithe: tithe, // Adicionar o atributo "tithe" ao objeto
-          dayBalance: 0 // Valor inicial do saldo do dia
+          tithe: tithe,
+          dayBalance: 0
         };
 
-        // Adicionar os novos dados ao array de dados digitados
+        // Atribui o valor de débito ou crédito ao objeto newData
+        if (debit.trim() !== "") {
+          newData.debit = parseFloat(debit);
+        } else if (credit.trim() !== "") {
+          newData.credit = parseFloat(credit);
+        }
+
         inputData.push(newData);
 
-        // Limpar os campos de entrada
         document.getElementById("janDescription").value = "";
         document.getElementById("janDebit").value = "";
         document.getElementById("janCredit").value = "";
         document.getElementById("janDay").value = "";
-        document.getElementById("titheCheckbox").checked = false; // Desmarcar o checkbox
+        document.getElementById("titheCheckbox").checked = false;
 
-        // Ordenar o array inputData com base no campo "dia"
         inputData.sort(function (a, b) {
           return parseInt(a.day) - parseInt(b.day);
         });
 
-        // Atualizar os cards de dados
         updateDataCards();
 
-        // Salvar dados no banco de dados após adicionar
-        if (user) { // Verificar se o usuário está logado
+        if (user) {
           saveDataToDatabase(user.uid);
         }
       } else {
-        // Exibir mensagem de erro se a descrição, o dia e pelo menos um dos campos débito ou crédito estiverem em branco
         alert("Por favor, preencha a descrição, o dia e pelo menos um dos campos débito ou crédito.");
       }
     }
@@ -369,7 +374,6 @@
         M.updateTextFields();
       }
     }
-
 
     // Função para salvar a edição dos dados
     function saveEdit(cardId) {
@@ -477,6 +481,7 @@
       cardContent.className = "card-content";
 
       // Adicionar os campos de dados ao card
+      console.log("dataItem:", dataItem);
       if (dataItem.description.trim() !== "") {
         var description = document.createElement("p");
         description.textContent = "Descrição: " + dataItem.description;
@@ -487,15 +492,29 @@
         day.textContent = "Dia: " + dataItem.day;
         cardContent.appendChild(day);
       }
-      if (dataItem.debit.trim() !== "") {
+      // Verifique se dataItem.debit é uma string antes de usar trim()
+      if (typeof dataItem.debit === 'string' && dataItem.debit.trim() !== "") {
         var debit = document.createElement("p");
         debit.textContent = "Débito: " + dataItem.debit;
         cardContent.appendChild(debit);
+      } else if (typeof dataItem.debit === 'number' && dataItem.debit !== 0) {
+        var debit = document.createElement("p");
+        debit.textContent = "Débito: " + dataItem.debit;
+        cardContent.appendChild(debit);
+      } else {
+        // dataItem.debit é undefined ou 0, não exiba o valor do débito
       }
-      if (dataItem.credit.trim() !== "") {
+      // Verifique o tipo de dataItem.credit e aplique trim() se necessário
+      if (typeof dataItem.credit === 'string' && dataItem.credit.trim() !== "") {
         var credit = document.createElement("p");
         credit.textContent = "Crédito: " + dataItem.credit;
         cardContent.appendChild(credit);
+      } else if (typeof dataItem.credit === 'number' && dataItem.credit !== 0) {
+        var credit = document.createElement("p");
+        credit.textContent = "Crédito: " + dataItem.credit;
+        cardContent.appendChild(credit);
+      } else {
+        // dataItem.credit é undefined ou 0, não exiba o valor do crédito
       }
 
       // Adicionar o saldo do dia
@@ -525,19 +544,18 @@
       return card;
     }
 
-
     // Função para redirecionar para a página inicial
     function redirectToIndex() {
       window.location.href = "index.html"; // Redireciona para a página inicial
     }
 
-    // Função para redirecionar para a página de Dezembro
-    function redirectToDez() {
+    // Função para redirecionar para a página de Fevereiro
+    function redirectToDec() {
       window.location.href = "12Dez.html"; // Redireciona para a página de Dezembro
     }
 
     // Função para redirecionar para a página de Fevereiro
-    function redirectToFev() {
+    function redirectToFeb() {
       window.location.href = "2Fev.html"; // Redireciona para a página de Fevereiro
     }
 
@@ -556,8 +574,8 @@
     }
 
     // Adicionar eventos aos botões de navegação
-    document.getElementById("backButton").onclick = redirectToDez;
-    document.getElementById("nextButton").onclick = redirectToFev;
+    document.getElementById("backButton").onclick = redirectToDec;
+    document.getElementById("nextButton").onclick = redirectToFeb;
     document.getElementById("chartButton").onclick = redirectToChart;
     document.getElementById("homeButton").onclick = redirectToIndex;
 
@@ -572,6 +590,126 @@
     // Chamar a função para salvar o saldo final de janeiro quando o cálculo é feito
     calculateTotal();
     saveFinalBalance();
+
+    // Adicione um evento de clique ao botão de importação
+    document.getElementById("importButton").addEventListener('click', async function () {
+      document.getElementById("ofxFile").click(); // Abre a caixa de diálogo para selecionar o arquivo OFX
+    });
+
+    // Evento para quando o arquivo OFX é selecionado
+    document.getElementById("ofxFile").addEventListener('change', async function (event) {
+      const file = event.target.files[0];
+
+      try {
+        // Ler o arquivo OFX como texto
+        const fileReader = new FileReader();
+        fileReader.onload = async function (event) {
+          const ofxData = event.target.result;
+
+          try {
+            // Parsear o arquivo OFX
+            const parsedTransactions = parseOFX(ofxData);
+            console.log("Transações OFX:", parsedTransactions);
+
+            // Adicionar as transações ao array inputData
+            parsedTransactions.forEach(transaction => {
+              inputData.push({
+                id: uuidv4(),
+                description: transaction.description,
+                debit: transaction.debit,
+                credit: transaction.credit,
+                day: transaction.date,
+                tithe: false,
+                dayBalance: 0
+              });
+            });
+
+            // Atualizar os cards e recalcular os totais
+            updateDataCards();
+            calculateTotal();
+
+            // Salve os dados no banco de dados
+            if (user) {
+              saveDataToDatabase(user.uid);
+            }
+          } catch (error) {
+            console.error("Erro ao processar arquivo OFX:", error);
+            alert("Erro ao processar arquivo OFX. Verifique se o arquivo é válido.");
+          }
+        };
+        fileReader.readAsText(file);
+      } catch (error) {
+        console.error("Erro ao ler arquivo OFX:", error);
+        alert("Erro ao ler arquivo OFX. Tente novamente.");
+      }
+    });
+
+    // Função para parsear arquivos OFX
+    function parseOFX(ofxData) {
+      const transactions = [];
+      const lines = ofxData.split('\n');
+
+      let currentTransaction = {};
+      let isInsideTransaction = false;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        if (line.startsWith('<STMTTRN')) {
+          isInsideTransaction = true;
+          currentTransaction = {};
+        } else if (line.startsWith('</STMTTRN')) {
+          isInsideTransaction = false;
+          transactions.push(currentTransaction);
+        } else if (isInsideTransaction) {
+          if (line.startsWith('<MEMO>')) {
+            currentTransaction.description = line.replace(/<MEMO>/g, '').replace(/<\/MEMO>/g, '').trim();
+          } else if (line.startsWith('<DTPOSTED>')) {
+            const match = line.match(/<DTPOSTED>(\d{8})(\d{6})\[-?\d+:.*\]<\/DTPOSTED>/);
+            if (match) {
+              currentTransaction.date = match[1].substring(6, 8);
+            } else {
+              console.warn("Linha DTPOSTED ausente ou com formato inválido.");
+            }
+          } else if (line.startsWith('<TRNAMT>')) {
+            currentTransaction.amount = parseFloat(line.substring(8, line.length - 10));
+            if (currentTransaction.amount > 0) {
+              currentTransaction.credit = currentTransaction.amount;
+              currentTransaction.debit = 0;
+            } else {
+              currentTransaction.debit = Math.abs(currentTransaction.amount);
+              currentTransaction.credit = 0;
+            }
+          }
+        }
+      }
+
+      return transactions;
+    }
+
+    // Funções para deslizamento de tela touch:
+    var touchstartX = 0;
+    var touchendX = 0;
+    var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
+
+    document.addEventListener('touchstart', function(event) {
+      touchstartX = event.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function(event) {
+      touchendX = event.changedTouches[0].screenX;
+      handleGesture();
+    });
+
+    function handleGesture() {
+      if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        // Deslizamento para a esquerda
+        redirectToFeb(); // Redireciona para a página anterior
+      } else if (touchendX > touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        // Deslizamento para a direita
+        redirectToIndex(); // Redireciona para a próxima página
+      }
+    }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>

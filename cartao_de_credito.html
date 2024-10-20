@@ -401,22 +401,46 @@
           });
       }
 
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('select');
         M.FormSelect.init(elems, {});
-        document.getElementById('addButton').addEventListener('click', function() {
+        document.getElementById('addButton').addEventListener('click', function () {
           addItem();
           updateGroupedCardContainer();
           updateCardBalances();
         });
-        document.getElementById('backButton').addEventListener('click', function() {
+        document.getElementById('backButton').addEventListener('click', function () {
           window.history.back();
         });
-        document.getElementById('nextButton').addEventListener('click', function() {
+        document.getElementById('nextButton').addEventListener('click', function () {
           window.history.back();
         });
       });
+
+      // Funções para deslizamento de tela touch:
+      var touchstartX = 0;
+      var touchendX = 0;
+      var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
+
+      document.addEventListener('touchstart', function (event) {
+        touchstartX = event.changedTouches[0].screenX;
+      });
+
+      document.addEventListener('touchend', function (event) {
+        touchendX = event.changedTouches[0].screenX;
+        handleGesture();
+      });
+
+      function handleGesture() {
+        if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+          // Deslizamento para a esquerda
+          window.history.back(); // Redireciona para a página anterior
+        } else if (touchendX > touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+          // Deslizamento para a direita
+          window.history.back(); // Redireciona para a página anterior
+        }
+      }
     </script>
-  </body>
+</body>
 
 </html>

@@ -5,7 +5,9 @@
 
 /* Oculta o botão PDF em telas menores */
 @media screen and (max-width: 1100px) {
-  #pdfButton {
+  #pdfButton,
+  #backButton,
+  #nextButton {
     display: none !important;
   }
 
@@ -162,7 +164,8 @@
 #backButton,
 #nextButton,
 #homeButton,
-#chartButton {
+#chartButton,
+#importButton {
   background-color: #258fff;
   /* Cor de fundo azul */
   color: white;

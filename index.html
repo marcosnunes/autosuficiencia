@@ -165,64 +165,67 @@
 
     // Função para limpar os dados do Firebase Realtime Database e localStorage
     function limparDados() {
-      // Limpar localStorage
-      localStorage.clear();
+      // Confirmação do usuário antes de limpar os dados
+      if (confirm("Tem certeza que deseja limpar todos os seus dados? Esta ação é irreversível.")) {
+        // Limpar localStorage
+        localStorage.clear();
 
-      // Obter o userId do localStorage ou da autenticação
-      const userId = localStorage.getItem('userId') || (auth.currentUser ? auth.currentUser.uid : null);
+        // Obter o userId do localStorage ou da autenticação
+        const userId = localStorage.getItem('userId') || (auth.currentUser ? auth.currentUser.uid : null);
 
-      // Verificar se o userId está disponível
-      if (userId) {
-        // Referência para os dados do cartão de crédito
-        const creditCardDataRef = ref(database, 'creditCardData/' + userId);
+        // Verificar se o userId está disponível
+        if (userId) {
+          // Referência para os dados do cartão de crédito
+          const creditCardDataRef = ref(database, 'creditCardData/' + userId);
 
-        // Referência para os dados de cada mês
-        const januaryRef = ref(database, 'users/' + userId + '/january');
-        const februaryRef = ref(database, 'users/' + userId + '/february');
-        const marchRef = ref(database, 'users/' + userId + '/march');
-        const aprilRef = ref(database, 'users/' + userId + '/april');
-        const mayRef = ref(database, 'users/' + userId + '/may');
-        const juneRef = ref(database, 'users/' + userId + '/june');
-        const julyRef = ref(database, 'users/' + userId + '/july');
-        const augustRef = ref(database, 'users/' + userId + '/august');
-        const septemberRef = ref(database, 'users/' + userId + '/september');
-        const octoberRef = ref(database, 'users/' + userId + '/october');
-        const novemberRef = ref(database, 'users/' + userId + '/november');
-        const decemberRef = ref(database, 'users/' + userId + '/december');
+          // Referência para os dados de cada mês
+          const januaryRef = ref(database, 'users/' + userId + '/january');
+          const februaryRef = ref(database, 'users/' + userId + '/february');
+          const marchRef = ref(database, 'users/' + userId + '/march');
+          const aprilRef = ref(database, 'users/' + userId + '/april');
+          const mayRef = ref(database, 'users/' + userId + '/may');
+          const juneRef = ref(database, 'users/' + userId + '/june');
+          const julyRef = ref(database, 'users/' + userId + '/july');
+          const augustRef = ref(database, 'users/' + userId + '/august');
+          const septemberRef = ref(database, 'users/' + userId + '/september');
+          const octoberRef = ref(database, 'users/' + userId + '/october');
+          const novemberRef = ref(database, 'users/' + userId + '/november');
+          const decemberRef = ref(database, 'users/' + userId + '/december');
 
-        // Referência para o nó raiz de creditCardBalances
-        const creditCardBalancesRef = ref(database, 'creditCardBalances/' + userId);
+          // Referência para o nó raiz de creditCardBalances
+          const creditCardBalancesRef = ref(database, 'creditCardBalances/' + userId);
 
-        // Referência para os dados do usuário
-        const userRef = ref(database, 'users/' + userId);
+          // Referência para os dados do usuário
+          const userRef = ref(database, 'users/' + userId);
 
-        // Remover os dados do Firebase Realtime Database
-        Promise.all([
-          remove(creditCardDataRef),
-          remove(januaryRef),
-          remove(februaryRef),
-          remove(marchRef),
-          remove(aprilRef),
-          remove(mayRef),
-          remove(juneRef),
-          remove(julyRef),
-          remove(augustRef),
-          remove(septemberRef),
-          remove(octoberRef),
-          remove(novemberRef),
-          remove(decemberRef),
-          remove(creditCardBalancesRef), // Remove todos os dados dentro de creditCardBalances
-          remove(userRef)
-        ])
-          .then(() => {
-            console.log("Todos os dados do usuário apagados do Firebase.");
-            alert("Os dados foram apagados do Firebase e localStorage."); // Mensagem de confirmação
-          })
-          .catch((error) => {
-            console.error("Erro ao apagar dados do Firebase: ", error);
-          });
-      } else {
-        alert("Usuário não autenticado. Não é possível limpar dados do Firebase.");
+          // Remover os dados do Firebase Realtime Database
+          Promise.all([
+            remove(creditCardDataRef),
+            remove(januaryRef),
+            remove(februaryRef),
+            remove(marchRef),
+            remove(aprilRef),
+            remove(mayRef),
+            remove(juneRef),
+            remove(julyRef),
+            remove(augustRef),
+            remove(septemberRef),
+            remove(octoberRef),
+            remove(novemberRef),
+            remove(decemberRef),
+            remove(creditCardBalancesRef), // Remove todos os dados dentro de creditCardBalances
+            remove(userRef)
+          ])
+            .then(() => {
+              console.log("Todos os dados do usuário apagados do Firebase.");
+              alert("Os dados foram apagados do Firebase e localStorage."); // Mensagem de confirmação
+            })
+            .catch((error) => {
+              console.error("Erro ao apagar dados do Firebase: ", error);
+            });
+        } else {
+          alert("Usuário não autenticado. Não é possível limpar dados do Firebase.");
+        }
       }
     }
 

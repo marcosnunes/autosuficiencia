@@ -681,7 +681,7 @@
               console.warn("Linha DTPOSTED ausente ou com formato inválido.");
             }
           } else if (line.startsWith('<TRNAMT>')) {
-            currentTransaction.amount = parseFloat(line.substring(8, line.length - 10));
+            currentTransaction.amount = parseFloat(line.substring(8, line.length - 10)).toFixed(2);
             if (currentTransaction.amount > 0) {
               currentTransaction.credit = currentTransaction.amount;
               currentTransaction.debit = 0;

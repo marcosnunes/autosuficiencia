@@ -28,10 +28,10 @@
     <div class="card" id="aviso-saldo-inicial-telaGrande">
       <div class="card-content">
         <p>Adicione aqui o saldo inicial, ainda que você inicie os seus
-          lançamentos no meio do ano. Se você tiver um extrato no formato 
-          OFX, você poderá importá-lo clicando no botão Importar Extrato. 
-          Por enquanto esta funcionalidade só foi testada com extratos do 
-          banco Nubank e precisa ser no formato OFX apenas. 
+          lançamentos no meio do ano. Se você tiver um extrato no formato
+          OFX, você poderá importá-lo clicando no botão Importar Extrato.
+          Por enquanto esta funcionalidade só foi testada com extratos do
+          banco Nubank e precisa ser no formato OFX apenas.
           Clique em editar para editar o card inserido.
         </p>
       </div>
@@ -39,8 +39,8 @@
     <div class="card" id="aviso-saldo-inicial-telaPequena">
       <div class="card-content">
         <p>Adicione aqui o saldo inicial, ainda que você inicie os seus
-          lançamentos no meio do ano. Para passar para 
-          o mês seguinte arraste para o lado. 
+          lançamentos no meio do ano. Para passar para
+          o mês seguinte arraste para o lado.
           Clique em editar para editar o card inserido.
         </p>
       </div>
@@ -681,7 +681,12 @@
               console.warn("Linha DTPOSTED ausente ou com formato inválido.");
             }
           } else if (line.startsWith('<TRNAMT>')) {
-            currentTransaction.amount = parseFloat(line.substring(8, line.length - 10)).toFixed(2);
+            // Use parseFloat para converter o valor para número decimal
+            currentTransaction.amount = parseFloat(line.replace(/<TRNAMT>/g, '').replace(/<\/TRNAMT>/g, '').trim());
+
+            // Arredonde o valor para duas casas decimais
+            currentTransaction.amount = currentTransaction.amount.toFixed(2);
+
             if (currentTransaction.amount > 0) {
               currentTransaction.credit = currentTransaction.amount;
               currentTransaction.debit = 0;
@@ -701,11 +706,11 @@
     var touchendX = 0;
     var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
 
-    document.addEventListener('touchstart', function(event) {
+    document.addEventListener('touchstart', function (event) {
       touchstartX = event.changedTouches[0].screenX;
     });
 
-    document.addEventListener('touchend', function(event) {
+    document.addEventListener('touchend', function (event) {
       touchendX = event.changedTouches[0].screenX;
       handleGesture();
     });

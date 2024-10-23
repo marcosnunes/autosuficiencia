@@ -724,7 +724,12 @@
               console.warn("Linha DTPOSTED ausente ou com formato inválido.");
             }
           } else if (line.startsWith('<TRNAMT>')) {
-            currentTransaction.amount = parseFloat(line.substring(8, line.length - 10)).toFixed(2);
+            // Use parseFloat para converter o valor para número decimal
+            currentTransaction.amount = parseFloat(line.replace(/<TRNAMT>/g, '').replace(/<\/TRNAMT>/g, '').trim());
+
+            // Arredonde o valor para duas casas decimais
+            currentTransaction.amount = currentTransaction.amount.toFixed(2);
+
             if (currentTransaction.amount > 0) {
               currentTransaction.credit = currentTransaction.amount;
               currentTransaction.debit = 0;

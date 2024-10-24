@@ -620,17 +620,27 @@
             const parsedTransactions = parseOFX(ofxData);
             console.log("Transações OFX:", parsedTransactions);
 
-            // Adicionar as transações ao array inputData
+            // Verifica se a transação já existe com base na descrição e data
+            function transactionExists(transaction) {
+              return inputData.some(existingTransaction =>
+                existingTransaction.description === transaction.description &&
+                existingTransaction.date === transaction.date
+              );
+            }
+
+            // Adiciona as transações ao array inputData, apenas se não existirem
             parsedTransactions.forEach(transaction => {
-              inputData.push({
-                id: uuidv4(),
-                description: transaction.description,
-                debit: transaction.debit,
-                credit: transaction.credit,
-                day: transaction.date,
-                tithe: false,
-                dayBalance: 0
-              });
+              if (!transactionExists(transaction)) {
+                inputData.push({
+                  id: uuidv4(),
+                  description: transaction.description,
+                  debit: transaction.debit,
+                  credit: transaction.credit,
+                  day: transaction.date,
+                  tithe: false,
+                  dayBalance: 0
+                });
+              }
             });
 
             // Atualizar os cards e recalcular os totais

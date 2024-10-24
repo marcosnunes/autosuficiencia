@@ -25,6 +25,7 @@
   <div class="container">
     <button id="homeButton" class="btn btn-default">Inicio</button>
     <button id="chartButton" class="btn btn-default">Gráficos</button>
+    <button id="clearMonthButton" class="btn btn-default">Limpar Mês</button>
     <div class="card">
       <div class="card-content" id="initBalance">
         <span class="card-title">Saldo inicial de julho</span>
@@ -788,6 +789,40 @@
         redirectToJun(); // Redireciona para a página anterior
       }
     }
+
+    // Função para limpar os dados do mês
+    function clearMonthData() {
+      if (user) { // Verifica se o usuário está logado
+        // Limpa os dados do banco de dados
+        set(ref(database, 'users/' + user.uid + '/july'), null)
+          .then(() => {
+            console.log("Dados do mês de julho limpos com sucesso!");
+            // Limpa os dados no array inputData
+            inputData = [];
+            // Limpa os campos da tela
+            document.getElementById("JulInitialBalance").value = "";
+            document.getElementById("julyTithe").textContent = "0.00";
+            document.getElementById("julyCreditCardBalance").textContent = "0.00";
+            document.getElementById("totalCredit").textContent = "0.00";
+            document.getElementById("totalDebit").textContent = "0.00";
+            document.getElementById("totalJulho").textContent = "0.00";
+            document.getElementById("balance").textContent = "0.00";
+            document.getElementById("totalPorcentagem").textContent = "0.00%";
+            // Atualiza os cards de dados
+            updateDataCards();
+          })
+          .catch((error) => {
+            console.error("Erro ao limpar dados do mês:", error);
+          });
+      } else {
+        // Se o usuário não estiver logado, mostra um alerta
+        alert("Você precisa estar logado para limpar os dados do mês.");
+      }
+    }
+
+    // Adicione um evento de clique ao botão "Limpar Mês"
+    document.getElementById("clearMonthButton").onclick = clearMonthData;
+    
 
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

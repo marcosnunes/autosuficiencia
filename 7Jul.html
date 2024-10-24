@@ -810,6 +810,7 @@
             document.getElementById("totalPorcentagem").textContent = "0.00%";
             // Atualiza os cards de dados
             updateDataCards();
+            calculateTotal();
           })
           .catch((error) => {
             console.error("Erro ao limpar dados do mês:", error);

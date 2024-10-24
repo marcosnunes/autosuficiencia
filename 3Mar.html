@@ -790,26 +790,24 @@
       }
     }
 
-    // Função para limpar os dados do mês de Março
-    function clearMarchData() {
+    // Função para limpar os dados do mês
+    function clearMonthData() {
       if (user) { // Verifica se o usuário está logado
         // Limpa os dados do banco de dados
         set(ref(database, 'users/' + user.uid + '/march'), null)
           .then(() => {
             console.log("Dados do mês de março limpos com sucesso!");
-
-            // Limpa os dados no array 'inputDataMarch'
-            inputDataMarch = [];
-
+            // Limpa os dados no array inputData
+            inputData = [];
             // Limpa os campos da tela
             document.getElementById("MarInitialBalance").value = "";
             document.getElementById("marchTithe").textContent = "0.00";
-            document.getElementById("marchCreditCardBalance").textContent = "0.00"; 
-            document.getElementById("totalCreditMarch").textContent = "0.00"; 
-            document.getElementById("totalDebitMarch").textContent = "0.00"; 
-            document.getElementById("totalMarço").textContent = "0.00"; 
-            document.getElementById("balanceMarch").textContent = "0.00"; 
-            document.getElementById("totalPorcentagemMarch").textContent = "0.00%"; 
+            document.getElementById("marchCreditCardBalance").textContent = "0.00";
+            document.getElementById("totalCredit").textContent = "0.00";
+            document.getElementById("totalDebit").textContent = "0.00";
+            document.getElementById("totalMarch").textContent = "0.00";
+            document.getElementById("balance").textContent = "0.00";
+            document.getElementById("totalPorcentagem").textContent = "0.00%";
             // Atualiza os cards de dados
             updateDataCards();
           })

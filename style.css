@@ -167,7 +167,8 @@
 #nextButton,
 #homeButton,
 #chartButton,
-#importButton {
+#importButton,
+#clearMonthButton {
   background-color: #258fff;
   /* Cor de fundo azul */
   color: white;
@@ -201,7 +202,9 @@
 #backButton:hover,
 #nextButton:hover,
 #homeButton:hover,
-#chartButton:hover {
+#chartButton:hover,
+#importButton:hover,
+#clearMonthButton:hover {
   background-color: #0056b3;
   /* Cor de fundo azul mais escuro ao passar o mouse */
 }

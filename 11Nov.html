@@ -685,7 +685,8 @@
                   credit: transaction.credit,
                   day: transaction.date,
                   tithe: false,
-                  dayBalance: 0
+                  dayBalance: 0,
+                  FITID: transaction.FITID // Adiciona o FITID à transação
                 });
               }
             });
@@ -771,11 +772,11 @@
     var touchendX = 0;
     var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
 
-    document.addEventListener('touchstart', function(event) {
+    document.addEventListener('touchstart', function (event) {
       touchstartX = event.changedTouches[0].screenX;
     });
 
-    document.addEventListener('touchend', function(event) {
+    document.addEventListener('touchend', function (event) {
       touchendX = event.changedTouches[0].screenX;
       handleGesture();
     });
@@ -822,7 +823,7 @@
 
     // Adicione um evento de clique ao botão "Limpar Mês"
     document.getElementById("clearMonthButton").onclick = clearMonthData;
-    
+
 
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

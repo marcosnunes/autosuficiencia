@@ -52,6 +52,8 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
+
+    // Nomes dos meses em inglês (para o Firebase)
     const months = [
       "january",
       "february",
@@ -65,6 +67,22 @@
       "october",
       "november",
       "december",
+    ];
+
+    // Nomes dos meses em português (para os gráficos)
+    const monthsPtBr = [
+      "janeiro",
+      "fevereiro",
+      "março",
+      "abril",
+      "maio",
+      "junho",
+      "julho",
+      "agosto",
+      "setembro",
+      "outubro",
+      "novembro",
+      "dezembro",
     ];
 
     let yearData = {};
@@ -129,7 +147,6 @@
           });
         }))
           .then(() => {
-            // Agora que todos os dados do Firebase foram carregados
             // chame a função para criar os gráficos
             displayCharts(yearData);
             resolve(yearData);
@@ -157,7 +174,7 @@
       new Chart(creditDebitChart, {
         type: "bar",
         data: {
-          labels: months,
+          labels: monthsPtBr, // Use monthsPtBr para rótulos
           datasets: [
             {
               label: "Crédito",
@@ -195,7 +212,7 @@
       new Chart(monthlyBalanceChart, {
         type: "line",
         data: {
-          labels: months,
+          labels: monthsPtBr, // Use monthsPtBr para rótulos
           datasets: [
             {
               label: "Saldo Mensal",

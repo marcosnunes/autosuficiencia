@@ -667,11 +667,10 @@
             const parsedTransactions = parseOFX(ofxData);
             console.log("Transações OFX:", parsedTransactions);
 
-            // Verifica se a transação já existe com base na descrição e data
+            // Verifica se a transação já existe com base no FITID
             function transactionExists(transaction) {
               return inputData.some(existingTransaction =>
-                existingTransaction.description === transaction.description &&
-                existingTransaction.date === transaction.date
+                existingTransaction.FITID === transaction.FITID
               );
             }
 
@@ -717,6 +716,7 @@
 
       let currentTransaction = {};
       let isInsideTransaction = false;
+      let currentFITID = null; // Armazena o FITID da transação atual
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
@@ -724,6 +724,7 @@
         if (line.startsWith('<STMTTRN')) {
           isInsideTransaction = true;
           currentTransaction = {};
+          currentFITID = null; // Reinicia o FITID para cada nova transação
         } else if (line.startsWith('</STMTTRN')) {
           isInsideTransaction = false;
           transactions.push(currentTransaction);
@@ -751,6 +752,12 @@
               currentTransaction.debit = Math.abs(currentTransaction.amount);
               currentTransaction.credit = 0;
             }
+          } else if (line.startsWith('<FITID>')) {
+            currentFITID = line.replace(/<FITID>/g, '').replace(/<\/FITID>/g, '').trim(); // Salva o FITID
+          }
+          // Adiciona o FITID à transação atual
+          if (currentFITID !== null) {
+            currentTransaction.FITID = currentFITID;
           }
         }
       }

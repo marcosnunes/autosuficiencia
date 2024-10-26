@@ -29,7 +29,7 @@
     <div class="card">
       <div class="card-content" id="initBalance">
         <span class="card-title">Saldo inicial de fevereiro</span>
-        <div class="form-control" id="FevInitialBalance">0.00</div>
+        <div class="form-control" id="FebInitialBalance">0.00</div>
       </div>
     </div>
     <div class="card" id="card-lancamento">
@@ -136,11 +136,11 @@
             const fevereiroData = snapshot.val();
 
             if (fevereiroData) {
-              const fevInitialBalance = fevereiroData.initialBalance || janeiroFinalBalance;
-              document.getElementById("FevInitialBalance").innerText = fevInitialBalance;
+              const FebInitialBalance = fevereiroData.initialBalance || janeiroFinalBalance;
+              document.getElementById("FebInitialBalance").innerText = FebInitialBalance;
               inputData = fevereiroData.transactions || [];
             } else {
-              document.getElementById("FevInitialBalance").innerText = janeiroFinalBalance;
+              document.getElementById("FebInitialBalance").innerText = janeiroFinalBalance;
               inputData = [];
             }
 
@@ -183,7 +183,7 @@
 
     function calculateTotal() {
       var creditCardBalance = Number(document.getElementById("fevCreditCardBalance").textContent);
-      var initialBalance = Number(document.getElementById("FevInitialBalance").innerText);
+      var initialBalance = Number(document.getElementById("FebInitialBalance").innerText);
       var debitTotal = 0;
       var creditTotal = 0;
       var titheTotal = 0;
@@ -264,7 +264,7 @@
       const finalBalance = calculateFinalBalance();
       const currentMonthRef = ref(database, `users/${userId}/months/${currentMonth}`);
       set(currentMonthRef, {
-        initialBalance: document.getElementById("FevInitialBalance").innerText,
+        initialBalance: document.getElementById("FebInitialBalance").innerText,
         transactions: inputData,
         tithe: document.getElementById("fevTithe").textContent,
         creditCardBalance: document.getElementById("fevCreditCardBalance").textContent,
@@ -288,7 +288,7 @@
 
       try {
         await set(currentMonthRef, {
-          initialBalance: document.getElementById("FevInitialBalance").innerText,
+          initialBalance: document.getElementById("FebInitialBalance").innerText,
           transactions: inputData,
           tithe: document.getElementById("fevTithe").textContent,
           creditCardBalance: document.getElementById("fevCreditCardBalance").textContent,
@@ -306,7 +306,7 @@
     }
 
     function calculateFinalBalance() {
-      const initialBalance = Number(document.getElementById("FevInitialBalance").innerText);
+      const initialBalance = Number(document.getElementById("FebInitialBalance").innerText);
       let finalBalance = initialBalance;
 
       for (const dataItem of inputData) {
@@ -318,7 +318,7 @@
     }
 
     function saveInitialBalance() {
-      const initialBalance = document.getElementById("FevInitialBalance").innerText;
+      const initialBalance = document.getElementById("FebInitialBalance").innerText;
       console.log("Salvando saldo inicial:", initialBalance);
       localStorage.setItem("currentBalance", initialBalance);
       calculateTotal();
@@ -517,7 +517,7 @@
 
       inputData.sort((a, b) => parseInt(a.day) - parseInt(b.day));
 
-      let runningBalance = Number(document.getElementById("FevInitialBalance").innerText);
+      let runningBalance = Number(document.getElementById("FebInitialBalance").innerText);
 
       for (const dataItem of inputData) {
         if (dataItem.credit) {
@@ -642,7 +642,7 @@
       addData("Fevereiro");
     };
 
-    document.getElementById("FevInitialBalance").oninput = saveInitialBalance;
+    document.getElementById("FebInitialBalance").oninput = saveInitialBalance;
 
     // Chamar a função para salvar o saldo final de janeiro quando o cálculo é feito
     calculateTotal();

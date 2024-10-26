@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Sua calculadora financeira prática">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Chatbot financeiro</title>
+</head>
+
+<body>
+  <div class="navigation">
+    <nav>
+      <div class="nav-wrapper">
+        <button id="backButton" class="btn btn-default">Voltar</button>
+        <span class="brand-logo center">Assistente</span>
+        <button id="nextButton" class="btn btn-default">Próximo</button>
+      </div>
+    </nav>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-content">
+        <div id="chatLog"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <input type="text" id="userInput" placeholder="Faça sua pergunta">
+        <button id="bot-button" class="btn btn-default">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Importar Firebase -->
+  <script type="module">
+    // Importa os módulos necessários do Firebase
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js';
+    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js';
+    import firebaseConfig from './config.js';
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // Variável para armazenar o usuário autenticado
+    let user = null; // Declare user aqui
+
+    // Verificação do estado de autenticação
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log("Usuário autenticado:", currentUser.uid);
+        user = currentUser;
+        loadDataFromDatabase(currentUser.uid);
+        loadCreditCardBalance(currentUser.uid);
+        loadInitialBalance(currentUser.uid);
+        // Exibe a mensagem de saudação ao carregar a página
+        displayBotMessage("Olá! 👋  Eu sou seu assistente financeiro. Posso te ajudar a verificar suas informações financeiras. Por exemplo: para saber o seu saldo inicial de Janeiro, me pergunte Qual é o meu saldo inicial de janeiro? Você pode saber sobre o saldo inicial, saldo final, valor da fatura do cartão de crédito... Lembre-se sempre de especificar o Mês que vc quer a informação. Como posso te ajudar hoje?");
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    // Variáveis para armazenar os dados financeiros
+    let januaryData = {};
+    let februaryData = {};
+    let marchData = {};
+    let aprilData = {};
+    let mayData = {};
+    let juneData = {};
+    let julyData = {};
+    let augustData = {};
+    let septemberData = {};
+    let octoberData = {};
+    let novemberData = {};
+    let decemberData = {};
+
+    // Carregar os dados financeiros do Firebase
+    function loadDataFromDatabase(userId) {
+      const databaseRef = ref(database, `users/${userId}`);
+      onValue(databaseRef, (snapshot) => {
+        const userData = snapshot.val(); // Objeto JavaScript direto do Firebase
+        if (userData) {
+          januaryData = userData.january || {};
+          februaryData = userData.february || {};
+          marchData = userData.march || {};
+          aprilData = userData.april || {};
+          mayData = userData.may || {};
+          juneData = userData.june || {};
+          julyData = userData.july || {};
+          augustData = userData.august || {};
+          septemberData = userData.september || {};
+          octoberData = userData.october || {};
+          novemberData = userData.november || {};
+          decemberData = userData.december || {};
+        }
+      });
+    }
+
+    // Carregar o saldo do cartão de crédito do Firebase
+    function loadCreditCardBalance(userId) {
+      const balanceRef = ref(database, `creditCardBalances/${userId}`);
+      onValue(balanceRef, (snapshot) => {
+        const data = snapshot.val(); // Objeto JavaScript direto do Firebase
+        if (data) {
+          januaryData.creditCardBalance = data.januaryCreditCardBalance || 0.00;
+          februaryData.creditCardBalance = data.februaryCreditCardBalance || 0.00;
+          marchData.creditCardBalance = data.marchCreditCardBalance || 0.00;
+          aprilData.creditCardBalance = data.aprilCreditCardBalance || 0.00;
+          mayData.creditCardBalance = data.mayCreditCardBalance || 0.00;
+          juneData.creditCardBalance = data.juneCreditCardBalance || 0.00;
+          julyData.creditCardBalance = data.julyCreditCardBalance || 0.00;
+          augustData.creditCardBalance = data.augustCreditCardBalance || 0.00;
+          septemberData.creditCardBalance = data.septemberCreditCardBalance || 0.00;
+          octoberData.creditCardBalance = data.octoberCreditCardBalance || 0.00;
+          novemberData.creditCardBalance = data.novemberCreditCardBalance || 0.00;
+          decemberData.creditCardBalance = data.decemberCreditCardBalance || 0.00;
+        }
+      });
+    }
+
+    // Carregar o saldo inicial do Firebase
+    function loadInitialBalance(userId) {
+      const balanceRef = ref(database, `initialBalances/${userId}`);
+      onValue(balanceRef, (snapshot) => {
+        const data = snapshot.val(); // Objeto JavaScript direto do Firebase
+        if (data) {
+          januaryData.initialBalance = data.JanInitialBalance || 0.00;
+          februaryData.initialBalance = data.FebInitialBalance || 0.00;
+          marchData.initialBalance = data.MarInitialBalance || 0.00;
+          aprilData.initialBalance = data.AprInitialBalance || 0.00;
+          mayData.initialBalance = data.MayInitialBalance || 0.00;
+          juneData.initialBalance = data.JunInitialBalance || 0.00;
+          julyData.initialBalance = data.JulInitialBalance || 0.00;
+          augustData.initialBalance = data.AugInitialBalance || 0.00;
+          septemberData.initialBalance = data.SepInitialBalance || 0.00;
+          octoberData.initialBalance = data.OctInitialBalance || 0.00;
+          novemberData.initialBalance = data.NovInitialBalance || 0.00;
+          decemberData.initialBalance = data.DecInitialBalance || 0.00;
+        }
+      });
+    }
+
+    // Interface de usuário do Chatbot
+    const chatLog = document.getElementById('chatLog');
+    const userInput = document.getElementById('userInput');
+
+    // Função para enviar a mensagem
+    function sendMessage() {
+      const message = userInput.value.trim();
+      if (message !== "") {
+        chatLog.innerHTML += `<div class="user-message"><strong>Você:</strong> ${message}</div>`;
+
+        // Chama processMessageAsync() que lida com a lógica de forma assíncrona
+        processMessageAsync(message);
+
+        userInput.value = "";
+      }
+    }
+
+    // Função processMessageAsync para lidar com a lógica de forma assíncrona
+    async function processMessageAsync(message) {
+      // Espera até que os dados do Firebase estejam carregados
+      await waitForData();
+
+      let response = "";
+      message = message.toLowerCase().trim();
+
+      // Palavras-chave para perguntas
+      const palavrasChave = {
+        saldoFinal: ["saldo final"],
+        saldoInicial: ["saldo inicial"],
+        dizimo: ["dizimo", "dízimo"],
+        cartaoCredito: ["cartão", "cartao", "fatura"],
+        totalCredito: ["total de crédito", "total de credito", "total crédito", "total credito"],
+        totalDebito: ["total de débito", "total de debito", "total débito", "total debito"],
+        balanco: ["balanço"],
+        percentual: ["percentual", "porcentagem", "porcento", "percento"],
+        saudacao: ["olá", "ola", "oi", "tudo bem"],
+        duvida: ["informacao", "informacoes", "informação", "informações", "dúvida", "duvida", "ajuda", "help", "pergunta"]
+      };
+
+      // Verificar se a mensagem contém uma palavra-chave
+      for (const chave in palavrasChave) {
+        if (palavrasChave[chave].some(keyword => message.includes(keyword))) {
+          // Encontrou uma palavra-chave
+          if (chave == "saudacao") {
+            response = 'Oi! Qual informação financeira você quer saber? Não esqueça de especificar o mês.';
+          } if (chave == "duvida") {
+            response = 'Você pode obter o valor do seu Saldo Final, Saldo Inicial, Dízimo, Fatura do Cartão de Crédito, Total de Crédito, Total de Débito, Balanço em moeda e em Porcentagem do mês que você especificar na mensagem. Apenas me pergunte. Por exemplo: Me diga qual é o valor da minha fatura do cartão de crédito do mês de novembro.';
+          } else if (chave === "saldoFinal") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.finalBalance) {
+                response = `O saldo final de ${month[0]} é ${monthData.finalBalance}.`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "dizimo") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.tithe) {
+                response = `O dízimo de ${month[0]} é ${monthData.tithe}.`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "saldoInicial") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.initialBalance) {
+                response = `O saldo inicial de ${month[0]} é ${monthData.initialBalance}.`;
+              } else {
+                // Se o saldo inicial não estiver disponível, procure o saldo final do mês anterior
+                const previousMonth = getPreviousMonth(month[0].toLowerCase());
+                if (previousMonth) {
+                  const previousMonthData = getMonthData(previousMonth);
+                  if (previousMonthData && previousMonthData.finalBalance) {
+                    response = `O saldo inicial de ${month[0]} é ${previousMonthData.finalBalance}, que é o saldo final de ${previousMonth}.`;
+                  } else {
+                    response = `Não encontrei dados para o saldo inicial de ${month[0]}.`;
+                  }
+                } else {
+                  response = `Não encontrei dados para o saldo inicial de ${month[0]}.`;
+                }
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "cartaoCredito") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.creditCardBalance) {
+                response = `O fatura do cartão de crédito em ${month[0]} foi de ${monthData.creditCardBalance}.`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "totalCredito") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.totalCredit) {
+                response = `O total de crédito em ${month[0]} é ${monthData.totalCredit}.`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "totalDebito") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.totalDebit) {
+                response = `O total de débito em ${month[0]} é ${monthData.totalDebit}.`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "balanco") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.balance) {
+                response = `O balanço em ${month[0]} é ${monthData.balance}. O balanço representa a diferença entre o crédito e o débito, ou seja, se este valor for um valor negativo sifnifica que você gastou mais do que ganhou. Para saber quanto foi o seu balanço em porcentagem, pergunte (Qual foi a porcentagem das minhas transações para ${month[0]})`;
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          } else if (chave === "percentual") {
+            // Buscar mês na pergunta
+            const month = message.match(/janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro/i);
+            if (month) {
+              const monthData = getMonthData(month[0].toLowerCase());
+              if (monthData && monthData.percentage) {
+                const percentage = parseFloat(monthData.percentage); // Converte a string para número
+                if (percentage > 100) {
+                  const balance = Math.abs(parseFloat(monthData.balance)); // Remove o sinal negativo
+                  response = `O percentual de débito em relação ao crédito em ${month[0]} é ${monthData.percentage}, ou seja, você gastou ${balance.toFixed(2)} a mais do que ganhou. Cuidado com gastos excessivos. Que tal checar o saldo final de ${month[0]} para saber se você ficou no vermelho? Para isso digite qual o saldo final de ${month[0]}`;
+                } else if (percentage < 100) {
+                  response = `O percentual de débito em relação ao crédito em ${month[0]} é ${monthData.percentage}, ou seja, você recebeu ${monthData.balance} a mais do que gastou. Parabéns! Você está fazendo um bom trabalho de economia.`;
+                } else {
+                  response = `O percentual de débito em relação ao crédito em ${month[0]} é ${monthData.percentage}.`;
+                }
+              } else {
+                response = `Não encontrei dados para ${month[0]}.`;
+              }
+            } else {
+              response = `Por favor, especifique o mês.`;
+            }
+          }
+          break; // Encontrou uma palavra-chave, parar de verificar as outras
+        }
+      }
+
+      // Se nenhuma palavra-chave foi encontrada
+      if (response === "") {
+        response = `Desculpe, não entendi sua pergunta.`;
+      }
+
+      chatLog.innerHTML += `<div class="bot-message"><strong>Assistente:</strong> ${response}</div>`;
+    }
+
+    // Função para obter os dados do mês
+    function getMonthData(month) {
+      switch (month) {
+        case "janeiro":
+          return januaryData;
+        case "fevereiro":
+          return februaryData;
+        case "março":
+          return marchData;
+        case "abril":
+          return aprilData;
+        case "maio":
+          return mayData;
+        case "junho":
+          return juneData;
+        case "julho":
+          return julyData;
+        case "agosto":
+          return augustData;
+        case "setembro":
+          return septemberData;
+        case "outubro":
+          return octoberData;
+        case "novembro":
+          return novemberData;
+        case "dezembro":
+          return decemberData;
+        default:
+          return null;
+      }
+    }
+
+    // Função para obter o mês anterior
+    function getPreviousMonth(month) {
+      switch (month) {
+        case "fevereiro":
+          return "janeiro";
+        case "março":
+          return "fevereiro";
+        case "abril":
+          return "março";
+        case "maio":
+          return "abril";
+        case "junho":
+          return "maio";
+        case "julho":
+          return "junho";
+        case "agosto":
+          return "julho";
+        case "setembro":
+          return "agosto";
+        case "outubro":
+          return "setembro";
+        case "novembro":
+          return "outubro";
+        case "dezembro":
+          return "novembro";
+        default:
+          return null;
+      }
+    }
+
+    // Função para aguardar o carregamento dos dados do Firebase
+    async function waitForData() {
+      // Cria uma promessa que será resolvida quando todos os dados estiverem disponíveis
+      return new Promise(resolve => {
+        // Verifica se todos os dados do Firebase foram carregados
+        const checkDataReady = () => {
+          if (januaryData && februaryData && marchData && aprilData && mayData && juneData && julyData && augustData && septemberData && octoberData && novemberData && decemberData) {
+            resolve();
+          } else {
+            // Se não estiverem todos carregados, verifica novamente após um curto intervalo
+            setTimeout(checkDataReady, 100);
+          }
+        };
+        checkDataReady();
+      });
+    }
+
+    // Função para exibir uma mensagem do bot no chatLog
+    function displayBotMessage(message) {
+      chatLog.innerHTML += `<div class="bot-message"><strong>Assistente:</strong> ${message}</div>`;
+    }
+
+    // Inicializar a biblioteca Materialize e adicionar evento de clique ao botão
+    document.addEventListener('DOMContentLoaded', function () {
+      M.AutoInit(); // Inicializar Materialize
+      // Obter o botão pelo ID:
+      const botButton = document.getElementById('bot-button');
+
+      // Adicionar o evento de clique:
+      botButton.addEventListener('click', sendMessage);
+
+      document.getElementById('backButton').addEventListener('click', function () {
+        window.history.back();
+      });
+      document.getElementById('nextButton').addEventListener('click', function () {
+        window.history.back();
+      });
+    });
+
+    // Funções para deslizamento de tela touch:
+    var touchstartX = 0;
+    var touchendX = 0;
+    var gestureZone = 50;
+
+    document.addEventListener('touchstart', function (event) {
+      touchstartX = event.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function (event) {
+      touchendX = event.changedTouches[0].screenX;
+      handleGesture();
+    });
+
+    function handleGesture() {
+      if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        window.history.back();
+      } else if (touchendX > touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
+        window.history.back();
+      }
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+
+</html>

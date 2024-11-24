@@ -225,13 +225,8 @@
         creditCardBalanceTotal += parseFloat(yearData.creditCard.decemberCreditCardBalance) || 0;
       }
 
-      balance = creditTotal - debitTotal - creditCardBalanceTotal;
-      percentage =
-        creditTotal > 0
-          ? ((debitTotal + creditCardBalanceTotal) /
-            (creditTotal + creditCardBalanceTotal)) *
-          100
-          : 0;
+      balance = creditTotal - debitTotal;
+      percentage = creditTotal > 0 ? (debitTotal / creditTotal) * 100 : 0;
 
       updateBalanceValues("BRL", 1, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage);
     }

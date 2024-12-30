@@ -89,6 +89,10 @@
   </div>
   <!-- Importar Firebase -->
   <script type="module">
+    
+    import { displayYearInTitle } from './utils.js';
+    displayYearInTitle();
+
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js';
     import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js';
@@ -115,8 +119,14 @@
 
     var inputData = [];
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentYear = urlParams.get('year');
+
     document.addEventListener('DOMContentLoaded', function () {
       if (user) {
+        const titleSpan = document.querySelector(".brand-logo");
+        const currentTitle = titleSpan.textContent;
+        titleSpan.textContent = currentTitle + " " + currentYear;
         loadDataFromDatabase(user.uid); // Carregar dados do banco de dados
         loadCreditCardBalance(user.uid); // Carregar o saldo do cartão de crédito
       }
@@ -124,15 +134,15 @@
 
     function loadDataFromDatabase(userId) {
       console.log("Iniciando carregamento dos dados para o usuário:", userId);
-
-      const marçoRef = ref(database, 'users/' + userId + '/march');
+      let currentYear = new URLSearchParams(window.location.search).get('year');
+      const marçoRef = ref(database, 'users/' + userId + '/march' + '-' + currentYear);
       onValue(marçoRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const marçoFinalBalance = data.finalBalance || '0.00';
           console.log("Saldo final de março:", marçoFinalBalance);
 
-          const abrilRef = ref(database, 'users/' + userId + '/april');
+          const abrilRef = ref(database, 'users/' + userId + '/april' + '-' + currentYear);
           onValue(abrilRef, (snapshot) => {
             const abrilData = snapshot.val();
 
@@ -154,7 +164,8 @@
 
     // Função para carregar o saldo do cartão de crédito do Firebase
     function loadCreditCardBalance(userId) {
-      const balanceRef = ref(database, `creditCardBalances/${userId}/aprilCreditCardBalance`);
+    let currentYear = new URLSearchParams(window.location.search).get('year');
+      const balanceRef = ref(database, `creditCardBalances/${userId}/${currentYear}/aprilCreditCardBalance`);
       onValue(balanceRef, (snapshot) => {
         const balance = snapshot.val() || '0.00';
         document.getElementById('aprCreditCardBalance').textContent = balance;
@@ -162,6 +173,7 @@
     }
 
     async function saveDataToDatabase(userId) {
+      let currentYear = new URLSearchParams(window.location.search).get('year');
       const abrilData = {
         transactions: inputData,
         tithe: document.getElementById("aprTithe").textContent,
@@ -172,13 +184,13 @@
         balance: document.getElementById("balance").textContent,
         percentage: document.getElementById("totalPorcentagem").textContent
       };
-
-      try {
-        await set(ref(database, `users/${userId}/april`), abrilData);
-        console.log("Dados salvos com sucesso!");
-      } catch (error) {
-        console.error("Erro ao salvar dados:", error);
-      }
+      set(ref(database, 'users/' + userId + '/april' + '-' + currentYear), abrilData)
+        .then(() => {
+          console.log("Dados salvos com sucesso!");
+        })
+        .catch((error) => {
+          console.error("Erro ao salvar dados:", error);
+        });
     }
 
 
@@ -614,11 +626,11 @@
     }
 
     function redirectToMar() {
-      window.location.href = "3Mar.html";
+      window.location.href = `3Mar.html?year=${currentYear}`;
     }
 
     function redirectToMay() {
-      window.location.href = "5Mai.html";
+      window.location.href = `5Mai.html?year=${currentYear}`;
     }
 
     // Função para redirecionar para a página de Gráficos
@@ -795,8 +807,9 @@
     // Função para limpar os dados do mês
     function clearMonthData() {
       if (user) { // Verifica se o usuário está logado
+        let currentYear = new URLSearchParams(window.location.search).get('year');
         // Limpa os dados do banco de dados
-        set(ref(database, 'users/' + user.uid + '/april'), null)
+        set(ref(database, 'users/' + user.uid + '/april' + '-' + currentYear), null)
           .then(() => {
             console.log("Dados do mês de abril limpos com sucesso!");
             // Limpa os dados no array inputData

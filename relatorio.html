@@ -85,7 +85,15 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
   <script type="module">
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentYear = urlParams.get('year');
+
+    import { displayYearInTitle } from './utils.js';
+    displayYearInTitle();
+
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
     import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
@@ -155,90 +163,85 @@
     }
 
     function loadDataFromFirebase(userId) {
+      let currentYear = new URLSearchParams(window.location.search).get('year');
       const yearData = {};
 
       return new Promise((resolve, reject) => {
         Promise.all(months.map(month => {
           return new Promise((resolve, reject) => {
-            const monthRef = ref(database, `users/${userId}/${month}`);
+            const monthRef = ref(database, `users/${userId}/${month}-${currentYear}`);
             onValue(monthRef, (snapshot) => {
               const monthData = snapshot.val();
               yearData[month] = monthData;
               resolve();
             }, (error) => {
-              console.error(`Erro ao obter dados de ${month}:`, error);
+              console.error(`Erro ao obter dados de ${month}-${currentYear}:`, error);
               reject(error);
             });
           });
         }))
-          // Promessa para carregar dados do cartão de crédito
           .then(() => {
-            const creditCardRef = ref(database, `creditCardBalances/${userId}`);
-            onValue(creditCardRef, (snapshot) => {
-              const creditCardData = snapshot.val();
-              yearData['creditCard'] = creditCardData;
-              resolve();
-            }, (error) => {
-              console.error(`Erro ao obter dados do cartão de crédito:`, error);
-              reject(error);
+            const creditCardRef = ref(database, `creditCardBalances/${userId}/${currentYear}`);
+            return new Promise((resolve, reject) => {
+              onValue(creditCardRef, (snapshot) => {
+                const creditCardData = snapshot.val();
+                yearData['creditCard'] = creditCardData;
+                resolve();
+              }, (error) => {
+                console.error(`Erro ao obter dados do cartão de crédito:`, error);
+                reject(error);
+              });
             });
           })
           .then(() => {
             console.log("Dados do ano:", yearData);
             calculateAnnualTotals(yearData);
             displayAnnualLaunches(yearData);
+            resolve(yearData)
           })
           .catch((error) => {
             console.error("Erro ao carregar dados do Firebase:", error);
+            reject(error);
           });
       });
     }
 
     function calculateAnnualTotals(yearData) {
-      creditTotal = 0;
-      debitTotal = 0;
-      creditCardBalanceTotal = 0;
+      let creditCardBalanceTotal = 0;
+      let initialBalance = 0;
+      let debitTotal = 0;
+      let creditTotal = 0;
+      let titheTotal = 0;
+      let currentYear = new URLSearchParams(window.location.search).get('year');
+      currentYear = parseInt(currentYear) || new Date().getFullYear();
 
       for (const month in yearData) {
-        const monthData = yearData[month];
-        if (monthData) {
-          creditTotal += parseFloat(monthData.totalCredit) || 0;
-          debitTotal += parseFloat(monthData.totalDebit) || 0;
-          creditCardBalanceTotal +=
-            parseFloat(monthData.creditCardBalance) || 0;
+        if (yearData.hasOwnProperty(month)) {
+          const monthData = yearData[month];
+          if (monthData) {
+            creditTotal += Number(monthData.totalCredit || 0);
+            debitTotal += Number(monthData.totalDebit || 0);
+            if (monthData.tithe) {
+              titheTotal += Number(monthData.tithe || 0);
+            }
+          }
         }
       }
 
-      // Acumule os valores do cartão de crédito de cada mês
-      if (yearData.creditCard) {
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.januaryCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.februaryCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.marchCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.aprilCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.mayCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.juneCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.julyCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.augustCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.septemberCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.octoberCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.novemberCreditCardBalance) || 0;
-        creditCardBalanceTotal += parseFloat(yearData.creditCard.decemberCreditCardBalance) || 0;
-      }
+      const creditCardData = yearData['creditCard'];
 
+      if (creditCardData) {
+        for (const month of months) {
+          const id = `${month}CreditCardBalance`;
+          if (creditCardData && creditCardData.hasOwnProperty(id)) {
+            creditCardBalanceTotal += Number(creditCardData[id] || 0);
+          }
+        }
+      }
       balance = creditTotal - debitTotal;
       percentage = creditTotal > 0 ? (debitTotal / creditTotal) * 100 : 0;
 
       updateBalanceValues("BRL", 1, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage);
-    }
-
-    function updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage) {
-      const selectedCurrency = currency || document.getElementById("currencySelect").value;
-
-      document.getElementById("debitTotal").textContent = formatCurrency(debitTotal * exchangeRate, selectedCurrency);
-      document.getElementById("creditTotal").textContent = formatCurrency(creditTotal * exchangeRate, selectedCurrency);
-      document.getElementById("creditCardBalance").textContent = formatCurrency(creditCardBalanceTotal * exchangeRate, selectedCurrency);
-      document.getElementById("balance").textContent = formatCurrency(balance * exchangeRate, selectedCurrency);
-      document.getElementById("balancePercentage").textContent = percentage.toFixed(2) + "%";
     }
 
     function displayAnnualLaunches(yearData) {
@@ -306,7 +309,13 @@
         })
         .catch(error => console.error("Erro ao obter taxas de câmbio:", error));
     }
-
+    function updateBalanceValues(currency, exchangeRate, debitTotal, creditTotal, creditCardBalanceTotal, balance, percentage) {
+      document.getElementById("debitTotal").textContent = formatCurrency(debitTotal * exchangeRate, currency);
+      document.getElementById("creditTotal").textContent = formatCurrency(creditTotal * exchangeRate, currency);
+      document.getElementById("creditCardBalance").textContent = formatCurrency(creditCardBalanceTotal * exchangeRate, currency);
+      document.getElementById("balance").textContent = formatCurrency(balance * exchangeRate, currency);
+      document.getElementById("balancePercentage").textContent = percentage.toFixed(2) + "%";
+    }
     // Funções para deslizamento de tela touch:
     var touchstartX = 0;
     var touchendX = 0;

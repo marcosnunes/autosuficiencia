@@ -28,7 +28,11 @@
     <div id="user-name" class="user-name"></div> <!-- Adicionando a exibição do nome do usuário -->
     <button onclick="logout()" class="btn red btn-logout">Logout</button>
     <button onclick="deleteAccount()" class="btn red btn-logout">Excluir Conta</button>
-    <!-- <a href="delete_account.html">Excluir Conta</a> </p>  -->
+    <div class="input-field" style="display: flex; justify-content: center;">
+      <select id="yearSelector" style="width:100px; margin-right: 10px;">
+        <!-- As opções de ano serão adicionadas aqui pelo JavaScript -->
+      </select>
+    </div>
   </div>
   <div class="main-content">
     <div class="container">
@@ -141,15 +145,46 @@
     const auth = getAuth(app);
     const database = getDatabase(app);
 
+    // Variável para o ano atual
+    let currentYear;
+
     // Verificação do estado de autenticação e exibição do nome do usuário
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const displayName = user.displayName || user.email;
         document.getElementById('user-name').textContent = `Bem-vindo, ${displayName}!`;
+        setupYearSelector(); // Adiciona os anos no select
       } else {
         window.location.href = "login.html"; // Redireciona para a página de login se não estiver autenticado
       }
     });
+
+    // Gera as opções de ano e seleciona o ano salvo no localStorage
+    function setupYearSelector() {
+      const yearSelector = document.getElementById("yearSelector");
+      const startYear = 2020;
+      const endYear = 2030;
+      let savedYear = localStorage.getItem('selectedYear');
+
+      // Gera as opções de ano
+      for (let year = startYear; year <= endYear; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        yearSelector.add(option);
+      }
+
+      // Seleciona o ano salvo no localStorage, se existir, senão pega o ano atual
+      currentYear = savedYear ? parseInt(savedYear) : new Date().getFullYear();
+      yearSelector.value = currentYear;
+
+      // Salva o ano selecionado no localStorage quando ele for alterado pelo usuário
+      yearSelector.addEventListener('change', function() {
+          currentYear = parseInt(this.value); // Atualiza a variável global
+          localStorage.setItem('selectedYear', this.value);
+      });
+
+    }
 
     // Função de logout
     window.logout = function () {
@@ -237,27 +272,32 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("limparDadosCard").addEventListener("click", limparDados);
 
-      document.getElementById("card1").addEventListener("click", () => window.location.href = "1Jan.html");
-      document.getElementById("card2").addEventListener("click", () => window.location.href = "2Fev.html");
-      document.getElementById("card3").addEventListener("click", () => window.location.href = "3Mar.html");
-      document.getElementById("card4").addEventListener("click", () => window.location.href = "4Abr.html");
-      document.getElementById("card5").addEventListener("click", () => window.location.href = "5Mai.html");
-      document.getElementById("card6").addEventListener("click", () => window.location.href = "6Jun.html");
-      document.getElementById("card7").addEventListener("click", () => window.location.href = "7Jul.html");
-      document.getElementById("card8").addEventListener("click", () => window.location.href = "8Ago.html");
-      document.getElementById("card9").addEventListener("click", () => window.location.href = "9Set.html");
-      document.getElementById("card10").addEventListener("click", () => window.location.href = "10Out.html");
-      document.getElementById("card11").addEventListener("click", () => window.location.href = "11Nov.html");
-      document.getElementById("card12").addEventListener("click", () => window.location.href = "12Dez.html");
-      document.getElementById("card13").addEventListener("click", () => window.location.href = "cartao_de_credito.html");
+      document.getElementById("card1").addEventListener("click", () => window.location.href = `1Jan.html?year=${currentYear}`);
+      document.getElementById("card2").addEventListener("click", () => window.location.href = `2Fev.html?year=${currentYear}`);
+      document.getElementById("card3").addEventListener("click", () => window.location.href = `3Mar.html?year=${currentYear}`);
+      document.getElementById("card4").addEventListener("click", () => window.location.href = `4Abr.html?year=${currentYear}`);
+      document.getElementById("card5").addEventListener("click", () => window.location.href = `5Mai.html?year=${currentYear}`);
+      document.getElementById("card6").addEventListener("click", () => window.location.href = `6Jun.html?year=${currentYear}`);
+      document.getElementById("card7").addEventListener("click", () => window.location.href = `7Jul.html?year=${currentYear}`);
+      document.getElementById("card8").addEventListener("click", () => window.location.href = `8Ago.html?year=${currentYear}`);
+      document.getElementById("card9").addEventListener("click", () => window.location.href = `9Set.html?year=${currentYear}`);
+      document.getElementById("card10").addEventListener("click", () => window.location.href = `10Out.html?year=${currentYear}`);
+      document.getElementById("card11").addEventListener("click", () => window.location.href = `11Nov.html?year=${currentYear}`);
+      document.getElementById("card12").addEventListener("click", () => window.location.href = `12Dez.html?year=${currentYear}`);
+      document.getElementById("card13").addEventListener("click", () => window.location.href = `cartao_de_credito.html?year=${currentYear}`);
       document.getElementById("card14").addEventListener("click", () => window.location.href = "perguntas_frequentes.html");
       document.getElementById("card15").addEventListener("click", () => window.location.href = "privacy.html");
       document.getElementById("card16").addEventListener("click", () => window.location.href = "ferramentas.html");
-      document.getElementById("card17").addEventListener("click", () => window.location.href = "dizimo.html");
-      document.getElementById("card18").addEventListener("click", () => window.location.href = "relatorio.html");
-      document.getElementById("card19").addEventListener("click", () => window.location.href = "chart.html");
-      document.getElementById("card20").addEventListener("click", () => window.location.href = "aichat.html");
+      document.getElementById("card17").addEventListener("click", () => window.location.href = `dizimo.html?year=${currentYear}`);
+      document.getElementById("card18").addEventListener("click", () => window.location.href = `relatorio.html?year=${currentYear}`);
+      document.getElementById("card19").addEventListener("click", () => window.location.href = `chart.html?year=${currentYear}`);
+      document.getElementById("card20").addEventListener("click", () => window.location.href = `aichat.html?year=${currentYear}`);
     });
+
+    yearSelector.addEventListener('change', function() {
+          currentYear = parseInt(this.value); // Atualiza a variável global
+          localStorage.setItem('selectedYear', this.value); // Salva o ano atual no localStorage
+      });
   </script>
 </body>
 

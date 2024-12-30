@@ -118,7 +118,15 @@
       <div id="groupedCardContainer"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
     <script type="module">
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const currentYear = urlParams.get('year');
+
+      import { displayYearInTitle } from './utils.js';
+      displayYearInTitle();
+
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
       import { getDatabase, ref, set, onValue, remove } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js';
       import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
@@ -149,19 +157,22 @@
       ];
 
       function loadDataFromDatabase(userId) {
-        const dataRef = ref(database, `creditCardData/${userId}`);
+        const dataRef = ref(database, `creditCardData/${userId}/${currentYear}`);
         onValue(dataRef, (snapshot) => {
           const fetchedData = snapshot.val();
           if (fetchedData) {
             // Assumindo que fetchedData é um objeto com IDs como chaves
             data = Object.keys(fetchedData).map(key => ({ ...fetchedData[key], id: key }));
             console.log("Dados carregados:", data); // Depuração
+           // Atualizar as visualizações aqui
             updateGroupedCardContainer();
             updateCardBalances();
-
-            // Inicializa a caixa de seleção de meses após carregar os dados
-            var elems = document.querySelectorAll('select');
-            M.FormSelect.init(elems, {});
+          }
+         else {
+            // Se não houver dados, ainda precisamos atualizar as views para limpar valores existentes
+            data = [];
+            updateGroupedCardContainer();
+            updateCardBalances();
           }
         });
       }
@@ -176,7 +187,7 @@
 
       function addItemToDatabase(userId, item) {
         const itemId = uuidv4();
-        const itemRef = ref(database, `creditCardData/${userId}/${itemId}`);
+        const itemRef = ref(database, `creditCardData/${userId}/${currentYear}/${itemId}`);
         set(itemRef, { ...item, id: itemId }) // Incluindo o ID no item
           .then(() => {
             console.log("Item adicionado com sucesso.");
@@ -193,20 +204,22 @@
         const description = document.getElementById('description').value;
         const multiplicator = parseInt(document.getElementById('multiplicator').value);
         const billingValue = parseFloat(document.getElementById('billingValue').value);
+        let currentYear = new URLSearchParams(window.location.search).get('year');
 
         if (!month || !description || isNaN(multiplicator) || isNaN(billingValue)) {
           alert("Por favor, preencha todos os campos corretamente.");
           return;
         }
+        currentYear = parseInt(currentYear) || new Date().getFullYear();
 
         const valuePerMonth = billingValue / multiplicator;
         const items = [];
         let currentMonthIndex = months.indexOf(month);
-        let currentYear = new Date().getFullYear();
+        let year = currentYear; // Usando uma variável local para iteração.
 
         for (let i = 0; i < multiplicator; i++) {
           const monthName = monthsPT[currentMonthIndex];
-          const yearMonth = `${monthName} ${currentYear}`;
+          const yearMonth = `${monthName} ${year}`; // Usando a variável year.
           items.push({
             month: yearMonth,
             description: description,
@@ -215,7 +228,7 @@
 
           currentMonthIndex = (currentMonthIndex + 1) % 12;
           if (currentMonthIndex === 0) {
-            currentYear++;
+            year++; // Incrementa o ano local.
           }
         }
 
@@ -230,7 +243,8 @@
       }
 
       function updateCardBalances() {
-        const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+        let currentYear = new URLSearchParams(window.location.search).get('year');
+        currentYear = parseInt(currentYear) || new Date().getFullYear(); // Obtenha o ano corretamente
         const monthsAbbreviation = [
           { id: 'januaryCreditCardBalance', month: 'Janeiro' },
           { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
@@ -261,10 +275,10 @@
 
         // Atualiza os valores no banco de dados
         const userId = auth.currentUser.uid;
-        updateBalancesInDatabase(userId);
+        updateBalancesInDatabase(userId, currentYear);
       }
 
-      function updateBalancesInDatabase(userId) {
+      function updateBalancesInDatabase(userId, currentYear) {
         const balanceElements = [
           { id: 'januaryCreditCardBalance', month: 'Janeiro' },
           { id: 'februaryCreditCardBalance', month: 'Fevereiro' },
@@ -284,7 +298,7 @@
           const element = document.getElementById(id);
           if (element) {
             const value = parseFloat(element.textContent) || 0;
-            const monthRef = ref(database, `creditCardBalances/${userId}/${id}`);
+            const monthRef = ref(database, `creditCardBalances/${userId}/${currentYear}/${id}`); // Usando o ano na referência
             set(monthRef, value)
               .then(() => {
                 console.log(`${id} atualizado no banco de dados com valor ${value}.`);
@@ -297,7 +311,8 @@
       }
 
       function updateGroupedCardContainer() {
-        const currentYear = new Date().getFullYear(); // Obtém o ano corrente
+        let currentYear = new URLSearchParams(window.location.search).get('year');
+        currentYear = parseInt(currentYear) || new Date().getFullYear(); // Obtém o ano corrente
         const container = document.getElementById('groupedCardContainer');
         container.innerHTML = '';
 
@@ -358,20 +373,22 @@
 
       function deleteCard(description) {
         const userId = auth.currentUser.uid;
+        let currentYear = new URLSearchParams(window.location.search).get('year');
+        currentYear = parseInt(currentYear) || new Date().getFullYear();
 
-        // 1. Remover os itens do array `data` localmente
-        data = data.filter(item => item.description !== description);
-
-        // 2. Atualizar a interface localmente
+        // 1. Remover os itens do array 'data' localmente
+        data = data.filter(item => !(item.description === description && parseInt(item.month.split(" ")[1]) === currentYear));
+        
+        // 2. Atualiza os cartões de dados e calcula os totais após a exclusão
         updateGroupedCardContainer();
         updateCardBalances();
-
-        // 3. Excluir os itens do Firebase
-        const itemsToDelete = data.filter(item => item.description === description); // Pega os IDs novamente para garantir que tenha apenas os itens relacionados ao card
+        
+         // 3. Excluir os itens do Firebase
+        const itemsToDelete = data.filter(item => item.description === description && parseInt(item.month.split(" ")[1]) === currentYear); // Pega os IDs novamente para garantir que tenha apenas os itens relacionados ao card
 
         // Remover todos os itens associados a essa descrição
         const deletePromises = itemsToDelete.map(item => {
-          const itemRef = ref(database, `creditCardData/${userId}/${item.id}`);
+          const itemRef = ref(database, `creditCardData/${userId}/${currentYear}/${item.id}`);
           return remove(itemRef)
             .then(() => {
               console.log(`Item ${item.id} excluído com sucesso.`);
@@ -381,18 +398,19 @@
             });
         });
 
+
         // Atualiza a interface após a exclusão de todos os itens
         Promise.all(deletePromises)
           .then(() => {
             console.log("Todos os itens do card foram excluídos do Firebase");
 
             // 4. Atualiza o Firebase com a nova lista `data`
-            const userId = auth.currentUser.uid;
-            const dataRef = ref(database, `creditCardData/${userId}`);
+             const userId = auth.currentUser.uid;
+            const dataRef = ref(database, `creditCardData/${userId}/${currentYear}`);
             set(dataRef, data)
               .then(() => {
-                console.log("Dados atualizados no Firebase");
-              })
+                 console.log("Dados atualizados no Firebase");
+               })
               .catch(error => {
                 console.error("Erro ao atualizar dados no Firebase:", error);
               });
@@ -402,20 +420,26 @@
           });
       }
 
-      document.addEventListener('DOMContentLoaded', function () {
-        var elems = document.querySelectorAll('select');
-        M.FormSelect.init(elems, {});
-        document.getElementById('addButton').addEventListener('click', function () {
-          addItem();
-          updateGroupedCardContainer();
-          updateCardBalances();
-        });
-        document.getElementById('backButton').addEventListener('click', function () {
-          window.history.back();
-        });
-        document.getElementById('nextButton').addEventListener('click', function () {
-          window.history.back();
-        });
+      document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('select');
+          M.FormSelect.init(elems, {});
+          document.getElementById('addButton').addEventListener('click', function() {
+            addItem();
+            updateGroupedCardContainer();
+            updateCardBalances();
+          });
+          document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+          });
+          document.getElementById('nextButton').addEventListener('click', function() {
+            window.history.back();
+          });
+        
+        // Verificar se o usuário está autenticado e carregar os dados inicialmente
+        if (auth.currentUser) {
+            loadDataFromDatabase(auth.currentUser.uid);
+        }
+
       });
 
       // Funções para deslizamento de tela touch:

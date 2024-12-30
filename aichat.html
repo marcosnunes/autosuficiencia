@@ -40,6 +40,13 @@
 
   <!-- Importar Firebase -->
   <script type="module">
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentYear = urlParams.get('year');
+
+    import { displayYearInTitle } from './utils.js';
+    displayYearInTitle();
+
     // Importa os módulos necessários do Firebase
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js';
     import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js';
@@ -85,22 +92,23 @@
 
     // Carregar os dados financeiros do Firebase
     function loadDataFromDatabase(userId) {
+      let currentYear = new URLSearchParams(window.location.search).get('year');
       const databaseRef = ref(database, `users/${userId}`);
       onValue(databaseRef, (snapshot) => {
         const userData = snapshot.val(); // Objeto JavaScript direto do Firebase
         if (userData) {
-          januaryData = userData.january || {};
-          februaryData = userData.february || {};
-          marchData = userData.march || {};
-          aprilData = userData.april || {};
-          mayData = userData.may || {};
-          juneData = userData.june || {};
-          julyData = userData.july || {};
-          augustData = userData.august || {};
-          septemberData = userData.september || {};
-          octoberData = userData.october || {};
-          novemberData = userData.november || {};
-          decemberData = userData.december || {};
+          januaryData = userData['january-' + currentYear] || {};
+          februaryData = userData['february-' + currentYear] || {};
+          marchData = userData['march-' + currentYear] || {};
+          aprilData = userData['april-' + currentYear] || {};
+          mayData = userData['may-' + currentYear] || {};
+          juneData = userData['june-' + currentYear] || {};
+          julyData = userData['july-' + currentYear] || {};
+          augustData = userData['august-' + currentYear] || {};
+          septemberData = userData['september-' + currentYear] || {};
+          octoberData = userData['october-' + currentYear] || {};
+          novemberData = userData['november-' + currentYear] || {};
+          decemberData = userData['december-' + currentYear] || {};
         }
       });
     }
@@ -334,6 +342,7 @@
 
     // Função para obter os dados do mês
     function getMonthData(month) {
+      let currentYear = new URLSearchParams(window.location.search).get('year');
       switch (month) {
         case "janeiro":
           return januaryData;
@@ -436,7 +445,7 @@
     // Funções para deslizamento de tela touch:
     var touchstartX = 0;
     var touchendX = 0;
-    var gestureZone = 50;
+    var gestureZone = 50; // A distância mínima para considerar um deslizamento válido
 
     document.addEventListener('touchstart', function (event) {
       touchstartX = event.changedTouches[0].screenX;
@@ -449,9 +458,11 @@
 
     function handleGesture() {
       if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
-        window.history.back();
+        // Deslizamento para a esquerda
+        window.history.back(); // Redireciona para a página anterior
       } else if (touchendX > touchstartX && Math.abs(touchendX - touchstartX) > gestureZone) {
-        window.history.back();
+        // Deslizamento para a direita
+        window.history.back(); // Redireciona para a página anterior
       }
     }
   </script>

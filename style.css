@@ -44,7 +44,8 @@
   #tutorial,
   #currencyConverter,
   .navigation,
-  .iframe-container {
+  .iframe-container,
+  #Registrar_Compra {
     display: none !important;
   }
 

@@ -35,7 +35,8 @@ body {
   color: #3b3d64;/* Cor do texto do nome do usuário */
   font-size: 1.2em;/* Tamanho da fonte do nome do usuário */
   font-weight: bold;/* Texto em negrito */
-  margin-left: 10px;/* Margem à esquerda do nome do usuário */
+  margin: 10px;/* Margem à esquerda do nome do usuário */
+  padding: 5px;/* Espaçamento interno do nome do usuário */
 }
 .main-content {
   padding: 20px;

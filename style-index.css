@@ -197,8 +197,9 @@ body {
 }
 
 .btn-logout {
-  margin-top: 10px;
+  margin: 10px;
   border-radius: 15px;
+  width: 150px;
 }
 
 .input-field select {

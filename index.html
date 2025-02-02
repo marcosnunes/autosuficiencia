@@ -29,7 +29,7 @@
     <button onclick="logout()" class="btn red btn-logout">Logout</button>
     <button onclick="deleteAccount()" class="btn red btn-logout">Excluir Conta</button>
     <div class="input-field" style="display: flex; justify-content: center;">
-      <select id="yearSelector" style="width:100px; margin-right: 10px;">
+      <select id="yearSelector" style="width: 100px;height: 40px;border: 1px solid #bdbdbd;background: #ffffff;background-blend-mode: normal;">
         <!-- As opções de ano serão adicionadas aqui pelo JavaScript -->
       </select>
     </div>
@@ -101,7 +101,7 @@
               <div class="card-content"><span class="card-title">Assistente</span></div>
             </div>
             <div class="card" id="limparDadosCard">
-              <div class="card-content"><span class="card-title" style="color: #d50000">Recomeçar</span></div>
+              <div class="card-content"><span class="card-title">Recomeçar</span></div>
             </div>
           </div>
         </div>
@@ -179,9 +179,9 @@
       yearSelector.value = currentYear;
 
       // Salva o ano selecionado no localStorage quando ele for alterado pelo usuário
-      yearSelector.addEventListener('change', function() {
-          currentYear = parseInt(this.value); // Atualiza a variável global
-          localStorage.setItem('selectedYear', this.value);
+      yearSelector.addEventListener('change', function () {
+        currentYear = parseInt(this.value); // Atualiza a variável global
+        localStorage.setItem('selectedYear', this.value);
       });
 
     }
@@ -294,10 +294,10 @@
       document.getElementById("card20").addEventListener("click", () => window.location.href = `aichat.html?year=${currentYear}`);
     });
 
-    yearSelector.addEventListener('change', function() {
-          currentYear = parseInt(this.value); // Atualiza a variável global
-          localStorage.setItem('selectedYear', this.value); // Salva o ano atual no localStorage
-      });
+    yearSelector.addEventListener('change', function () {
+      currentYear = parseInt(this.value); // Atualiza a variável global
+      localStorage.setItem('selectedYear', this.value); // Salva o ano atual no localStorage
+    });
   </script>
 </body>
 

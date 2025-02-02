@@ -91,46 +91,29 @@
 
 /* Estiliza a barra de navegação */
 .nav-wrapper {
-  background-color: #007bff;
-  /* Cor de fundo azul */
+  background-color: #007bff;/* Cor de fundo azul */
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Sombra sutil */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);/* Sombra sutil */
   display: flex;
-  justify-content: space-between;
-  /* Espaça os elementos igualmente */
-  align-items: center;
-  /* Alinha verticalmente os itens no centro */
+  justify-content: space-between;/* Espaça os elementos igualmente */
+  align-items: center;/* Alinha verticalmente os itens no centro */
 }
 
 /* Estiliza os botões de navegação */
 .nav-wrapper .btn {
-  background-color: #ffffff;
-  /* Cor de fundo branca */
-  color: #007bff;
-  /* Cor do texto azul */
-  border: 2px solid #007bff;
-  /* Borda azul */
-  border-radius: 5px;
-  /* Bordas arredondadas */
-  padding: 10px 15px;
-  /* Espaçamento interno */
-  font-size: 16px;
-  /* Tamanho da fonte */
-  cursor: pointer;
-  /* Cursor em forma de mão */
-  text-align: center;
-  /* Centraliza o texto horizontalmente */
-  line-height: 1.5;
-  /* Alinha verticalmente o texto */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  /* Transições suaves */
-  display: inline-flex;
-  /* Faz com que o botão seja tratado como um contêiner flexível */
-  align-items: center;
-  /* Alinha o texto verticalmente no centro */
-  justify-content: center;
-  /* Alinha o texto horizontalmente no centro */
+  background-color: #ffffff; /* Cor de fundo branca */
+  color: #007bff;/* Cor do texto azul */
+  border: 2px solid #007bff;/* Borda azul */
+  border-radius: 5px;/* Bordas arredondadas */
+  padding: 10px 15px;/* Espaçamento interno */
+  font-size: 16px;/* Tamanho da fonte */
+  cursor: pointer;/* Cursor em forma de mão */
+  text-align: center;/* Centraliza o texto horizontalmente */
+  line-height: 1.5;/* Alinha verticalmente o texto */
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;/* Transições suaves */
+  display: inline-flex;/* Faz com que o botão seja tratado como um contêiner flexível */
+  align-items: center; /* Alinha o texto verticalmente no centro */
+  justify-content: center;/* Alinha o texto horizontalmente no centro */
 }
 
 .nav-wrapper .btn:hover {
@@ -210,6 +193,17 @@
 #bot-button:hover {
   background-color: #0056b3;
   /* Cor de fundo azul mais escuro ao passar o mouse */
+}
+
+#homeButton,
+#chartButton,
+#clearMonthButton {
+  border-radius: 15px;
+  width: 80px;
+  font-size: 12px;
+  padding: 22px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .btn-edit {

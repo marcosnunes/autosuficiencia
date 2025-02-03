@@ -809,18 +809,20 @@
       if (user) { // Verifica se o usuário está logado
         let currentYear = new URLSearchParams(window.location.search).get('year');
         // Limpa os dados do banco de dados
-        set(ref(database, 'users/' + user.uid + '/july' + '-' + currentYear), null)
+        const julhoData = {
+          initialBalance: document.getElementById("JulInitialBalance").innerText,
+        };
+        set(ref(database, 'users/' + user.uid + '/july' + '-' + currentYear), julhoData)
           .then(() => {
             console.log("Dados do mês de julho limpos com sucesso!");
             // Limpa os dados no array inputData
             inputData = [];
             // Limpa os campos da tela
-            document.getElementById("JulInitialBalance").value = "";
-            document.getElementById("julyTithe").textContent = "0.00";
-            document.getElementById("julyCreditCardBalance").textContent = "0.00";
+            document.getElementById("JulTithe").textContent = "0.00";
+            document.getElementById("JulCreditCardBalance").textContent = "0.00";
             document.getElementById("totalCredit").textContent = "0.00";
             document.getElementById("totalDebit").textContent = "0.00";
-            document.getElementById("totalJulho").textContent = "0.00";
+            document.getElementById("totalJul").textContent = "0.00";
             document.getElementById("balance").textContent = "0.00";
             document.getElementById("totalPorcentagem").textContent = "0.00%";
             // Atualiza os cards de dados

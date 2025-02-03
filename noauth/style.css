@@ -32,13 +32,6 @@
     font-size: 14px;
   }
 
-  .navigation {
-    position: relative;
-    top: 0;
-    width: 100%;
-    border: none;
-  }
-
   .container {
     position: absolute;
     width: 100%;
@@ -67,6 +60,9 @@
   }
   #tutorial {
     display:none
+  }
+  .navigation {
+    display: none;
   }
 }
 
